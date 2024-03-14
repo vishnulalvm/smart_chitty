@@ -5,8 +5,8 @@ Widget buttons(
     required String buttonName,
     required Color color}) {
   return SizedBox(
-    width: 250,
-    height: 56,
+    width: 200,
+    height: 50,
     child: ElevatedButton(
       onPressed: buttonAction,
       autofocus: true,
@@ -17,7 +17,7 @@ Widget buttons(
       child: Text(
         buttonName,
         style: const TextStyle(
-          fontSize: 24,
+          fontSize: 20,
           color: Colors.white,
           fontWeight: FontWeight.w500,
         ),

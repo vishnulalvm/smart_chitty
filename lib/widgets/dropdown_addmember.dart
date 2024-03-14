@@ -14,20 +14,26 @@ class _DropdownButtonSchemeState extends State<DropdownButtonScheme> {
   @override
   Widget build(BuildContext context) {
     return Container(
-   
-      width: 200,
+      alignment: Alignment.center,
+      height: 45,
+      width: 180,
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(30)),
+          border: Border.all(color: Colors.white),
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(30)),
       child: DropdownMenu<String>(
+        expandedInsets: EdgeInsets.zero,
         enableSearch: true,
         width: 200,
-        inputDecorationTheme: InputDecorationTheme(border: InputBorder.none,contentPadding: EdgeInsets.all(0)),
-        hintText: 'Select Scheme',
+        inputDecorationTheme: const InputDecorationTheme(
+          border: InputBorder.none,
+        ),
+        hintText: 'Select Schemem',
+        textStyle: const TextStyle(color: Colors.white),
         leadingIcon: const Padding(
           padding: EdgeInsets.all(8),
           child: CircleAvatar(
             backgroundColor: Colors.blue,
-           
           ),
         ),
         onSelected: (String? value) {
@@ -44,7 +50,6 @@ class _DropdownButtonSchemeState extends State<DropdownButtonScheme> {
               style: ButtonStyle(
                 foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
                 backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
-
               ));
         }).toList(),
       ),

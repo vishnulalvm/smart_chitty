@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Widget customTextField({
   required var hintText,
   required var title,
-  required TextEditingController controller,
+   TextEditingController? controller,
   Key? key,
   required String? Function(String?)? validator,
   TextInputType? keyboardtype, required TextInputType keyboardType,
@@ -14,7 +14,8 @@ Widget customTextField({
       SizedBox(
         width: 10,
       ),
-      Expanded(
+      SizedBox(
+        width: 250,
         child: TextFormField(
           keyboardType: keyboardtype,
           autovalidateMode: AutovalidateMode.onUserInteraction,

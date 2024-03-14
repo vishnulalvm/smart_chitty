@@ -3,6 +3,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:smart_chitty/pages/account.dart';
 import 'package:smart_chitty/pages/members.dart';
 import 'package:smart_chitty/pages/scheme.dart';
+import 'package:smart_chitty/pages/update_button.dart';
 import 'package:smart_chitty/widgets/icon_button.dart';
 import 'package:text_scroll/text_scroll.dart';
 
@@ -230,7 +231,9 @@ class _HomeScreenState extends State<HomeScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30), // Adjust radius as needed
           ),
-          onPressed: () {}),
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const UpdateButton()));
+          }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }

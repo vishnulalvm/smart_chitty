@@ -220,8 +220,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
             ),
             Positioned(
               top: 850,
-              left: 50,
-              right: 50,
+              left: 100,
+              right: 100,
               child: buttons(
                 buttonAction: () {
                   if (formKeys.currentState!.validate()) {
