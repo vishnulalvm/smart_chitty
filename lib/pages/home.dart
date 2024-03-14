@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:smart_chitty/pages/account.dart';
+import 'package:smart_chitty/pages/members.dart';
 import 'package:smart_chitty/pages/scheme.dart';
 import 'package:smart_chitty/widgets/icon_button.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -114,7 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CircularIconhome(
                         icontype: Symbols.group,
-                        buttonpress: () {},
+                        buttonpress: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const MembersScreen()));
+                        },
                         iconname: 'Members',
                       ),
                       CircularIconhome(

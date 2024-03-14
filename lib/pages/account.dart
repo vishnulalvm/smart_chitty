@@ -93,7 +93,6 @@ class _AccountScreenState extends State<AccountScreen> {
                         fontWeight: FontWeight.w500,
                       ),
                       gap(height: 15),
-
                       Expanded(
                         child: SingleChildScrollView(
                           child: Column(
@@ -142,10 +141,11 @@ class _AccountScreenState extends State<AccountScreen> {
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 20,right: 20),
+                                padding:
+                                    const EdgeInsets.only(left: 20, right: 20),
                                 child: Row(
-                                  
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     ModifiedText(
                                         text: 'Logout',
@@ -153,15 +153,19 @@ class _AccountScreenState extends State<AccountScreen> {
                                         color: AppColor.fontColor),
                                     IconButton(
                                         onPressed: () {},
-                                        icon: const Icon(Icons.logout,color: Colors.blue,))
+                                        icon: const Icon(
+                                          Icons.logout,
+                                          color: Colors.blue,
+                                        ))
                                   ],
                                 ),
                               ),
                               gap(height: 50),
-                              ModifiedText(text: 'version 1.0', size: 12, color: AppColor.fontColor),
-                              gap(
-                                height: 20
-                              )
+                              ModifiedText(
+                                  text: 'version 1.0',
+                                  size: 12,
+                                  color: AppColor.fontColor),
+                              gap(height: 20)
                             ],
                           ),
                         ),
