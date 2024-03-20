@@ -1,18 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/utils/colors.dart';
+import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/contact_button.dart';
 import 'package:smart_chitty/widgets/listtile_account.dart';
 import 'package:smart_chitty/widgets/widget_gap.dart';
 
-class AccountScreen extends StatefulWidget {
-  const AccountScreen({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<AccountScreen> createState() => _AccountScreenState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _AccountScreenState extends State<AccountScreen> {
+class _ProfileScreenState extends State<ProfileScreen> {
+  BuildContext? _context;
+  @override
+  void initState() {
+    super.initState();
+    _context = context; // Store context in state variable
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,12 +30,12 @@ class _AccountScreenState extends State<AccountScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Smart Chitty'),
-        actions: [
+        title: const Text('Smart Chitty'),
+        actions:  [
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: CircleAvatar(
-              backgroundImage: AssetImage('assets/images/smart kuri.jpeg'),
+              backgroundImage: AssetImage(appLogo),
               radius: 22,
             ),
           ),
@@ -36,24 +46,15 @@ class _AccountScreenState extends State<AccountScreen> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: 500,
-            decoration: const BoxDecoration(
+            decoration:  BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
-                    'assets/images/background home.jpeg',
+                    backgroundImage,
                   ),
                   fit: BoxFit.cover),
             ),
             child: Stack(
               children: [
-                // Positioned(
-                //   left: 22,
-                //   top: 108,
-                //   child: CircleAvatar(
-                //     backgroundImage:
-                //         AssetImage('assets/images/smart kuri.jpeg'),
-                //     radius: 22,
-                //   ),
-                // ),
                 Positioned(
                     top: 150,
                     right: 0,
@@ -62,9 +63,7 @@ class _AccountScreenState extends State<AccountScreen> {
                       children: [
                         contactButton(
                             buttonName: 'Call President', icon: Icons.call),
-                        SizedBox(
-                          height: 20,
-                        ),
+                        gap(height: 20),
                         contactButton(
                             buttonName: 'Whatsapp Group', icon: Icons.chat),
                       ],
@@ -92,7 +91,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         color: AppColor.fontColor,
                         fontWeight: FontWeight.w500,
                       ),
-                      gap(height: 15),
+                     
                       Expanded(
                         child: SingleChildScrollView(
                           child: Column(
@@ -104,24 +103,24 @@ class _AccountScreenState extends State<AccountScreen> {
                                   leading: Icons.alarm),
                               customListTile(
                                   onTap: () {},
-                                  title: 'Set Meet Time',
-                                  leading: Icons.alarm),
+                                  title: 'Notifications',
+                                  leading: Icons.notifications_active),
                               customListTile(
                                   onTap: () {},
-                                  title: 'Set Meet Time',
-                                  leading: Icons.alarm),
+                                  title: 'Convert to Excel Sheet',
+                                  leading: Icons.picture_as_pdf),
                               customListTile(
                                   onTap: () {},
-                                  title: 'Set Meet Time',
-                                  leading: Icons.alarm),
+                                  title: 'Change Username & Password',
+                                  leading: Symbols.encrypted_rounded),
                               customListTile(
                                   onTap: () {},
-                                  title: 'Set Meet Time',
-                                  leading: Icons.alarm),
+                                  title: 'Help',
+                                  leading: Icons.help),
                               customListTile(
                                   onTap: () {},
-                                  title: 'Set Meet Time',
-                                  leading: Icons.alarm),
+                                  title: 'Connect to Developer',
+                                  leading: Symbols.exclamation),
                               gap(height: 15),
                               const Divider(
                                 thickness: 1.5,
@@ -130,14 +129,16 @@ class _AccountScreenState extends State<AccountScreen> {
                               ExpansionTile(
                                 shape: const Border(),
                                 title: ModifiedText(
-                                    text: 'privacy and policy',
-                                    size: 16,
-                                    color: AppColor.fontColor),
+                                  text: 'Privacy and Policy',
+                                  size: 16,
+                                  color: AppColor.fontColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
                                 children: [
                                   customListTile(
                                       onTap: () {},
-                                      title: 'Set Meet Time',
-                                      leading: Icons.alarm),
+                                      title: 'Privacy and Policy',
+                                      leading: Icons.privacy_tip),
                                 ],
                               ),
                               Padding(
@@ -148,15 +149,28 @@ class _AccountScreenState extends State<AccountScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     ModifiedText(
-                                        text: 'Logout',
-                                        size: 16,
-                                        color: AppColor.fontColor),
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: const Icon(
-                                          Icons.logout,
-                                          color: Colors.blue,
-                                        ))
+                                      text: 'Logout',
+                                      size: 16,
+                                      color: AppColor.fontColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    Container(
+                                      width: 80,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(30)),
+                                      child: IconButton(
+                                          onPressed: () {
+                                            showLogoutDialog();
+                                            // logout fuction
+                                          },
+                                          icon: const Icon(
+                                            Icons.logout,
+                                            color: Colors.red,
+                                          )),
+                                    )
                                   ],
                                 ),
                               ),
@@ -180,5 +194,40 @@ class _AccountScreenState extends State<AccountScreen> {
         ],
       ),
     );
+  }
+
+  void showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final sharedPre = await SharedPreferences.getInstance();
+                await sharedPre.clear();
+                Navigator.of(_context!).pop(); // Close the dialog
+                _performLogout(_context!); // Perform logout logic
+              },
+              child: const Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _performLogout(BuildContext context) {
+    // Perform logout logic
+
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 Widget textField({
-  bool obscureText=false,
+  int? maxLine,
   required var hintText,
   required IconData icons,
   required TextEditingController controller,
@@ -19,7 +19,9 @@ Widget textField({
         ),
         Expanded(
           child: TextFormField(
-            obscureText: obscureText,
+            maxLines: maxLine,
+            
+            
             keyboardType: keyboardtype,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             autofocus: true,

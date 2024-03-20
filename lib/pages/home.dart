@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:smart_chitty/pages/account.dart';
+import 'package:smart_chitty/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/models/scheme_model.dart';
+import 'package:smart_chitty/pages/profile.dart';
 import 'package:smart_chitty/pages/members.dart';
 import 'package:smart_chitty/pages/scheme.dart';
 import 'package:smart_chitty/pages/update_button.dart';
+import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/widgets/icon_button.dart';
 import 'package:text_scroll/text_scroll.dart';
 
@@ -22,22 +25,20 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-       
         actions: [
-     Padding(
-       padding: const EdgeInsets.only(right: 12),
-       child: InkWell(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => const AccountScreen()));
-                      },
-                      child: const CircleAvatar(
-                        backgroundImage:
-                            AssetImage('assets/images/smart kuri.jpeg'),
-                        radius: 22,
-                      ),
-                    ),
-     ),
+          Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const ProfileScreen()));
+              },
+              child: CircleAvatar(
+                backgroundImage: AssetImage(appLogo),
+                radius: 22,
+              ),
+            ),
+          ),
         ],
       ),
       body: Stack(
@@ -45,16 +46,15 @@ class _HomeScreenState extends State<HomeScreen> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: 500,
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
-                    'assets/images/background home.jpeg',
+                    backgroundImage,
                   ),
                   fit: BoxFit.cover),
             ),
             child: Stack(
               children: [
-              
                 const Positioned(
                   top: 0,
                   left: 0,
@@ -170,40 +170,50 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
 
                       Expanded(
-                        child: ListView.builder(
-                          controller: controller,
-                          itemCount: 15,
-                          itemBuilder: (context, index) {
-                            return const Padding(
-                              padding:
-                                  EdgeInsets.only(left: 6, right: 6, bottom: 4),
-                              child: Card(
-                                elevation: 0,
-                                child: Padding(
-                                  padding: EdgeInsets.all(5.0),
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      radius: 20,
-                                      // backgroundImage: AssetImage(item.imagePath), // Use your image path
-                                    ),
-                                    title: Text("item.title"),
-                                    subtitle: Text('item.subtitle'),
-                                    trailing: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        Text('item.trailingText1'),
-                                        SizedBox(
-                                            height:
-                                                15), // Add some spacing between text widgets (optional)
-                                        Text('item.trailingText2'),
-                                      ],
+                        child: ValueListenableBuilder(
+                          valueListenable: schemeDateListNotifer,
+                          builder: (BuildContext context,
+                              List<SchemeModel> schemedata, Widget? child) {
+                            return ListView.builder(
+                            
+                              controller: controller,
+                              itemCount: schemedata.length,
+                              itemBuilder: (context, index) {
+                                  final data = schemedata[index];
+                                return  Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 6, right: 6, bottom: 4),
+                                  child: Card(
+                                    elevation: 0,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: ListTile(
+                                        leading: CircleAvatar(
+                                          backgroundColor: Colors.blue,
+                                          radius: 20,
+                                          child: Text(data.installment,style: const TextStyle(color: Colors.white,fontSize: 26,fontWeight: FontWeight.w700),),
+                                          // backgroundImage: AssetImage(item.imagePath), // Use your image path
+                                        ),
+                                        title: Text('${data.installment}×${data.subscription}'),
+                                        subtitle: Text('Subcribers :${data.totalMembers}'),
+                                        trailing: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Text('Subcribers :${data.totalMembers}'),
+                                            const SizedBox(
+                                                height:
+                                                    15), // Add some spacing between text widgets (optional)
+                                            const Text('item.trailingText2'),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                              },
                             );
                           },
                         ),
@@ -232,7 +242,8 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(30), // Adjust radius as needed
           ),
           onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const UpdateButton()));
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const UpdateButton()));
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

@@ -1,25 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/db%20functions/registration_function.dart';
 import 'package:smart_chitty/pages/home.dart';
 import 'package:smart_chitty/pages/register.dart';
+import 'package:smart_chitty/utils/const.dart';
+import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/widgets/buttonwidget.dart';
 import 'package:smart_chitty/widgets/textfieldwidget.dart';
 
-class LoginScreen extends StatelessWidget {
-  LoginScreen({super.key});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key});
+
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  BuildContext? _context;
+  @override
+  void initState() {
+    super.initState();
+    getUserCredentials();
+    _context = context; // Store context in state variable
+  }
+
   final userNameController = TextEditingController();
+
   final passwordController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
+
   final formKeypass = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           image: DecorationImage(
-              image: AssetImage('assets/images/loginbak.jpeg'),
-              fit: BoxFit.cover),
+              image: AssetImage(loginBackground), fit: BoxFit.cover),
         ),
         child: Center(
           child: Form(
@@ -54,7 +74,6 @@ class LoginScreen extends StatelessWidget {
                         name!.length < 3 ? 'Name should be 3 character' : null),
                 widgetSpace(height: 20),
                 textField(
-                    obscureText: true,
                     hintText: 'Enter password',
                     icons: Icons.lock,
                     controller: passwordController,
@@ -117,10 +136,13 @@ class LoginScreen extends StatelessWidget {
       final password = data.password;
       if (userId == userNameController.text &&
           password == passwordController.text) {
-        Navigator.of(context).pushAndRemoveUntil(
-  MaterialPageRoute(builder: (BuildContext context) => const HomeScreen()),
-  (Route<dynamic> route) => false,
-);
+        final sharedPre = await SharedPreferences.getInstance();
+        sharedPre.setBool(saveKeyName, true);
+        Navigator.of(_context!).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (BuildContext context) => const HomeScreen()),
+          (Route<dynamic> route) => false,
+        );
         return;
       }
     }

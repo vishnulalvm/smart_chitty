@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 AppBar customAppBar({
   required String title,
+  void Function()? onpresed
+  
 }) {
   return AppBar(
+    actions: [
+      IconButton(onPressed: onpresed, icon: const Icon(Icons.more_vert))
+    ],
     title: Text(
       title,
     ),

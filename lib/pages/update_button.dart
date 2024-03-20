@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_chitty/utils/colors.dart';
+import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/buttonwidget.dart';
 import 'package:smart_chitty/widgets/dropdown_addmember.dart';
@@ -46,10 +47,10 @@ class _UpdateButtonState extends State<UpdateButton> {
               child: Container(
                 width: MediaQuery.of(context).size.width,
                 height: 330,
-                decoration: const BoxDecoration(
+                decoration:  BoxDecoration(
                   image: DecorationImage(
                       image: AssetImage(
-                        'assets/images/background home.jpeg',
+                        backgroundImage,
                       ),
                       fit: BoxFit.cover),
                 ),

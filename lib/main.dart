@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:smart_chitty/db%20functions/registration_function.dart';
+import 'package:smart_chitty/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/models/addmember_model.dart';
 import 'package:smart_chitty/models/registration_model.dart';
-import 'package:smart_chitty/pages/home.dart';
+import 'package:smart_chitty/models/scheme_model.dart';
+import 'package:smart_chitty/utils/const.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,8 +13,14 @@ void main() async {
   if (!Hive.isAdapterRegistered(RegistrationModelAdapter().typeId)) {
     Hive.registerAdapter(RegistrationModelAdapter());
   }
+    if (!Hive.isAdapterRegistered(SchemeModelAdapter().typeId)) {
+    Hive.registerAdapter(SchemeModelAdapter());
+  }
+    if (!Hive.isAdapterRegistered(MemberModelAdapter().typeId)) {
+    Hive.registerAdapter(MemberModelAdapter());
+  }
   getUserCredentials();
-
+  getSchemeCredentials();
   runApp(const MyApp());
 }
 
@@ -32,7 +41,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      initialRoute: '/splash', // Set the initial route
+      routes: routes,
     );
   }
 }

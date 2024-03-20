@@ -5,6 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:smart_chitty/db%20functions/registration_function.dart';
 import 'package:smart_chitty/models/registration_model.dart';
 import 'package:smart_chitty/pages/login.dart';
+import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/widgets/buttonwidget.dart';
 import 'package:smart_chitty/widgets/textfieldwidget.dart';
 
@@ -43,9 +44,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
-          decoration: const BoxDecoration(
+          decoration:  BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('assets/images/loginbak.jpeg'),
+              image: AssetImage(loginBackground),
               fit: BoxFit.cover,
             ),
           ),
@@ -153,7 +154,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
                                     builder: (BuildContext context) =>
-                                        LoginScreen()),
+                                        const LoginScreen()),
                                 (Route<dynamic> route) => false,
                               );
                             },
@@ -199,7 +200,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void collectDataOnclick(context) async {
-    // values from textfield is add to a variable
     final chittyName = chittyNameController.text.trim();
     final contactNum = contactNumController.text.trim();
     final whatsapplink = whatsappLinkController.text.trim();
@@ -237,7 +237,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (ctx) => LoginScreen(),
+        builder: (ctx) => const LoginScreen(),
       ),
     );
   }

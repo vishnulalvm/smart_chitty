@@ -5,7 +5,6 @@ final List<RegistrationModel> allData = [];
 
 void insertData(RegistrationModel value) async {
   final companyDb = await Hive.openBox<RegistrationModel>('company_data');
-  
   await companyDb.add(value);
 }
 

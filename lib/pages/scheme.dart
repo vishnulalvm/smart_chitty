@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:smart_chitty/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/models/scheme_model.dart';
+import 'package:smart_chitty/pages/scheme_details.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/appbar.dart';
-import 'package:smart_chitty/widgets/scheme_bottomsheet.dart';
-// import 'package:smart_chitty/widgets/scheme_bottomsheet.dart';
+import 'package:smart_chitty/pages/addscheme.dart';
+import 'package:smart_chitty/widgets/widget_gap.dart';
 
 class SchemeButtonHome extends StatefulWidget {
   const SchemeButtonHome({
@@ -15,7 +18,9 @@ class SchemeButtonHome extends StatefulWidget {
 }
 
 class _SchemeButtonHomeState extends State<SchemeButtonHome> {
-  //  final _formKey = GlobalKey<FormState>();
+
+   
+ 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,45 +38,124 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                   color: AppColor.fontColor,
                   size: 15,
                 ),
+
+                ValueListenableBuilder(
+              valueListenable: schemeDateListNotifer,
+              builder: (BuildContext context, List<SchemeModel> schemedata,
+                  Widget? child) {
+                return
                 BoldText(
-                  text: '10',
+                  text: schemeDateListNotifer.value.length.toString(),
                   color: AppColor.fontColor,
                   size: 16,
+                );
+                  }
+                
                 ),
               ],
             ),
           ),
           Expanded(
-            child: ListView.builder(
-              itemCount: 15,
-              itemBuilder: (context, index) {
-                return const Padding(
-                  padding: EdgeInsets.only(left: 6, right: 6, bottom: 4),
-                  child: Card(
-                    elevation: 0,
-                    child: Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          radius: 20,
-                          // backgroundImage: AssetImage(item.imagePath), // Use your image path
-                        ),
-                        title: Text("item.title"),
-                        subtitle: Text('item.subtitle'),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text('item.trailingText1'),
-                            SizedBox(
-                                height:
-                                    15), // Add some spacing between text widgets (optional)
-                            Text('item.trailingText2'),
-                          ],
+            child: ValueListenableBuilder(
+              valueListenable: schemeDateListNotifer,
+              builder: (BuildContext context, List<SchemeModel> schemedata,
+                  Widget? child) {
+                return ListView.builder(
+                  itemCount: schemeDateListNotifer.value.length,
+                  itemBuilder: (context, index) {
+                    if (schemedata.isEmpty) {
+                      return const Text('No data available');
+                    }
+
+                    final data = schemedata[index];
+                    int bubAmount = int.parse(data.subscription);
+                    int instll = int.parse(data.installment);
+
+                    final pool = (bubAmount) * (instll);
+                    return Padding(
+                      padding:
+                          const EdgeInsets.only(left: 6, right: 6, bottom: 4),
+                      child: Card(
+                        elevation: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: ListTile(
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    transitionDuration:
+                                        const Duration(milliseconds: 400),
+                                    pageBuilder: (context, animation,
+                                            secondaryAnimation) =>
+                                        SchemeDetails(
+                                          pool: pool,
+                                      schemeId: data.schemeId,
+                                      dateTime: data.proposeDate,
+                                      commission: data.commission,
+                                      chittyIstallment: data.installment,
+                                      chittyMembers: data.totalMembers,
+                                      chittyPattern:
+                                          '${data.subscription}×${data.totalMembers}',
+                                      chittySubcription: data.subscription,
+                                    ),
+                                    transitionsBuilder: (context, animation,
+                                        secondaryAnimation, child) {
+                                      final tween = Tween<Offset>(
+                                          begin: const Offset(1.0, 0.0),
+                                          end: Offset.zero);
+                                      return SlideTransition(
+                                        position: animation.drive(tween),
+                                        child: child,
+                                      );
+                                    },
+                                  ));
+                            },
+                            leading: CircleAvatar(
+                              radius: 25,
+                              backgroundColor: Colors.blue,
+                              child: ModifiedText(
+                                  text: data.installment,
+                                  size: 26,
+                                  color: Colors.white),
+                            ),
+                            title: ModifiedText(
+                              text: '${data.subscription}×${data.totalMembers}',
+                              size: 18,
+                              color: AppColor.fontColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            subtitle: ModifiedText(
+                              text: 'Subscribers :${data.totalMembers}',
+                              size: 14,
+                              color: AppColor.fontColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                gap(height: 2),
+                                ModifiedText(
+                                    text: '₹ $pool',
+                                    size: 18,
+                                    color: AppColor.fontColor,
+                                    fontWeight: FontWeight.w600,
+                                    ),
+                                gap(
+                                    height:
+                                        4), // Add some spacing between text widgets (optional)
+                                ModifiedText(
+                                    text: 'Commission :${data.commission}%',
+                                    size: 12,
+                                    color: AppColor.fontColor)
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
             ),
@@ -85,7 +169,7 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
           showModalBottomSheet(
               context: context,
               isScrollControlled: true,
-              builder: (BuildContext context) => AddSchemeBottomSheet());
+              builder: (BuildContext context) => const AddSchemeBottomSheet());
         },
         child: const Icon(
           Icons.add,
