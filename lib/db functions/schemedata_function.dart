@@ -3,22 +3,19 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smart_chitty/models/scheme_model.dart';
 import 'package:flutter/foundation.dart';
 
+ValueNotifier<List<SchemeModel>> schemeListNotifer = ValueNotifier([]);
 
-
-ValueNotifier<List<SchemeModel>> schemeDateListNotifer = ValueNotifier([]);
-
-void addScheme (SchemeModel value){
-  schemeDateListNotifer.value.add(value);
-  schemeDateListNotifer.notifyListeners();
+// void addScheme (SchemeModel value){
+//   schemeListNotifer.value.add(value);
+//   schemeListNotifer.notifyListeners();
   
-}
+// }
 
 void getSchemeCredentials() async {
-  schemeDateListNotifer.value.clear();
+  schemeListNotifer.value.clear();
   final schemeDB = await Hive.openBox<SchemeModel>('schemes');
-
-  schemeDateListNotifer.value.addAll(schemeDB.values);
-  schemeDateListNotifer.notifyListeners();
+  schemeListNotifer.value.addAll(schemeDB.values);
+  schemeListNotifer.notifyListeners();
 
 
 }

@@ -30,6 +30,7 @@ class _MembersScreenState extends State<MembersScreen> {
   void initState() {
     super.initState();
     getSchemeIds();
+    
   }
 
   @override
@@ -42,8 +43,6 @@ class _MembersScreenState extends State<MembersScreen> {
           valueListenable: memberDataListNotifer,
           builder: (BuildContext context, List<MemberModel> memberdata,
               Widget? child) {
-                
-
             final filteredMembers = memberdata
                 .where((member) => member.schemeId == selectedId)
                 .toList();

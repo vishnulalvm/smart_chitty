@@ -40,11 +40,11 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                   size: 15,
                 ),
                 ValueListenableBuilder(
-                    valueListenable: schemeDateListNotifer,
+                    valueListenable: schemeListNotifer,
                     builder: (BuildContext context,
                         List<SchemeModel> schemedata, Widget? child) {
                       return BoldText(
-                        text: schemeDateListNotifer.value.length.toString(),
+                        text: schemeListNotifer.value.length.toString(),
                         color: AppColor.fontColor,
                         size: 16,
                       );
@@ -54,11 +54,11 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
           ),
           Expanded(
             child: ValueListenableBuilder(
-              valueListenable: schemeDateListNotifer,
+              valueListenable: schemeListNotifer,
               builder: (BuildContext context, List<SchemeModel> schemedata,
                   Widget? child) {
                 return ListView.builder(
-                  itemCount: schemeDateListNotifer.value.length,
+                  itemCount: schemeListNotifer.value.length,
                   itemBuilder: (context, index) {
                     if (schemedata.isEmpty) {
                       return const Text('No data available');

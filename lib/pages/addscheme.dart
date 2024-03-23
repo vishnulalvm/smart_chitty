@@ -250,7 +250,9 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
       final box = await Hive.openBox<SchemeModel>('schemes');
       // await box.add(scheme);
       await box.put(uniqueId, scheme);
-      addScheme(scheme);
+      // adding value to v
+      // addScheme(scheme);
+      getSchemeCredentials();
       await saveLastGeneratedId(lastGeneratedId + 1);
 
       ScaffoldMessenger.of(_context!).showSnackBar(

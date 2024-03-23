@@ -6,7 +6,7 @@ import 'package:smart_chitty/models/scheme_model.dart';
 import 'package:smart_chitty/pages/profile.dart';
 import 'package:smart_chitty/pages/members.dart';
 import 'package:smart_chitty/pages/scheme.dart';
-import 'package:smart_chitty/pages/update_button.dart';
+import 'package:smart_chitty/pages/payment_update_button.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/widgets/choice_chips.dart';
 import 'package:smart_chitty/widgets/icon_button.dart';
@@ -23,13 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
     @override
   void initState() {
     super.initState();
-   if (schemeDateListNotifer.value.isNotEmpty) {
-    selectedId = schemeDateListNotifer.value.first.schemeId;
+   if (schemeListNotifer.value.isNotEmpty) {
+    selectedId = schemeListNotifer.value.first.schemeId;
     getMemberCredentials(selectedId);
   } else {
     selectedId = '';
   }
-    getMemberCredentials(selectedId);
+    refreshMember(selectedId);
   }
   @override
   Widget build(BuildContext context) {
@@ -185,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
                       Expanded(
                         child: ValueListenableBuilder(
-                          valueListenable: schemeDateListNotifer,
+                          valueListenable: schemeListNotifer,
                           builder: (BuildContext context,
                               List<SchemeModel> schemedata, Widget? child) {
                             return ListView.builder(
@@ -257,7 +257,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           onPressed: () {
             Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const UpdateButton()));
+                MaterialPageRoute(builder: (context) => const PaymentUpdateButton()));
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

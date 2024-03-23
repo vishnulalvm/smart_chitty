@@ -8,19 +8,15 @@ import 'package:smart_chitty/widgets/dropdown_addmember.dart';
 import 'package:smart_chitty/widgets/textfield_schem.dart';
 import 'package:smart_chitty/widgets/widget_gap.dart';
 
-class UpdateButton extends StatefulWidget {
-  const UpdateButton({super.key});
+class PaymentUpdateButton extends StatefulWidget {
+  const PaymentUpdateButton({super.key});
 
   @override
-  State<UpdateButton> createState() => _UpdateButtonState();
+  State<PaymentUpdateButton> createState() => _PaymentUpdateButtonState();
 }
 
-class _UpdateButtonState extends State<UpdateButton> {
-  final chitAmountController = TextEditingController();
-  final memberNameController = TextEditingController();
-  final contactNumController = TextEditingController();
-  final memberAgeController = TextEditingController();
-  final memberAddressController = TextEditingController();
+class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
+  final paymetController = TextEditingController();
 
   List<String> list = ['Option 1', 'Option 2', 'Option 3'];
   final formKeys = GlobalKey<FormState>();

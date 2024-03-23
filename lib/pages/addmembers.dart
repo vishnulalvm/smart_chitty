@@ -51,7 +51,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   Future<void> getSchemeNames() async {
     final box = await Hive.openBox<SchemeModel>('schemes');
     final schemeData = box.values.toList();
-    schemeId = schemeData.map((scheme) => scheme.schemeId).toList();
+    setState(() {
+      schemeId = schemeData.map((scheme) => scheme.schemeId).toList();
+    });
+    
   }
 
   Map<String, String> imagePaths = {
@@ -319,9 +322,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
           memberAge.isEmpty &&
           memberAddress.isEmpty &&
           avatar.isEmpty &&
-          dropvalue == null
-          // selectedSchemeModel == null
-          ) {
+          dropvalue == null) {
         ScaffoldMessenger.of(_context!).showSnackBar(
           const SnackBar(
             content: Text('Invalid input. Please check the values.'),
@@ -333,10 +334,11 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       }
       lastGeneratedId = await getLastGeneratedId();
       final uniqueId = lastGeneratedId.toString().padLeft(2, 'M0');
-      
-         final schemebox = await Hive.openBox<SchemeModel>('schemes');
-    final schemeData = schemebox.values.toList();
-    final currentSchemeModel = schemeData.firstWhere((scheme) => scheme.schemeId == dropvalue);
+
+      final schemebox = await Hive.openBox<SchemeModel>('schemes');
+      final schemeData = schemebox.values.toList();
+      final currentSchemeModel =
+          schemeData.firstWhere((scheme) => scheme.schemeId == dropvalue);
 
       final member = MemberModel(
         schemeModel: currentSchemeModel,
@@ -349,12 +351,11 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         idFront: idFront,
         idBack: idBack,
         schemeId: dropdownValue,
-
       );
       final box = await Hive.openBox<MemberModel>('members');
       if (dropdownValue != null) {
         await box.put(uniqueId, member);
-        // await box.add(member);
+        refreshMember(dropdownValue);
 
         await saveLastGeneratedId(lastGeneratedId + 1);
         ScaffoldMessenger.of(_context!).showSnackBar(
@@ -382,8 +383,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         ),
       );
     }
-getMemberCredentials(dropdownValue);
-    // getSchemeIds();
   }
 
   Future<void> saveLastGeneratedId(int id) async {
