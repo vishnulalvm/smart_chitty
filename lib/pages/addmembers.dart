@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_chitty/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/models/addmember_model.dart';
 import 'package:smart_chitty/models/scheme_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
@@ -381,6 +382,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         ),
       );
     }
+getMemberCredentials(dropdownValue);
+    // getSchemeIds();
   }
 
   Future<void> saveLastGeneratedId(int id) async {

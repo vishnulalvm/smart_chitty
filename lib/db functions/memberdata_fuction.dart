@@ -10,12 +10,6 @@ ValueNotifier<List<MemberModel>> memberDataListNotifer = ValueNotifier([]);
 ValueNotifier<List<SchemeModel>> schemeChipListner = ValueNotifier([]);
 
 int? firstSchemeId;
-void addScheme(MemberModel value) {
-  memberDataListNotifer.value.add(value);
-  memberDataListNotifer.notifyListeners();
-}
-
-// filltering the member
 void getMemberCredentials(String? schemeId) async {
   memberDataListNotifer.value.clear();
   final filteredMembers = membersBox.values
