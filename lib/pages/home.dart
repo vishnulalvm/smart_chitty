@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:smart_chitty/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/models/scheme_model.dart';
 import 'package:smart_chitty/pages/profile.dart';
@@ -7,6 +8,7 @@ import 'package:smart_chitty/pages/members.dart';
 import 'package:smart_chitty/pages/scheme.dart';
 import 'package:smart_chitty/pages/update_button.dart';
 import 'package:smart_chitty/utils/images.dart';
+import 'package:smart_chitty/widgets/choice_chips.dart';
 import 'package:smart_chitty/widgets/icon_button.dart';
 import 'package:text_scroll/text_scroll.dart';
 
@@ -18,9 +20,21 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+    @override
+  void initState() {
+    super.initState();
+   if (schemeDateListNotifer.value.isNotEmpty) {
+    selectedId = schemeDateListNotifer.value.first.schemeId;
+    getMemberCredentials(selectedId);
+  } else {
+    selectedId = '';
+  }
+    getMemberCredentials(selectedId);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -229,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton.extended(
           label: const Text(
-            'Update',
+            'Update Payment',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
           icon: const Icon(

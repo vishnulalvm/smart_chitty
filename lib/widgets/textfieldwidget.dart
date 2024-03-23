@@ -20,8 +20,6 @@ Widget textField({
         Expanded(
           child: TextFormField(
             maxLines: maxLine,
-            
-            
             keyboardType: keyboardtype,
             autovalidateMode: AutovalidateMode.onUserInteraction,
             autofocus: true,

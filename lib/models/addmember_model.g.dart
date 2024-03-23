@@ -17,6 +17,7 @@ class MemberModelAdapter extends TypeAdapter<MemberModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return MemberModel(
+      schemeModel: fields[9] as SchemeModel,
       memberName: fields[0] as String,
       contactNumber: fields[1] as String,
       memberAge: fields[2] as String,
@@ -25,13 +26,14 @@ class MemberModelAdapter extends TypeAdapter<MemberModel> {
       idFront: fields[5] as String,
       idBack: fields[6] as String,
       schemeId: fields[7] as String?,
+      memberId: fields[8] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, MemberModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(10)
       ..writeByte(0)
       ..write(obj.memberName)
       ..writeByte(1)
@@ -47,7 +49,11 @@ class MemberModelAdapter extends TypeAdapter<MemberModel> {
       ..writeByte(6)
       ..write(obj.idBack)
       ..writeByte(7)
-      ..write(obj.schemeId);
+      ..write(obj.schemeId)
+      ..writeByte(8)
+      ..write(obj.memberId)
+      ..writeByte(9)
+      ..write(obj.schemeModel);
   }
 
   @override

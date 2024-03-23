@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:smart_chitty/models/scheme_model.dart';
 
 part 'addmember_model.g.dart';
 
@@ -18,7 +19,6 @@ class MemberModel {
 
   @HiveField(4)
   final String avatar;
-  
 
   @HiveField(5)
   final String idFront;
@@ -26,9 +26,18 @@ class MemberModel {
   @HiveField(6)
   final String idBack;
 
-   @HiveField(7)
+  @HiveField(7)
   final String? schemeId;
+
+  @HiveField(8)
+  final String memberId;
+
+  @HiveField(9)
+  
+  final SchemeModel schemeModel;
+
   MemberModel({
+    required this.schemeModel,
     required this.memberName,
     required this.contactNumber,
     required this.memberAge,
@@ -37,5 +46,6 @@ class MemberModel {
     required this.idFront,
     required this.idBack,
     required this.schemeId,
+    required this.memberId,
   });
 }

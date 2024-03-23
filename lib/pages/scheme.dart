@@ -18,14 +18,15 @@ class SchemeButtonHome extends StatefulWidget {
 }
 
 class _SchemeButtonHomeState extends State<SchemeButtonHome> {
-
-   
- 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
-      appBar: customAppBar(title: 'Scheme'),
+      appBar: customAppBar(
+          title: 'Scheme',
+          onpresed: (value) {},
+          item1: 'Settings',
+          item2: 'Info'),
       body: Column(
         children: [
           Padding(
@@ -38,20 +39,16 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                   color: AppColor.fontColor,
                   size: 15,
                 ),
-
                 ValueListenableBuilder(
-              valueListenable: schemeDateListNotifer,
-              builder: (BuildContext context, List<SchemeModel> schemedata,
-                  Widget? child) {
-                return
-                BoldText(
-                  text: schemeDateListNotifer.value.length.toString(),
-                  color: AppColor.fontColor,
-                  size: 16,
-                );
-                  }
-                
-                ),
+                    valueListenable: schemeDateListNotifer,
+                    builder: (BuildContext context,
+                        List<SchemeModel> schemedata, Widget? child) {
+                      return BoldText(
+                        text: schemeDateListNotifer.value.length.toString(),
+                        color: AppColor.fontColor,
+                        size: 16,
+                      );
+                    }),
               ],
             ),
           ),
@@ -68,10 +65,6 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                     }
 
                     final data = schemedata[index];
-                    int bubAmount = int.parse(data.subscription);
-                    int instll = int.parse(data.installment);
-
-                    final pool = (bubAmount) * (instll);
                     return Padding(
                       padding:
                           const EdgeInsets.only(left: 6, right: 6, bottom: 4),
@@ -89,7 +82,7 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
                                         SchemeDetails(
-                                          pool: pool,
+                                      pool: data.poolAmount,
                                       schemeId: data.schemeId,
                                       dateTime: data.proposeDate,
                                       commission: data.commission,
@@ -126,7 +119,7 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                               fontWeight: FontWeight.w500,
                             ),
                             subtitle: ModifiedText(
-                              text: 'Subscribers :${data.totalMembers}',
+                              text: 'Subscribers : ${data.totalMembers}',
                               size: 14,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
@@ -137,16 +130,16 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                               children: [
                                 gap(height: 2),
                                 ModifiedText(
-                                    text: '₹ $pool',
-                                    size: 18,
-                                    color: AppColor.fontColor,
-                                    fontWeight: FontWeight.w600,
-                                    ),
+                                  text: '₹ ${data.poolAmount}',
+                                  size: 18,
+                                  color: AppColor.fontColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
                                 gap(
                                     height:
                                         4), // Add some spacing between text widgets (optional)
                                 ModifiedText(
-                                    text: 'Commission :${data.commission}%',
+                                    text: 'Commission : ${data.commission}%',
                                     size: 12,
                                     color: AppColor.fontColor)
                               ],

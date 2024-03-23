@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/models/addmember_model.dart';
 import 'package:smart_chitty/models/scheme_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
@@ -20,6 +21,8 @@ class AddMemberScreen extends StatefulWidget {
 }
 
 class _AddMemberScreenState extends State<AddMemberScreen> {
+  SchemeModel? selectedSchemeModel;
+  int lastGeneratedId = 1;
   final memberNameController = TextEditingController();
   final contactNumController = TextEditingController();
   final memberAgeController = TextEditingController();
@@ -39,12 +42,15 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     getSchemeNames();
   }
 
+  Future<int> getLastGeneratedId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('lasGeneratedMemberId') ?? 1;
+  }
+
   Future<void> getSchemeNames() async {
     final box = await Hive.openBox<SchemeModel>('schemes');
     final schemeData = box.values.toList();
     schemeId = schemeData.map((scheme) => scheme.schemeId).toList();
-
-    setState(() {});
   }
 
   Map<String, String> imagePaths = {
@@ -259,6 +265,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                 if (formKeys.currentState!.validate()) {
                   saveDataToHive();
                   Navigator.pop(context);
+
                   // collectDataOnclick(context);
                 }
               },
@@ -282,12 +289,14 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
           content: Text('Image saved successfully!'),
+          duration: Duration(seconds: 1),
         ),
       );
     } else {
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
           content: Text('No image selected.'),
+          duration: Duration(seconds: 1),
         ),
       );
     }
@@ -302,12 +311,16 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       avatar = imagePaths['avatar']!.toString();
       idFront = imagePaths['frontImage']!.toString();
       idBack = imagePaths['backImage']!.toString();
+      final dropvalue = dropdownValue;
 
-          if (memberName.isEmpty &&
+      if (memberName.isEmpty &&
           contactNumber.isEmpty &&
           memberAge.isEmpty &&
           memberAddress.isEmpty &&
-          avatar.isEmpty) {
+          avatar.isEmpty &&
+          dropvalue == null
+          // selectedSchemeModel == null
+          ) {
         ScaffoldMessenger.of(_context!).showSnackBar(
           const SnackBar(
             content: Text('Invalid input. Please check the values.'),
@@ -317,8 +330,16 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         );
         return;
       }
+      lastGeneratedId = await getLastGeneratedId();
+      final uniqueId = lastGeneratedId.toString().padLeft(2, 'M0');
+      
+         final schemebox = await Hive.openBox<SchemeModel>('schemes');
+    final schemeData = schemebox.values.toList();
+    final currentSchemeModel = schemeData.firstWhere((scheme) => scheme.schemeId == dropvalue);
 
       final member = MemberModel(
+        schemeModel: currentSchemeModel,
+        memberId: uniqueId,
         memberName: memberName,
         contactNumber: contactNumber,
         memberAge: memberAge,
@@ -327,17 +348,30 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         idFront: idFront,
         idBack: idBack,
         schemeId: dropdownValue,
+
       );
       final box = await Hive.openBox<MemberModel>('members');
-      await box.add(member);
+      if (dropdownValue != null) {
+        await box.put(uniqueId, member);
+        // await box.add(member);
 
-      ScaffoldMessenger.of(_context!).showSnackBar(
-        const SnackBar(
-          content: Text('Member added successfully!'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
-        ),
-      );
+        await saveLastGeneratedId(lastGeneratedId + 1);
+        ScaffoldMessenger.of(_context!).showSnackBar(
+          const SnackBar(
+            content: Text('Member added successfully!'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(_context!).showSnackBar(
+          const SnackBar(
+            content: Text('No Scheme Selected'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     } catch (error) {
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
@@ -347,5 +381,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         ),
       );
     }
+  }
+
+  Future<void> saveLastGeneratedId(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('lasGeneratedMemberId', id);
   }
 }

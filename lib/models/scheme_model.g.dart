@@ -17,6 +17,7 @@ class SchemeModelAdapter extends TypeAdapter<SchemeModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return SchemeModel(
+      poolAmount: fields[7] as String,
       schemeId: fields[6] as String,
       installment: fields[0] as String,
       totalMembers: fields[1] as String,
@@ -30,7 +31,7 @@ class SchemeModelAdapter extends TypeAdapter<SchemeModel> {
   @override
   void write(BinaryWriter writer, SchemeModel obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(8)
       ..writeByte(0)
       ..write(obj.installment)
       ..writeByte(1)
@@ -44,7 +45,9 @@ class SchemeModelAdapter extends TypeAdapter<SchemeModel> {
       ..writeByte(5)
       ..write(obj.proposeDate)
       ..writeByte(6)
-      ..write(obj.schemeId);
+      ..write(obj.schemeId)
+      ..writeByte(7)
+      ..write(obj.poolAmount);
   }
 
   @override

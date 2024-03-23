@@ -1,6 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
- part 'scheme_model.g.dart';
-
+part 'scheme_model.g.dart';
 
 @HiveType(typeId: 2)
 class SchemeModel {
@@ -25,9 +24,11 @@ class SchemeModel {
   @HiveField(6)
   final String schemeId;
 
-  
+  @HiveField(7)
+  final String poolAmount;
 
-  SchemeModel( {
+  SchemeModel({
+    required this.poolAmount,
     required this.schemeId,
     required this.installment,
     required this.totalMembers,

@@ -182,9 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final XFile? pickedImage =
         await imagePicker.pickImage(source: ImageSource.gallery);
     if (pickedImage != null) {
-      setState(() {
-        imagePath = pickedImage.path;
-      });
+      updateImagePath(pickedImage.path);
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
           content: Text('Image saved successfully!'),
@@ -241,4 +239,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       ),
     );
   }
+
+  void updateImagePath(String newImagePath) {
+  setState(() {
+    imagePath = newImagePath;
+  });
+}
 }

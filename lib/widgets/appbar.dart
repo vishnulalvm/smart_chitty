@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 
-AppBar customAppBar({
-  required String title,
-  void Function()? onpresed
-  
-}) {
+AppBar customAppBar({required String title,required void Function(int)? onpresed,String item1='',String item2='',}) {
   return AppBar(
     actions: [
-      IconButton(onPressed: onpresed, icon: const Icon(Icons.more_vert))
+       PopupMenuButton<int>(
+        onSelected: onpresed,
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+           PopupMenuItem<int>(
+            value: 1,
+            child: Text(item1),
+          ),
+           PopupMenuItem<int>(
+            value: 2,
+            child: Text(item2),
+          ),
+        ],
+      ),
     ],
     title: Text(
       title,
     ),
     flexibleSpace: Container(
       decoration: const BoxDecoration(
-       
         gradient: LinearGradient(
             colors: [
               Color.fromRGBO(1, 82, 136, 1),

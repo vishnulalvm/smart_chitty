@@ -62,7 +62,6 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                   key: formKey,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    // Use Column for vertical layout
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(20),
@@ -74,32 +73,25 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       ),
                       gap(height: 20),
                       customTextField(
-                        hintText:
-                            'No.Of Installment in Months', // Assuming "Amount" is intended
+                        hintText: 'No.Of Installment in Months',
                         title: 'No.Of Installment :',
                         controller: noOfInstallmentController,
                         validator: (value) =>
-                            value!.isEmpty // Adjust validation logic
-                                ? 'add no.of installment'
-                                : null,
-                        keyboardType: TextInputType.phone, // Set keyboard type
+                            value!.isEmpty ? 'add no.of installment' : null,
+                        keyboardType: TextInputType.phone,
                       ),
                       gap(height: 20),
                       customTextField(
-                        hintText:
-                            'Number of Members', // Assuming "Amount" is intended
+                        hintText: 'Number of Members',
                         title: 'Total Members :',
                         controller: totalMembersController,
                         validator: (value) =>
-                            value!.isEmpty // Adjust validation logic
-                                ? 'add member count'
-                                : null,
-                        keyboardType: TextInputType.phone, // Set keyboard type
+                            value!.isEmpty ? 'add member count' : null,
+                        keyboardType: TextInputType.phone,
                       ),
                       gap(height: 20),
                       customTextField(
-                        hintText:
-                            'Subcription Amount', // Assuming "Amount" is intended
+                        hintText: 'Subcription Amount',
                         title: 'Subcription Amount :',
                         controller: subscriptionController,
                         validator: (value) =>
@@ -240,9 +232,13 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
 
       lastGeneratedId = await getLastGeneratedId();
       final uniqueId = lastGeneratedId.toString().padLeft(4, '0');
-
+      int members = int.parse(totalMembers);
+      int subscriptionAmount = int.parse(subscription);
+      final pooL = (members) * (subscriptionAmount);
+      final pool = pooL.toString();
 
       final scheme = SchemeModel(
+        poolAmount: pool,
         schemeId: uniqueId,
         installment: installment,
         totalMembers: totalMembers,
@@ -252,10 +248,10 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
         proposeDate: proposeDate,
       );
       final box = await Hive.openBox<SchemeModel>('schemes');
-      await box.add(scheme);
+      // await box.add(scheme);
+      await box.put(uniqueId, scheme);
       addScheme(scheme);
       await saveLastGeneratedId(lastGeneratedId + 1);
-      
 
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(

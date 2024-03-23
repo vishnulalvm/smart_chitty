@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 String? dropdownValue;
+
 class DropdownButtonScheme extends StatefulWidget {
   final List<String> list;
   const DropdownButtonScheme({super.key, required this.list});
@@ -10,8 +11,6 @@ class DropdownButtonScheme extends StatefulWidget {
 }
 
 class _DropdownButtonSchemeState extends State<DropdownButtonScheme> {
-  
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -27,10 +26,7 @@ class _DropdownButtonSchemeState extends State<DropdownButtonScheme> {
         enableSearch: true,
         // width: 180,
         inputDecorationTheme: const InputDecorationTheme(
-         
-          
           border: InputBorder.none,
-
         ),
         hintText: 'Select Schemem',
         leadingIcon: const Padding(
@@ -40,7 +36,7 @@ class _DropdownButtonSchemeState extends State<DropdownButtonScheme> {
           ),
         ),
         onSelected: (String? value) {
-          // This is called when the user selects an item.
+        
           setState(() {
             dropdownValue = value!;
           });
@@ -50,7 +46,6 @@ class _DropdownButtonSchemeState extends State<DropdownButtonScheme> {
           return DropdownMenuEntry<String>(
             value: value,
             label: value,
-            
           );
         }).toList(),
       ),
