@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_chitty/db%20functions/registration_function.dart';
-import 'package:smart_chitty/pages/home.dart';
-import 'package:smart_chitty/pages/register.dart';
-import 'package:smart_chitty/utils/const.dart';
+import 'package:smart_chitty/services/db%20functions/registration_function.dart';
+import 'package:smart_chitty/pages/tabs/home.dart';
+import 'package:smart_chitty/auth/register.dart';
+import 'package:smart_chitty/utils/constants.dart';
 import 'package:smart_chitty/utils/images.dart';
-import 'package:smart_chitty/widgets/buttonwidget.dart';
-import 'package:smart_chitty/widgets/textfieldwidget.dart';
+import 'package:smart_chitty/widgets/global/buttonwidget.dart';
+import 'package:smart_chitty/widgets/global/textfieldwidget.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

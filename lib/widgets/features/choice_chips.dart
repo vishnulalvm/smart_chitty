@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chitty/db%20functions/memberdata_fuction.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
+import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
 
 int? selectedSchemeId;

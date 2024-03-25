@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:smart_chitty/pages/call_chitty.dart';
-import 'package:smart_chitty/pages/view_id_screen.dart';
+import 'package:smart_chitty/pages/others/memberscreen_features/call_chitty.dart';
+import 'package:smart_chitty/pages/others/other_screens/view_id_screen.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
-import 'package:smart_chitty/widgets/row_text.dart';
-import 'package:smart_chitty/widgets/widget_gap.dart';
+import 'package:smart_chitty/widgets/global/row_text.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class MemberDetails extends StatefulWidget {
   final String memberName;

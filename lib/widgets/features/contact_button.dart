@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_chitty/utils/text.dart';
-import 'package:smart_chitty/widgets/widget_gap.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 Widget contactButton ({IconData? icon,required String buttonName,}){
   return Container(

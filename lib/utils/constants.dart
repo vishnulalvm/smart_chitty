@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chitty/pages/home.dart';
-import 'package:smart_chitty/pages/login.dart';
-import 'package:smart_chitty/pages/members.dart';
-import 'package:smart_chitty/pages/profile.dart';
-import 'package:smart_chitty/pages/splash.dart';
+import 'package:smart_chitty/pages/tabs/home.dart';
+import 'package:smart_chitty/auth/login.dart';
+import 'package:smart_chitty/pages/tabs/members.dart';
+import 'package:smart_chitty/pages/tabs/profile.dart';
+import 'package:smart_chitty/auth/splash.dart';
 
 const saveKeyName = 'userLogin';
 

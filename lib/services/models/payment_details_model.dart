@@ -14,7 +14,11 @@ class PaymentModel {
   @HiveField(3)
   final DateTime? paymentDate;
 
+  @HiveField(4)
+  int installmentCount = 0;
+
   PaymentModel({
+    required this.installmentCount,
     required this.schemeId,
     required this.memberId,
     required this.payment,

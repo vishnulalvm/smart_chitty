@@ -4,9 +4,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
-import 'package:smart_chitty/widgets/contact_button.dart';
-import 'package:smart_chitty/widgets/listtile_account.dart';
-import 'package:smart_chitty/widgets/widget_gap.dart';
+import 'package:smart_chitty/widgets/features/contact_button.dart';
+import 'package:smart_chitty/widgets/global/list_tile_account.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});

@@ -1,13 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:smart_chitty/db%20functions/memberdata_fuction.dart';
-import 'package:smart_chitty/models/addmember_model.dart';
-import 'package:smart_chitty/pages/member_details.dart';
+import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/models/addmember_model.dart';
+import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
-import 'package:smart_chitty/widgets/appbar.dart';
-import 'package:smart_chitty/widgets/row_text.dart';
-import 'package:smart_chitty/widgets/widget_gap.dart';
+import 'package:smart_chitty/widgets/global/appbar.dart';
+import 'package:smart_chitty/widgets/global/row_text.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:intl/intl.dart';
 
 class SchemeDetails extends StatefulWidget {

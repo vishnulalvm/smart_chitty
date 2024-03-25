@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:flutter/foundation.dart';
 
 ValueNotifier<List<SchemeModel>> schemeListNotifer = ValueNotifier([]);

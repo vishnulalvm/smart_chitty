@@ -1,5 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:smart_chitty/models/registration_model.dart';
+import 'package:smart_chitty/services/models/registration_model.dart';
 
 final List<RegistrationModel> allData = [];
 

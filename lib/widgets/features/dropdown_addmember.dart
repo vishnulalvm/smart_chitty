@@ -7,10 +7,13 @@ class DropdownButtonScheme extends StatefulWidget {
   const DropdownButtonScheme({super.key, required this.list});
 
   @override
-  State<DropdownButtonScheme> createState() => _DropdownButtonSchemeState();
+  State<DropdownButtonScheme> createState() => DropdownButtonSchemeState();
 }
 
-class _DropdownButtonSchemeState extends State<DropdownButtonScheme> {
+class DropdownButtonSchemeState extends State<DropdownButtonScheme> {
+  String? _dropdownValue;
+
+  String? get selectedValue => _dropdownValue;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -37,7 +40,8 @@ class _DropdownButtonSchemeState extends State<DropdownButtonScheme> {
         ),
         onSelected: (String? value) {
           setState(() {
-            dropdownValue = value!;
+            _dropdownValue =value;
+            dropdownValue = value;
           });
         },
         dropdownMenuEntries:

@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:smart_chitty/db%20functions/memberdata_fuction.dart';
-import 'package:smart_chitty/models/addmember_model.dart';
-import 'package:smart_chitty/pages/addmembers.dart';
-import 'package:smart_chitty/pages/member_details.dart';
+import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/models/addmember_model.dart';
+import 'package:smart_chitty/pages/others/memberscreen_features/addmembers.dart';
+import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
-import 'package:smart_chitty/widgets/appbar.dart';
-import 'package:smart_chitty/widgets/choice_chips.dart';
-import 'package:smart_chitty/widgets/widget_gap.dart';
+import 'package:smart_chitty/widgets/global/appbar.dart';
+import 'package:smart_chitty/widgets/features/choice_chips.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
  
 class MembersScreen extends StatefulWidget {
   const MembersScreen({
@@ -25,12 +25,10 @@ class _MembersScreenState extends State<MembersScreen> {
       selectedId = newSelectedId;
     });
   }
-
   @override
   void initState() {
     super.initState();
     getSchemeIds();
-    
   }
 
   @override
@@ -99,9 +97,7 @@ class _MembersScreenState extends State<MembersScreen> {
                             padding: const EdgeInsets.all(5.0),
                             child: IntrinsicHeight(
                               child: ListTile(
-                                onTap: () {
-                               
-                                 
+                                onTap: () {                             
                                   Navigator.push(
                                       context,
                                       PageRouteBuilder(

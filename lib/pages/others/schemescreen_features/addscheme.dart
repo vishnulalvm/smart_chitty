@@ -1,13 +1,13 @@
 import 'dart:core';
 import 'package:flutter/material.dart'; // Assuming this is correct
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smart_chitty/db%20functions/schemedata_function.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
+import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
-import 'package:smart_chitty/widgets/dropdown_timeperiod.dart';
-import 'package:smart_chitty/widgets/textfield_schem.dart';
-import 'package:smart_chitty/widgets/widget_gap.dart';
+import 'package:smart_chitty/widgets/features/dropdown_timeperiod.dart';
+import 'package:smart_chitty/widgets/features/textfield_schem.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddSchemeBottomSheet extends StatefulWidget {

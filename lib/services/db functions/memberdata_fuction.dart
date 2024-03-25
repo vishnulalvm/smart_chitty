@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smart_chitty/main.dart';
-import 'package:smart_chitty/models/addmember_model.dart';
+import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
-import 'package:smart_chitty/widgets/choice_chips.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/widgets/features/choice_chips.dart';
 
 ValueNotifier<List<MemberModel>> memberDataListNotifer = ValueNotifier([]);
 ValueNotifier<List<SchemeModel>> schemeChipListner = ValueNotifier([]);

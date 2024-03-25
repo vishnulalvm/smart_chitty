@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chitty/db%20functions/schemedata_function.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
-import 'package:smart_chitty/pages/scheme_details.dart';
+import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/pages/others/schemescreen_features/scheme_details.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
-import 'package:smart_chitty/widgets/appbar.dart';
-import 'package:smart_chitty/pages/addscheme.dart';
-import 'package:smart_chitty/widgets/widget_gap.dart';
+import 'package:smart_chitty/widgets/global/appbar.dart';
+import 'package:smart_chitty/pages/others/schemescreen_features/addscheme.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class SchemeButtonHome extends StatefulWidget {
   const SchemeButtonHome({

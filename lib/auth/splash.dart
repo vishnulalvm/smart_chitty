@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/utils/colors.dart';
-import 'package:smart_chitty/utils/const.dart';
+import 'package:smart_chitty/utils/constants.dart';
 import 'package:smart_chitty/utils/text.dart';
 
 class SplashScreen extends StatefulWidget {

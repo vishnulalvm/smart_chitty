@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:smart_chitty/db%20functions/memberdata_fuction.dart';
-import 'package:smart_chitty/db%20functions/registration_function.dart';
-import 'package:smart_chitty/db%20functions/schemedata_function.dart';
-import 'package:smart_chitty/models/addmember_model.dart';
-import 'package:smart_chitty/models/registration_model.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
-import 'package:smart_chitty/utils/const.dart';
-import 'package:smart_chitty/widgets/choice_chips.dart';
+import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/db%20functions/registration_function.dart';
+import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/services/models/addmember_model.dart';
+import 'package:smart_chitty/services/models/registration_model.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/utils/constants.dart';
+import 'package:smart_chitty/widgets/features/choice_chips.dart';
 
 late Box<MemberModel> membersBox;
 void main() async {

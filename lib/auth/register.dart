@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:smart_chitty/db%20functions/registration_function.dart';
-import 'package:smart_chitty/models/registration_model.dart';
-import 'package:smart_chitty/pages/login.dart';
+import 'package:smart_chitty/services/db%20functions/registration_function.dart';
+import 'package:smart_chitty/services/models/registration_model.dart';
+import 'package:smart_chitty/auth/login.dart';
 import 'package:smart_chitty/utils/images.dart';
-import 'package:smart_chitty/widgets/buttonwidget.dart';
-import 'package:smart_chitty/widgets/textfieldwidget.dart';
+import 'package:smart_chitty/widgets/global/buttonwidget.dart';
+import 'package:smart_chitty/widgets/global/textfieldwidget.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});

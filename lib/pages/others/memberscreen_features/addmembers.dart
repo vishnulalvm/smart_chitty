@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_chitty/db%20functions/memberdata_fuction.dart';
-import 'package:smart_chitty/models/addmember_model.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
+import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/models/addmember_model.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
-import 'package:smart_chitty/widgets/buttonwidget.dart';
-import 'package:smart_chitty/widgets/dropdown_addmember.dart';
-import 'package:smart_chitty/widgets/textfieldwidget.dart';
-import 'package:smart_chitty/widgets/widget_gap.dart';
+import 'package:smart_chitty/widgets/global/buttonwidget.dart';
+import 'package:smart_chitty/widgets/features/dropdown_addmember.dart';
+import 'package:smart_chitty/widgets/global/textfieldwidget.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class AddMemberScreen extends StatefulWidget {
   const AddMemberScreen({super.key});

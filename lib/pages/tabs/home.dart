@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:smart_chitty/db%20functions/memberdata_fuction.dart';
-import 'package:smart_chitty/db%20functions/schemedata_function.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
-import 'package:smart_chitty/pages/profile.dart';
-import 'package:smart_chitty/pages/members.dart';
-import 'package:smart_chitty/pages/scheme.dart';
-import 'package:smart_chitty/pages/payment_update_button.dart';
+import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/pages/tabs/profile.dart';
+import 'package:smart_chitty/pages/tabs/members.dart';
+import 'package:smart_chitty/pages/tabs/scheme.dart';
+import 'package:smart_chitty/pages/others/homescreen_features/payment_update_button.dart';
 import 'package:smart_chitty/utils/images.dart';
-import 'package:smart_chitty/widgets/choice_chips.dart';
-import 'package:smart_chitty/widgets/icon_button.dart';
+import 'package:smart_chitty/widgets/features/choice_chips.dart';
+import 'package:smart_chitty/widgets/global/icon_button.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 class HomeScreen extends StatefulWidget {

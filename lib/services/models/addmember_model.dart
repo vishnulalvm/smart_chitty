@@ -1,5 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smart_chitty/models/scheme_model.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
 
 part 'addmember_model.g.dart';
 
