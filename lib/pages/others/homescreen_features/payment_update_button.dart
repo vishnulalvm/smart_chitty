@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:smart_chitty/services/db%20functions/payment_function.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
-import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/models/payment_details_model.dart';
+import 'package:smart_chitty/services/providers/memberid_provider.dart';
+import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
+import 'package:smart_chitty/widgets/features/dropdown_selectmember.dart';
 import 'package:smart_chitty/widgets/global/buttonwidget.dart';
-import 'package:smart_chitty/widgets/features/dropdown_addmember.dart';
 import 'package:smart_chitty/widgets/global/row_text.dart';
 import 'package:smart_chitty/widgets/features/textfield_schem.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
+
+int? installment;
+String? selectedSchemeValue;
+String? selectedMemberValue;
 
 class PaymentUpdateButton extends StatefulWidget {
   const PaymentUpdateButton({super.key});
@@ -20,50 +28,25 @@ class PaymentUpdateButton extends StatefulWidget {
 
 class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
   BuildContext? _context;
-  List<MemberModel> memberDatas = [];
-  List<String> schemeIds = [];
-  List<String> memberIds = [];
+
   final paymetController = TextEditingController();
   final formKeys = GlobalKey<FormState>();
-   final _schemeDropdownKey = GlobalKey<DropdownButtonSchemeState>();
-  final _memberDropdownKey = GlobalKey<DropdownButtonSchemeState>();
 
-  String? selectedSchemeValue;
-  String? selectedMemberValue;
   @override
   void initState() {
     super.initState();
-     _context = context;
-    getSchemeIds();
-    getMemberIds();
-  }
-
-    void getSelectedSchemeValue() {
-    final dropdownSchemeState = _schemeDropdownKey.currentState;
-    if (dropdownSchemeState != null) {
-      selectedSchemeValue = dropdownSchemeState.selectedValue;
-      
-     
-    }
-  }
-
-  void getSelectedMemberValue() {
-    final dropdownMemberState = _memberDropdownKey.currentState;
-    if (dropdownMemberState != null) {
-      selectedMemberValue = dropdownMemberState.selectedValue;
-     
-    }
+    _context = context;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-      ),
-      body: Form(
-        child: Stack(
+    return Consumer<MemberListProvider>(builder: (context, memberModel, child) {
+      return Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+        ),
+        body: Stack(
           children: [
             Positioned(
               top: 0,
@@ -82,18 +65,6 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const ModifiedText(
-                            text: 'Selected Scheme :',
-                            size: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          DropdownButtonScheme(list: schemeIds),
-                        ],
-                      ),
                       gap(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -104,7 +75,9 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
                           ),
-                          DropdownButtonScheme(list: memberIds),
+                          DropdownSelectMember(
+                            list: memberModel.memberDatasdrop,
+                          ),
                         ],
                       ),
                     ],
@@ -131,37 +104,64 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 200,
+                          height: 300,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
                           ),
                           // padding: const EdgeInsets.all(5.0),
 
-                          child: Column(
-                            children: [
-                              rowText(
-                                  firstText: 'Member Name :',
-                                  secoundText: memberDatas.isNotEmpty
-                                      ? memberDatas.first.memberName
-                                      : 'N/A'),
-                              rowText(
-                                firstText: 'Subcription Amount :',
-                                secoundText: memberDatas.isNotEmpty
-                                    ? memberDatas.first.schemeModel.subscription
-                                    : 'N/A',
-                              ),
-                              rowText(
-                                  firstText: 'Total Installment :',
+                          child: Form(
+                            key: formKeys,
+                            child: Column(
+                              children: [
+                                rowText(
+                                    firstText: 'Member Name :',
+                                    secoundText:
+                                        memberModel.memberDatas.isNotEmpty
+                                            ? memberModel
+                                                .memberDatas.first.memberName
+                                            : 'N/A'),
+                                rowText(
+                                    firstText: 'Member id :',
+                                    secoundText: memberModel
+                                            .memberDatas.isNotEmpty
+                                        ? memberModel.memberDatas.first.memberId
+                                        : 'N/A'),
+                                rowText(
+                                  firstText: 'Subcription Amount :',
                                   secoundText:
-                                      '${allPaymentData.isNotEmpty?allPaymentData.first.installmentCount:'N/A'}/${memberDatas.isNotEmpty ? memberDatas.first.schemeModel.installment : 'N/A'}'),
-                              rowText(
-                                firstText: 'Member id :',
-                                secoundText: memberDatas.isNotEmpty
-                                    ? memberDatas.first.memberId
-                                    : 'N/A',
-                              ),
-                            ],
+                                      memberModel.memberDatas.isNotEmpty
+                                          ? memberModel.memberDatas.first
+                                              .schemeModel.subscription
+                                          : 'N/A',
+                                ),
+                                rowText(
+                                    firstText: 'Total Installment :',
+                                    secoundText:
+                                        '${memberModel.memberDatas.isNotEmpty ? installment : 'N/A'}/${memberModel.memberDatas.isNotEmpty ? memberModel.memberDatas.first.schemeModel.installment : 'N/A'}'),
+                                rowText(
+                                  firstText: 'Scheme id :',
+                                  secoundText: memberModel
+                                          .memberDatas.isNotEmpty
+                                      ? memberModel.memberDatas.first.schemeId!
+                                      : 'N/A',
+                                ),
+                                gap(height: 12),
+                                ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.blue),
+                                    onPressed: () async {
+                                      memberModel.fetchMemberData(context);
+                                      installment = await getInstallmentCount(
+                                          selectedMember!);
+                                    },
+                                    child: const ModifiedText(
+                                        text: 'Get Details',
+                                        size: 14,
+                                        color: Colors.white)),
+                              ],
+                            ),
                           ),
                         ),
                         gap(height: 20),
@@ -174,7 +174,6 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                               : null,
                           keyboardType: TextInputType.number,
                         ),
-                        gap(height: 12),
                         const SizedBox(
                           height: 400,
                         )
@@ -191,8 +190,10 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
               child: buttons(
                 buttonAction: () {
                   if (formKeys.currentState!.validate()) {
-                    // collectDataOnclick(context);
+                    saveSchemeToHive();
                   }
+
+                  Navigator.pop(context);
                 },
                 buttonName: 'Register',
                 color: const Color.fromRGBO(0, 205, 255, 1),
@@ -200,51 +201,83 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
             )
           ],
         ),
-      ),
-    );
+      );
+    });
   }
 
   Future<void> saveSchemeToHive() async {
-     final payment = paymetController.text;
+    final member = await Hive.openBox<MemberModel>('members');
+    final memberData = member.values.toList();
+    final selectedMemberData =
+        memberData.firstWhere((member) => member.memberId == selectedMember);
 
+    final payment = paymetController.text;
+    final imagePath = selectedMemberData.avatar;
+    final memberId = selectedMemberData.memberId;
+    final schemeId = selectedMemberData.schemeId!;
+    DateTime currentDateTime = DateTime.now();
 
-        if (payment.isEmpty ) {
-        ScaffoldMessenger.of(_context!).showSnackBar(
-          const SnackBar(
-            content: Text('Invalid input. Please check the values.'),
-            backgroundColor: Colors.red,
-            duration: Duration(seconds: 2),
-          ),
-        );
-        return;
-      }
+    DateTime now = DateTime(
+      currentDateTime.year,
+      currentDateTime.month,
+      currentDateTime.day,
+      currentDateTime.hour,
+      currentDateTime.minute,
+    );
 
+// final formattedDateTime = DateFormat('yyyy-MM-dd HH:mm').format(now);
 
+    if (payment.isEmpty &&
+        imagePath.isEmpty &&
+        memberId.isEmpty &&
+        schemeId.isEmpty) {
+      ScaffoldMessenger.of(_context!).showSnackBar(
+        const SnackBar(
+          content: Text('Invalid input. Please check the values.'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      return;
+    } else {
+      final installmentCount =
+          await getInstallmentCount(selectedMemberData.memberId) + 1;
+      await saveInstallmentCount(selectedMemberData.memberId, installmentCount);
 
+      final box = await Hive.openBox<PaymentModel>('payments');
+
+      final paymentModel = PaymentModel(
+        imagePath: selectedMemberData.avatar,
+        installmentCount: installmentCount,
+        memberId: selectedMemberData.memberId,
+        memberModel: selectedMemberData,
+        payment: payment,
+        paymentDate: now,
+        schemeId: selectedMemberData.schemeId!,
+      );
+      await box.add(paymentModel);
+
+      ScaffoldMessenger.of(_context!).showSnackBar(
+        const SnackBar(
+          content: Text('Payment saved successfully.'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+    final paymentModel =
+        Provider.of<TransactionHistoryProvider>(_context!, listen: false);
+    paymentModel.fetchMemberDatas();
   }
 
-  Future<void> getSchemeIds() async {
-    final box = await Hive.openBox<SchemeModel>('schemes');
-    final schemeData = box.values.toList();
-    setState(() {
-      schemeIds = schemeData.map((scheme) => scheme.schemeId).toList();
-    });
+  Future<void> saveInstallmentCount(
+      String memberId, int installmentCount) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('installment_$memberId', installmentCount);
   }
 
-  Future<void> getMemberIds() async {
-    final box = await Hive.openBox<MemberModel>('members');
-    final memberData = box.values.toList();
-
-    setState(() {
-      memberIds = memberData.map((member) => member.memberId).toList();
-
-      if (dropdownValue != null) {
-        memberDatas = memberData
-            .where((member) => member.memberId == dropdownValue)
-            .toList();
-      } else {
-        memberDatas = [];
-      }
-    });
+  Future<int> getInstallmentCount(String memberId) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('installment_$memberId') ?? 0;
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/constants.dart';
@@ -18,7 +19,6 @@ class _SplashScreenState extends State<SplashScreen> {
     checkLoglogin();
 
     super.initState();
-  
   }
 
   @override
@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> gotohomeScreen() async {
-     Navigator.pushReplacementNamed(context, '/login');
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   Future<void> checkLoglogin() async {
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (userloged == null || userloged == false) {
         gotohomeScreen();
       } else {
-         Navigator.pushReplacementNamed(context, '/home');
+        context.go('/');
       }
     });
   }

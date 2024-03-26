@@ -35,6 +35,7 @@ class MemberModel {
   @HiveField(9)
   
   final SchemeModel schemeModel;
+  
 
   MemberModel({
     required this.schemeModel,

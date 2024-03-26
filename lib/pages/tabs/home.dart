@@ -1,15 +1,28 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:provider/provider.dart';
+import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/pages/tabs/profile.dart';
 import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/scheme.dart';
 import 'package:smart_chitty/pages/others/homescreen_features/payment_update_button.dart';
+import 'package:smart_chitty/services/providers/memberid_provider.dart';
+import 'package:smart_chitty/services/providers/schemeid_provider.dart';
+import 'package:smart_chitty/services/providers/transaction.dart';
+import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
+import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/choice_chips.dart';
 import 'package:smart_chitty/widgets/global/icon_button.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:text_scroll/text_scroll.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,17 +33,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-    @override
+  ScrollController scrollController = ScrollController();
+  @override
   void initState() {
     super.initState();
-   if (schemeListNotifer.value.isNotEmpty) {
-    selectedId = schemeListNotifer.value.first.schemeId;
-    getMemberCredentials(selectedId);
-  } else {
-    selectedId = '';
+    if (schemeListNotifer.value.isNotEmpty) {
+      selectedId = schemeListNotifer.value.first.schemeId;
+      getMemberCredentials(selectedId);
+    } else {
+      selectedId = '';
+    }
+    final schemeIdModel =
+        Provider.of<SchemeIdListProvider>(context, listen: false);
+    schemeIdModel.getSchemeIds();
+    final memberModel = Provider.of<MemberListProvider>(context, listen: false);
+    memberModel.getMemberIds();
+    memberModel.fetchMemberDatas();
+    final paymentModel =
+        Provider.of<TransactionHistoryProvider>(context, listen: false);
+    paymentModel.fetchTransactionsForMonth(3);
   }
-    refreshMember(selectedId);
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -117,7 +140,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       CircularIconhome(
                         icontype: Symbols.finance,
-                        buttonpress: () {},
+                        buttonpress: () {
+                          context.go('/statistics');
+                          final paymentModel =
+                              Provider.of<TransactionHistoryProvider>(context,
+                                  listen: false);
+                          paymentModel.fetchTransactionsForMonth(3);
+                        },
                         iconname: 'Statistics',
                       ),
                       CircularIconhome(
@@ -148,18 +177,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           DraggableScrollableSheet(
+            snapAnimationDuration: Durations.extralong2,
             initialChildSize: 0.63,
             minChildSize: 0.63,
             maxChildSize: 0.88,
-            builder: (context, controller) => Container(
-                padding: const EdgeInsets.all(0),
+            builder: (context, scrollControllers) => Container(
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(199, 245, 245, 1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
+                  padding: const EdgeInsets.only(left: 12, right: 12, top: 30),
+                  child: ListView(
+                    // physics: const BouncingScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    controller: scrollControllers,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -182,57 +214,274 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                         ],
                       ),
-
-                      Expanded(
-                        child: ValueListenableBuilder(
-                          valueListenable: schemeListNotifer,
-                          builder: (BuildContext context,
-                              List<SchemeModel> schemedata, Widget? child) {
-                            return ListView.builder(
-                            
-                              controller: controller,
-                              itemCount: schemedata.length,
-                              itemBuilder: (context, index) {
-                                  final data = schemedata[index];
-                                return  Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: 6, right: 6, bottom: 4),
-                                  child: Card(
-                                    elevation: 0,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: Colors.blue,
-                                          radius: 20,
-                                          child: Text(data.installment,style: const TextStyle(color: Colors.white,fontSize: 26,fontWeight: FontWeight.w700),),
-                                          // backgroundImage: AssetImage(item.imagePath), // Use your image path
-                                        ),
-                                        title: Text('${data.installment}×${data.subscription}'),
-                                        subtitle: Text('Subcribers :${data.totalMembers}'),
-                                        trailing: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text('Subcribers :${data.totalMembers}'),
-                                            const SizedBox(
-                                                height:
-                                                    15), // Add some spacing between text widgets (optional)
-                                            const Text('item.trailingText2'),
-                                          ],
-                                        ),
+                      gap(height: 10),
+                      Container(
+                        width: double.maxFinite,
+                        height: 50,
+                        decoration: BoxDecoration(
+                            color: const Color.fromRGBO(28, 167, 190, 1),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Icon(
+                                Icons.alarm,
+                                color: Colors.white,
+                              ),
+                              gap(width: 10),
+                              const ModifiedText(
+                                text: 'Next Meet @ 10.00 12-02-24',
+                                size: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              gap(width: 80),
+                              const Icon(
+                                Icons.close,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      gap(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Transaction ',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromRGBO(29, 27, 32, 1)),
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                context.go('/transaction');
+                              },
+                              child: const Text(
+                                'See All',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromRGBO(29, 27, 32, 1)),
+                              )),
+                        ],
+                      ),
+                      gap(height: 10),
+                      Consumer<TransactionHistoryProvider>(
+                        builder: (context, paymentData, child) {
+                          return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            controller: scrollController,
+                            itemCount: paymentData.lastFourTransaction.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final payment =
+                                  paymentData.lastFourTransaction[index];
+                              String formattedDateTime =
+                                  DateFormat('dd-MM-yyyy HH:mm')
+                                      .format(payment.paymentDate!);
+                              installmentcount = payment.installmentCount;
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Card(
+                                  elevation: 0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: ListTile(
+                                      leading: CircleAvatar(
+                                        radius: 25,
+                                        backgroundImage:
+                                            FileImage(File(payment.imagePath)),
+                                        backgroundColor: Colors.blue,
+                                      ),
+                                      title: ModifiedText(
+                                        text: formattedDateTime,
+                                        size: 18,
+                                        color: AppColor.fontColor,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      subtitle: ModifiedText(
+                                        text:
+                                            'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
+                                        size: 14,
+                                        color: AppColor.fontColor,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      trailing: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        children: [
+                                          gap(height: 2),
+                                          ModifiedText(
+                                            text:
+                                                '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
+                                            size: 18,
+                                            color: AppColor.fontColor,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          gap(height: 4),
+                                          ModifiedText(
+                                            text:
+                                                'scheme : ${payment.schemeId}', // Replace with the actual payment mode field from PaymentModel
+                                            size: 12,
+                                            color: AppColor.fontColor,
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                );
-                              },
-                            );
-                          },
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      gap(height: 10),
+                      ModifiedText(
+                        text: 'New Schemes',
+                        size: 16,
+                        color: AppColor.fontColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      gap(height: 20),
+                      SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            Container(
+                              height: 100,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            gap(width: 12),
+                            Container(
+                              height: 100,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            gap(width: 12),
+                            Container(
+                              height: 100,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            gap(width: 12),
+                            Container(
+                              height: 100,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                            gap(width: 12),
+                            Container(
+                              height: 100,
+                              width: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                      //
+                      gap(height: 10),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'New Members',
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromRGBO(29, 27, 32, 1)),
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                context.go('/members');
+                              },
+                              child: const Text(
+                                'See All',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Color.fromRGBO(29, 27, 32, 1)),
+                              )),
+                        ],
+                      ),
+                      ValueListenableBuilder(
+                          valueListenable: schemeListNotifer,
+                          builder: (BuildContext context,
+                              List<SchemeModel> schemedata, Widget? child) {
+                            return SizedBox(
+                              height: 300,
+                              child: ListView.builder(
+                                padding: EdgeInsets.zero,
+                                controller: scrollController,
+                                itemCount: schemedata.length,
+                                itemBuilder: (context, index) {
+                                  final data = schemedata[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 4),
+                                    child: Card(
+                                      elevation: 0,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: ListTile(
+                                          leading: CircleAvatar(
+                                            backgroundColor: Colors.blue,
+                                            radius: 20,
+                                            child: Text(
+                                              data.installment,
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 26,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
+                                          ),
+                                          title: Text(
+                                              '${data.installment}×${data.subscription}'),
+                                          subtitle: Text(
+                                              'Subcribers :${data.totalMembers}'),
+                                          trailing: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              Text(
+                                                  'Subcribers :${data.totalMembers}'),
+                                              const SizedBox(
+                                                  height:
+                                                      15), // Add some spacing between text widgets (optional)
+                                              const Text('item.trailingText2'),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          }),
                     ],
                   ),
                 )
@@ -256,8 +505,8 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(30), // Adjust radius as needed
           ),
           onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const PaymentUpdateButton()));
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => const PaymentUpdateButton()));
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/providers/memberdata_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 
-int? selectedSchemeId;
+String? selectedSchemeId;
 String? selectedId;
+String? fistvalue;
 
 class MemberFillter extends StatefulWidget {
-  
   final Function(String?) onChipSelected;
   const MemberFillter({super.key, required this.onChipSelected});
 
@@ -21,30 +22,30 @@ class _MemberFillterState extends State<MemberFillter> {
   @override
   void initState() {
     super.initState();
-    getSchemeIds();
-
+    final schemeIdModel =
+        Provider.of<MemberDataProvider>(context, listen: false);
+    schemeIdModel.getSchemeIds();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder(
-      valueListenable: schemeChipListner,
-      builder: (BuildContext context, List<SchemeModel> schemeModels,
-          Widget? child) {
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: _buildChoiceChips(schemeModels),
-          ),
-        );
-      },
-    );
+    return Consumer<MemberDataProvider>(builder: (context, schememodel, child) {
+      
+
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: _buildChoiceChips(schememodel.schemeIdList),
+        ),
+      );
+    });
   }
 
-  List<Widget> _buildChoiceChips(List<SchemeModel> schemeModels) {
-    return schemeModels.map((schemeModel) {
-      int? schemeIdInt = int.tryParse(schemeModel.schemeId);
+  List<Widget> _buildChoiceChips(List<SchemeModel> schememodels) {
+    return schememodels.map((schemeModel) {
+      String? schemeIdInt = schemeModel.schemeId;
+
       return Padding(
         padding: const EdgeInsets.only(left: 12),
         child: ChoiceChip(
@@ -63,7 +64,7 @@ class _MemberFillterState extends State<MemberFillter> {
             onSelected: (bool selected) {
               if (mounted) {
                 setState(() {
-                  selectedSchemeId = selected ? schemeIdInt : firstSchemeId;
+                  selectedSchemeId = selected ? schemeIdInt : fistvalue;
                   selectedId = schemeIdInt.toString().padLeft(4, '0');
                   widget.onChipSelected(selectedId);
                 });

@@ -333,7 +333,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         return;
       }
       lastGeneratedId = await getLastGeneratedId();
-      final uniqueId = lastGeneratedId.toString().padLeft(2, 'M0');
+      final uniqueId = 'M${(lastGeneratedId + 1).toString().padLeft(3, '0')}';
 
       final schemebox = await Hive.openBox<SchemeModel>('schemes');
       final schemeData = schemebox.values.toList();

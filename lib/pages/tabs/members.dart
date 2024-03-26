@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/addmembers.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
+import 'package:smart_chitty/services/providers/memberdata_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
@@ -28,7 +31,9 @@ class _MembersScreenState extends State<MembersScreen> {
   @override
   void initState() {
     super.initState();
-    getSchemeIds();
+   final schemeIdModel =
+        Provider.of<MemberDataProvider>(context, listen: false);
+    schemeIdModel.getSchemeIds();
   }
 
   @override
@@ -97,7 +102,8 @@ class _MembersScreenState extends State<MembersScreen> {
                             padding: const EdgeInsets.all(5.0),
                             child: IntrinsicHeight(
                               child: ListTile(
-                                onTap: () {                             
+                                onTap: () {        
+                                  getPaymentCredentials(data.memberId);                     
                                   Navigator.push(
                                       context,
                                       PageRouteBuilder(

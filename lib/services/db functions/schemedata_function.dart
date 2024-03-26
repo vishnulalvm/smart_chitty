@@ -5,11 +5,6 @@ import 'package:flutter/foundation.dart';
 
 ValueNotifier<List<SchemeModel>> schemeListNotifer = ValueNotifier([]);
 
-// void addScheme (SchemeModel value){
-//   schemeListNotifer.value.add(value);
-//   schemeListNotifer.notifyListeners();
-  
-// }
 
 void getSchemeCredentials() async {
   schemeListNotifer.value.clear();

@@ -231,7 +231,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
       }
 
       lastGeneratedId = await getLastGeneratedId();
-      final uniqueId = lastGeneratedId.toString().padLeft(4, '0');
+      final uniqueId = 'S${(lastGeneratedId + 1).toString().padLeft(4, '0')}';
       int members = int.parse(totalMembers);
       int subscriptionAmount = int.parse(subscription);
       final pooL = (members) * (subscriptionAmount);

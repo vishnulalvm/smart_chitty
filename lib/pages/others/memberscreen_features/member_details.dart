@@ -1,12 +1,17 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/call_chitty.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_id_screen.dart';
+import 'package:smart_chitty/services/db%20functions/payment_function.dart';
+import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/row_text.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
+
+int? installmentcount;
 
 class MemberDetails extends StatefulWidget {
   final String memberName;
@@ -156,7 +161,8 @@ class _MemberDetailsState extends State<MemberDetails> {
                             secoundText: widget.pool),
                         rowText(
                             firstText: 'Total Installment :',
-                            secoundText: '32/${widget.installment}'),
+                            secoundText:
+                                '$installmentcount/${widget.installment}'),
                         rowText(
                             firstText: 'Member id :',
                             secoundText: widget.memberId),
@@ -293,65 +299,79 @@ class _MemberDetailsState extends State<MemberDetails> {
                       ),
                     ),
                   ),
-                  gap(height: 12),
                 ],
               ),
             ),
           ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 6, right: 6, bottom: 4),
-                  child: Card(
-                    elevation: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: ListTile(
-                        leading: const CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.blue,
-                          child: ModifiedText(
-                              text: 'G', size: 26, color: Colors.white),
-                        ),
-                        title: ModifiedText(
-                          text: '12-Mar-2023',
-                          size: 18,
-                          color: AppColor.fontColor,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        subtitle: ModifiedText(
-                          text: 'Member id: M01',
-                          size: 14,
-                          color: AppColor.fontColor,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        trailing: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            gap(height: 2),
-                            ModifiedText(
-                              text: '₹ 5000',
+          SliverToBoxAdapter(
+            child: ValueListenableBuilder(
+              valueListenable: allPaymentData,
+              builder: (BuildContext context, List<PaymentModel> paymentData,
+                  Widget? child) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: paymentData.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final payment = paymentData[index];
+                    String formattedDateTime = DateFormat('dd-MM-yyyy HH:mm')
+                        .format(payment.paymentDate!);
+                    installmentcount = payment.installmentCount;
+                    return Padding(
+                      padding:
+                          const EdgeInsets.only(left: 6, right: 6, bottom: 4),
+                      child: Card(
+                        elevation: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: ListTile(
+                            leading: CircleAvatar(
+                              radius: 25,
+                              backgroundImage:
+                                  FileImage(File(payment.imagePath)),
+                              backgroundColor: Colors.blue,
+                            ),
+                            title: ModifiedText(
+                              text: formattedDateTime,
                               size: 18,
                               color: AppColor.fontColor,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.w500,
                             ),
-                            gap(
-                                height:
-                                    4), // Add some spacing between text widgets (optional)
-                            ModifiedText(
-                                text: 'Payment : Upi',
-                                size: 12,
-                                color: AppColor.fontColor)
-                          ],
+                            subtitle: ModifiedText(
+                              text:
+                                  'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
+                              size: 14,
+                              color: AppColor.fontColor,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            trailing: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                gap(height: 2),
+                                ModifiedText(
+                                  text:
+                                      '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
+                                  size: 18,
+                                  color: AppColor.fontColor,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                                gap(height: 4),
+                                ModifiedText(
+                                  text:
+                                      'scheme : ${payment.schemeId}', // Replace with the actual payment mode field from PaymentModel
+                                  size: 12,
+                                  color: AppColor.fontColor,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 );
               },
-              childCount: 10,
             ),
           ),
         ],
