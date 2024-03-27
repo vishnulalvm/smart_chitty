@@ -7,6 +7,7 @@ class TransactionHistoryProvider extends ChangeNotifier {
   List<PaymentModel> sortedTransactionData = [];
   List<PaymentModel> specificTransaction = [];
   List<PaymentModel> lastFourTransaction = [];
+  double monthlyCollection =0;
 
   Future<void> fetchTransactionsForMonth(int month) async {
     await fetchMemberDatas();
@@ -48,4 +49,12 @@ class TransactionHistoryProvider extends ChangeNotifier {
       return date != null && date.month == month;
     }).toList();
   }
+  double calculateTotalMonthlyCollection() {
+  double totalCollection = 0;
+  for (var transaction in specificTransaction) {
+    totalCollection += double.tryParse(transaction.payment) ?? 0;
+monthlyCollection=totalCollection;
+  }
+  return totalCollection;
+}
 }

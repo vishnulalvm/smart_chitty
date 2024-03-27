@@ -18,15 +18,20 @@ class StatisticsScreen extends StatefulWidget {
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
   ScrollController scrollController = ScrollController();
-  List<_SalesData> data = [
-    _SalesData('Jan', 3500),
-    _SalesData('Feb', 2800),
-    _SalesData('Mar', 3400),
-    _SalesData('Apr', 3200),
-    _SalesData('May', 4000)
+  List<TransactionData> data = [
+    TransactionData('Jan', 31500),
+    TransactionData('Feb', 12800),
+    TransactionData('Mar', 3400),
+    TransactionData('Apr', 13200),
+    TransactionData('May', 40000),
+    TransactionData('Jun', 34800),
+    TransactionData('Jul', 42000),
+    TransactionData('Aug', 13200),
+    TransactionData('Sep', 40000),
+    TransactionData('Oct', 34800),
+    TransactionData('Nov', 42000),
+    TransactionData('Dec', 45000),
   ];
-
-  List<String> transactionHistory = [];
 
   @override
   void initState() {
@@ -51,51 +56,84 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           padding: EdgeInsets.zero,
           controller: scrollController,
           children: [
-            Container(
-              width: double.maxFinite,
-              height: 450,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/images/chart.jpeg'),
-                    fit: BoxFit.cover),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 150),
-                child: SfCartesianChart(
-                  isTransposed: true,
-                  primaryXAxis: const CategoryAxis(
-                    majorGridLines: MajorGridLines(width: 0, color: Colors.red),
-                    majorTickLines: MajorTickLines(width: 0),
-                  ),
-                  primaryYAxis: const NumericAxis(
-                    isInversed: false,
-                  ),
-                  series: <CartesianSeries<_SalesData, String>>[
-                    BarSeries<_SalesData, String>(
-                      dataSource: data,
-                      xValueMapper: (_SalesData sales, _) => sales.year,
-                      yValueMapper: (_SalesData sales, _) => sales.sales,
-                      name: 'Sales',
-                      dataLabelSettings:
-                          const DataLabelSettings(isVisible: true),
-                      color: const Color.fromRGBO(0, 185, 184, 1),
-                      selectionBehavior: SelectionBehavior(
-                        selectedOpacity: 1,
-                        unselectedOpacity: 1,
-                        // selectionController: ,
-                        enable: true,
-                        selectedColor: const Color.fromRGBO(1, 80, 136, 1),
-                        unselectedColor: const Color.fromRGBO(0, 185, 184, 1),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Container(
+                width: 800,
+                height: 450,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/images/chart.jpeg'),
+                      fit: BoxFit.cover),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 150),
+                  child: SfCartesianChart(
+                    onSelectionChanged: (value) {
+                      getdata(value,context);
+                      //  cc
+                    },
+                    margin: EdgeInsets.zero,
+                    enableAxisAnimation: true,
+                    plotAreaBorderWidth: 0,
+                    isTransposed: true,
+                    primaryXAxis: const CategoryAxis(
+                      arrangeByIndex: true,
+                      labelStyle: TextStyle(fontWeight: FontWeight.w500),
+                      autoScrollingMode: AutoScrollingMode.start,
+                      autoScrollingDelta: 12,
+                      axisLine: AxisLine(
+                          width: 2, color: Color.fromRGBO(1, 80, 136, 1)),
+                      majorGridLines: MajorGridLines(
+                        width: 0,
                       ),
-                    )
-                  ],
+                      majorTickLines: MajorTickLines(width: 0),
+                    ),
+                    primaryYAxis: NumericAxis(
+                      numberFormat: NumberFormat.simpleCurrency(
+                          decimalDigits: 0, locale: 'hi_IN'),
+                      edgeLabelPlacement: EdgeLabelPlacement.hide,
+                      autoScrollingMode: AutoScrollingMode.start,
+                      isVisible: false,
+                      axisLine: const AxisLine(
+                        width: 0,
+                      ),
+                      axisBorderType: AxisBorderType.withoutTopAndBottom,
+                      majorGridLines: const MajorGridLines(width: 0),
+                      minorGridLines: const MinorGridLines(width: 0),
+                      isInversed: false,
+                    ),
+                    series: <CartesianSeries<TransactionData, String>>[
+                      BarSeries<TransactionData, String>(
+                        dataSource: data,
+                        xValueMapper: (TransactionData sales, _) {
+                          return sales.year;
+                        },
+                        yValueMapper: (TransactionData sales, _) {
+                          return sales.sales;
+                        },
+                        name: 'Sales',
+                        dataLabelSettings:
+                            const DataLabelSettings(isVisible: true),
+                        color: const Color.fromRGBO(0, 185, 184, 1),
+                        selectionBehavior: SelectionBehavior(
+                          selectedOpacity: 1,
+                          unselectedOpacity: 1,
+                          // selectionController: ,
+                          enable: true,
+                          selectedColor: const Color.fromRGBO(1, 80, 136, 1),
+                          unselectedColor: const Color.fromRGBO(0, 185, 184, 1),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
             gap(height: 20),
             const Divider(
               thickness: 5,
-              color: Color.fromRGBO(0, 185, 184, 1),
+              color: Colors.white,
             ),
             gap(height: 12),
             Padding(
@@ -105,12 +143,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 children: [
                   ModifiedText(
                       text: 'Monthly Transactions',
-                      size: 18,
+                      size: 16,
                       color: AppColor.fontColor,
                       fontWeight: FontWeight.w500),
                   ModifiedText(
                       text: 'March',
-                      size: 18,
+                      size: 16,
                       color: AppColor.fontColor,
                       fontWeight: FontWeight.w500)
                 ],
@@ -195,10 +233,16 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
       );
     });
   }
+
+  void getdata(SelectionArgs value,BuildContext context) {
+    final paymentModel =
+        Provider.of<TransactionHistoryProvider>(context, listen: false);
+    paymentModel.fetchTransactionsForMonth(value.pointIndex + 1);
+  }
 }
 
-class _SalesData {
-  _SalesData(this.year, this.sales);
+class TransactionData {
+  TransactionData(this.year, this.sales);
   final String year;
   final double sales;
 }

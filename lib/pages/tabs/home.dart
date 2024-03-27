@@ -6,9 +6,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
-import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
-import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/pages/tabs/profile.dart';
 import 'package:smart_chitty/pages/tabs/members.dart';
@@ -142,10 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         icontype: Symbols.finance,
                         buttonpress: () {
                           context.go('/statistics');
-                          final paymentModel =
-                              Provider.of<TransactionHistoryProvider>(context,
-                                  listen: false);
-                          paymentModel.fetchTransactionsForMonth(3);
+                          
                         },
                         iconname: 'Statistics',
                       ),
@@ -167,7 +162,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CircularIconhome(
                         icontype: Symbols.alarm,
-                        buttonpress: () {},
+                        buttonpress: () {
+                         
+                        },
                         iconname: 'Reminder',
                       ),
                     ],

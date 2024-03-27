@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_chitty/auth/splash.dart';
-import 'package:smart_chitty/pages/others/other_screens/transaction_all%20.dart';
+import 'package:smart_chitty/pages/others/other_screens/all_transaction.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
 import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/statistics.dart';
