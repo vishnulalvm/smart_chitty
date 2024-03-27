@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
+ double monthlyCollection =0;
 
 class TransactionHistoryProvider extends ChangeNotifier {
   List<PaymentModel> transactionData = [];
   List<PaymentModel> sortedTransactionData = [];
   List<PaymentModel> specificTransaction = [];
   List<PaymentModel> lastFourTransaction = [];
-  double monthlyCollection =0;
-
-  Future<void> fetchTransactionsForMonth(int month) async {
+ 
+  Future<void> fetchTransactionsForMonth(String stringmonth) async {
     await fetchMemberDatas();
-    final transactionsForMonth = getTransactionsByMonth(month);
+    final transactionsForMonth = getTransactionsByMonth(stringmonth);
     specificTransaction = transactionsForMonth;
-
     notifyListeners();
   }
 
@@ -32,29 +31,24 @@ class TransactionHistoryProvider extends ChangeNotifier {
       } else if (bDate == null) {
         return -1; // b is null, so it should come after a
       } else {
-        // Sort in descending order (recent dates first)
         return bDate.compareTo(aDate);
       }
     });
     sortedTransactionData.addAll(transactionData);
     final lastFourTransactions = transactionData.take(4).toList();
     lastFourTransaction = lastFourTransactions;
-
     notifyListeners();
   }
 
-  List<PaymentModel> getTransactionsByMonth(int month) {
+  List<PaymentModel> getTransactionsByMonth(String month) {
     return transactionData.where((transaction) {
-      final date = transaction.paymentDate;
-      return date != null && date.month == month;
+      final monthPart = month;
+      print(monthPart);
+      // final monthInt = int.tryParse(monthPart) ?? 0;
+      final date = transaction.paymentMonth;
+      print(date);
+      return  date == monthPart ;
     }).toList();
   }
-  double calculateTotalMonthlyCollection() {
-  double totalCollection = 0;
-  for (var transaction in specificTransaction) {
-    totalCollection += double.tryParse(transaction.payment) ?? 0;
-monthlyCollection=totalCollection;
-  }
-  return totalCollection;
-}
+
 }

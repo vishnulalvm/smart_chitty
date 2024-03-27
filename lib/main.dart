@@ -5,6 +5,7 @@ import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
+import 'package:smart_chitty/services/models/monthly_collection_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/services/models/registration_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
@@ -31,6 +32,10 @@ void main() async {
   if (!Hive.isAdapterRegistered(PaymentModelAdapter().typeId)) {
     Hive.registerAdapter(PaymentModelAdapter());
   }
+  if (!Hive.isAdapterRegistered(MonthlyCollectionAdapter().typeId)) {
+    Hive.registerAdapter(MonthlyCollectionAdapter());
+  }
+
 
   getUserCredentials();
   getSchemeCredentials();

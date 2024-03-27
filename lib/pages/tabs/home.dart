@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
+import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/pages/tabs/profile.dart';
 import 'package:smart_chitty/pages/tabs/members.dart';
@@ -44,12 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
     final schemeIdModel =
         Provider.of<SchemeIdListProvider>(context, listen: false);
     schemeIdModel.getSchemeIds();
+
     final memberModel = Provider.of<MemberListProvider>(context, listen: false);
     memberModel.getMemberIds();
     memberModel.fetchMemberDatas();
-    final paymentModel =
+
+    final paymentHistory =
         Provider.of<TransactionHistoryProvider>(context, listen: false);
-    paymentModel.fetchTransactionsForMonth(3);
+    paymentHistory.fetchMemberDatas();
+    fetchMemberDatas();
   }
 
   @override
@@ -139,8 +143,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       CircularIconhome(
                         icontype: Symbols.finance,
                         buttonpress: () {
+                          fetchMemberDatas();
                           context.go('/statistics');
-                          
                         },
                         iconname: 'Statistics',
                       ),
@@ -162,9 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CircularIconhome(
                         icontype: Symbols.alarm,
-                        buttonpress: () {
-                         
-                        },
+                        buttonpress: () {},
                         iconname: 'Reminder',
                       ),
                     ],
@@ -184,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 12, right: 12, top: 30),
+                  padding: const EdgeInsets.only(left: 12, right: 12, top: 20),
                   child: ListView(
                     // physics: const BouncingScrollPhysics(),
                     padding: EdgeInsets.zero,
@@ -502,6 +504,10 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(30), // Adjust radius as needed
           ),
           onPressed: () {
+            final memberModel =
+        Provider.of<MemberListProvider>(context, listen: false);
+    memberModel.getMemberIds();
+    memberModel.fetchMemberDatas();
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const PaymentUpdateButton()));
           }),

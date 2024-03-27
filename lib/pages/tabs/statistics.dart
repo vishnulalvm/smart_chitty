@@ -3,11 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
+import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
+import 'package:smart_chitty/services/models/monthly_collection_model.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
+String month = '';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -17,24 +21,12 @@ class StatisticsScreen extends StatefulWidget {
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
+  late ZoomPanBehavior zoomPanBehavior;
   ScrollController scrollController = ScrollController();
-  List<TransactionData> data = [
-    TransactionData('Jan', 31500),
-    TransactionData('Feb', 12800),
-    TransactionData('Mar', 3400),
-    TransactionData('Apr', 13200),
-    TransactionData('May', 40000),
-    TransactionData('Jun', 34800),
-    TransactionData('Jul', 42000),
-    TransactionData('Aug', 13200),
-    TransactionData('Sep', 40000),
-    TransactionData('Oct', 34800),
-    TransactionData('Nov', 42000),
-    TransactionData('Dec', 45000),
-  ];
 
   @override
   void initState() {
+    zoomPanBehavior = ZoomPanBehavior(enablePanning: true);
     super.initState();
   }
 
@@ -46,9 +38,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
         backgroundColor: AppColor.primaryColor,
         extendBodyBehindAppBar: true,
         appBar: AppBar(
+          scrolledUnderElevation: 100,
+          bottomOpacity: 5,
+          surfaceTintColor: Colors.white,
+          forceMaterialTransparency: false,
           iconTheme: const IconThemeData(color: Colors.black),
           backgroundColor: Colors.transparent,
-          elevation: 0,
+          elevation: 5,
           title: ModifiedText(
               text: 'Statistics', size: 20, color: AppColor.fontColor),
         ),
@@ -59,7 +55,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Container(
-                width: 800,
+                width: 500,
                 height: 450,
                 decoration: const BoxDecoration(
                   image: DecorationImage(
@@ -69,15 +65,27 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 150),
                   child: SfCartesianChart(
+                    tooltipBehavior: TooltipBehavior(
+                        enable: true,
+                        builder: (dynamic data, dynamic point, dynamic series,
+                            int pointIndex, int seriesIndex) {
+                          final monthlyCollection = data as MonthlyCollection;
+                          month = monthlyCollection.month;
+                          paymentHistory.fetchTransactionsForMonth(month);
+                          return Text(month.toString());
+                        }),
+                    zoomPanBehavior: zoomPanBehavior,
+                    selectionType: SelectionType.cluster,
                     onSelectionChanged: (value) {
-                      getdata(value,context);
-                      //  cc
                     },
                     margin: EdgeInsets.zero,
                     enableAxisAnimation: true,
                     plotAreaBorderWidth: 0,
                     isTransposed: true,
                     primaryXAxis: const CategoryAxis(
+                      initialVisibleMinimum: 5,
+                      initialVisibleMaximum: 12,
+                      interval: 1,
                       arrangeByIndex: true,
                       labelStyle: TextStyle(fontWeight: FontWeight.w500),
                       autoScrollingMode: AutoScrollingMode.start,
@@ -103,13 +111,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       minorGridLines: const MinorGridLines(width: 0),
                       isInversed: false,
                     ),
-                    series: <CartesianSeries<TransactionData, String>>[
-                      BarSeries<TransactionData, String>(
+                    series: <CartesianSeries<MonthlyCollection, String>>[
+                      BarSeries<MonthlyCollection, String>(
                         dataSource: data,
-                        xValueMapper: (TransactionData sales, _) {
-                          return sales.year;
+                        xValueMapper: (MonthlyCollection sales, _) {
+                          return sales.month;
                         },
-                        yValueMapper: (TransactionData sales, _) {
+                        yValueMapper: (MonthlyCollection sales, _) {
                           return sales.sales;
                         },
                         name: 'Sales',
@@ -234,15 +242,4 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     });
   }
 
-  void getdata(SelectionArgs value,BuildContext context) {
-    final paymentModel =
-        Provider.of<TransactionHistoryProvider>(context, listen: false);
-    paymentModel.fetchTransactionsForMonth(value.pointIndex + 1);
-  }
-}
-
-class TransactionData {
-  TransactionData(this.year, this.sales);
-  final String year;
-  final double sales;
 }

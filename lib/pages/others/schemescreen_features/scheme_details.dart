@@ -46,7 +46,9 @@ class _SchemeDetailsState extends State<SchemeDetails> {
             title: 'Scheme : ${widget.chittyPattern}',
             onpresed: (value) {
               if (value == 1) {
-              } else if (value == 2) {}
+              } else if (value == 2) {
+                showLogoutDialog();
+              }
             },
             item1: 'Edit',
             item2: 'Delete'),
@@ -262,5 +264,31 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                 ],
               );
             }));
+  }
+
+  void showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete'),
+          content: const Text('Are you sure you want to delete?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+              child: const Text('delete'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

@@ -25,7 +25,11 @@ class PaymentModel {
   @HiveField(6)
   final MemberModel memberModel;
 
+  @HiveField(7)
+   dynamic paymentMonth;
+
   PaymentModel({
+    required this.paymentMonth,
     required this.imagePath,
     required this.memberModel,
     required this.installmentCount,

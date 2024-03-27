@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/call_chitty.dart';
+import 'package:smart_chitty/pages/others/memberscreen_features/edit_member.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_id_screen.dart';
 import 'package:smart_chitty/services/db%20functions/payment_function.dart';
+import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
@@ -91,28 +94,39 @@ class _MemberDetailsState extends State<MemberDetails> {
             ),
             actions: [
               PopupMenuButton<int>(
-                onSelected: (value) {},
+                onSelected: (value) {
+                  if(value==1){
+                    Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => 
+                                
+                    EditMemberScreen(
+                      address: widget.address,
+                      avatar: widget.avatar,
+                      contact: widget.contact,
+                      idBack: widget.idBack,
+                      idFront: widget.idFront,
+                      installment: widget.installment,
+                      memberId: widget.memberId,
+                      memberName:widget.memberName ,
+                      memberage: widget.memberage,
+                      pool: widget.pool,
+                      scheme: widget.scheme,
+                    )));
+                    
+
+                  }else{
+                    showLogoutDialog();
+                  }
+
+                },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
                   const PopupMenuItem<int>(
                     value: 1,
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.edit,
-                          color: Colors.black,
-                        ),
-                        Text('Edit'),
-                      ],
-                    ),
+                    child: Text('Edit'),
                   ),
                   const PopupMenuItem<int>(
                     value: 2,
-                    child: Row(
-                      children: [
-                        Icon(Icons.delete, color: Colors.black),
-                        Text('Delete'),
-                      ],
-                    ),
+                    child: Text('Delete'),
                   ),
                 ],
               ),
@@ -393,6 +407,33 @@ class _MemberDetailsState extends State<MemberDetails> {
                     )));
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
+  }
+    void showLogoutDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete'),
+          content: const Text('Are you sure you want to delete?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final box = await Hive.openBox<MemberModel>('members');
+                box.delete(widget.memberId);
+               
+              },
+              child: const Text('delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

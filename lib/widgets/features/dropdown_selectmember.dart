@@ -52,6 +52,7 @@ class DropdownSelectMemberState extends State<DropdownSelectMember> {
               ),
         onSelected: (String? value) {
           setState(() {
+            
             selectedMember = value;
           });
         },
