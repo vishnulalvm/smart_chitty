@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:smart_chitty/pages/others/schemescreen_features/editscheme.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
@@ -46,6 +47,17 @@ class _SchemeDetailsState extends State<SchemeDetails> {
             title: 'Scheme : ${widget.chittyPattern}',
             onpresed: (value) {
               if (value == 1) {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => EditschemeScreen(
+                          chittyIstallment: widget.chittyIstallment,
+                          chittyMembers: widget.chittyMembers,
+                          chittyPattern: widget.chittyPattern,
+                          chittySubcription: widget.chittySubcription,
+                          commission: widget.commission,
+                          pool: widget.pool,
+                          schemeId: widget.schemeId,
+                          dateTime: widget.dateTime,
+                        )));
               } else if (value == 2) {
                 showLogoutDialog();
               }

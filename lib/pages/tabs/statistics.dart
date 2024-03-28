@@ -155,7 +155,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       color: AppColor.fontColor,
                       fontWeight: FontWeight.w500),
                   ModifiedText(
-                      text: 'March',
+                      text: month,
                       size: 16,
                       color: AppColor.fontColor,
                       fontWeight: FontWeight.w500)
@@ -232,9 +232,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         );
                       },
                     )
-                  : const Center(
-                      child: Text('No transaction history'),
-                    ),
+                  :  Padding(
+                    padding: const EdgeInsets.only(top: 100),
+                    child: Center(
+                        child: ModifiedText(text: 'Select a Bar Graph to show History', size: 14, color: AppColor.fontColor),
+                      ),
+                  ),
             ),
           ],
         ),

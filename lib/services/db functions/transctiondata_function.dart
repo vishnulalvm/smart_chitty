@@ -7,7 +7,8 @@ Future<void> fetchMemberDatas() async {
   final collectionBox = await Hive.openBox<MonthlyCollection>('collections');
   final transactionDb = collectionBox.values.toList();
   data = transactionDb;
- data.sort((b, a) {
+data.sort((b, a) {
+  try {
     // Split the month string into month and year components
     final aMonthComponents = a.month.split('-');
     final bMonthComponents = b.month.split('-');
@@ -27,7 +28,12 @@ Future<void> fetchMemberDatas() async {
 
     // If the years are the same, compare the months
     return aMonthNum.compareTo(bMonthNum);
-  });
+  } catch (e) {
+    // Handle invalid format by returning a default value or taking appropriate action
+    print('Invalid month format: ${a.month}');
+    return 0;
+  }
+});
 }
 
 

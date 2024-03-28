@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
-import 'package:smart_chitty/pages/tabs/home.dart';
 import 'package:smart_chitty/auth/register.dart';
 import 'package:smart_chitty/utils/constants.dart';
 import 'package:smart_chitty/utils/images.dart';
@@ -138,11 +138,8 @@ class _LoginScreenState extends State<LoginScreen> {
           password == passwordController.text) {
         final sharedPre = await SharedPreferences.getInstance();
         sharedPre.setBool(saveKeyName, true);
-        Navigator.of(_context!).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (BuildContext context) => const HomeScreen()),
-          (Route<dynamic> route) => false,
-        );
+
+       _context!.pushReplacement('/');
         return;
       }
     }

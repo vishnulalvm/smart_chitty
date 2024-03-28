@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/services/models/registration_model.dart';
@@ -72,9 +73,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 onPressed: () {
                                   pickAndSaveImage(context);
                                 },
-                                icon: const Icon(
+                                icon:  Icon(
                                   Icons.add_a_photo,
-                                  color: Color.fromARGB(150, 0, 0, 0),
+                                  color:imagePath.isEmpty? Colors.black: Colors.transparent
                                 )),
                           ),
                         ],
@@ -151,12 +152,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) =>
-                                        const LoginScreen()),
-                                (Route<dynamic> route) => false,
-                              );
+                             context.pushReplacement('/login');
                             },
                             child: const Text(
                               'Sign In',

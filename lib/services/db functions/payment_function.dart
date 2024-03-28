@@ -5,6 +5,7 @@ ValueNotifier<List<PaymentModel>> allPaymentData = ValueNotifier([]);
 
 
 
+
 void insertPaymentData(PaymentModel value) async {
   final paymentDb = await Hive.openBox<PaymentModel>('payments');
   await paymentDb.add(value);

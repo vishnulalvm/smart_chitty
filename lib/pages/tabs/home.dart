@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
+import 'package:smart_chitty/pages/others/other_screens/view_transaction.dart';
+import 'package:smart_chitty/pages/tabs/set_reminder.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
@@ -14,12 +16,14 @@ import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/scheme.dart';
 import 'package:smart_chitty/pages/others/homescreen_features/payment_update_button.dart';
 import 'package:smart_chitty/services/providers/memberid_provider.dart';
+import 'package:smart_chitty/services/providers/schemedata_provider.dart';
 import 'package:smart_chitty/services/providers/schemeid_provider.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/choice_chips.dart';
+import 'package:smart_chitty/widgets/global/glasseffect.dart';
 import 'package:smart_chitty/widgets/global/icon_button.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:text_scroll/text_scroll.dart';
@@ -45,6 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
     final schemeIdModel =
         Provider.of<SchemeIdListProvider>(context, listen: false);
     schemeIdModel.getSchemeIds();
+
+    final schemeSlider =
+        Provider.of<SchemeListProvider>(context, listen: false);
+    schemeSlider.getSchemeCredentials();
 
     final memberModel = Provider.of<MemberListProvider>(context, listen: false);
     memberModel.getMemberIds();
@@ -144,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         icontype: Symbols.finance,
                         buttonpress: () {
                           fetchMemberDatas();
-                          context.go('/statistics');
+                          context.push('/statistics');
                         },
                         iconname: 'Statistics',
                       ),
@@ -166,7 +174,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CircularIconhome(
                         icontype: Symbols.alarm,
-                        buttonpress: () {},
+                        buttonpress: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const SetReminderScreen()));
+                        },
                         iconname: 'Reminder',
                       ),
                     ],
@@ -188,7 +199,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12, right: 12, top: 20),
                   child: ListView(
-                    // physics: const BouncingScrollPhysics(),
+// !Notification start here...
                     padding: EdgeInsets.zero,
                     controller: scrollControllers,
                     children: [
@@ -258,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           TextButton(
                               onPressed: () {
-                                context.go('/transaction');
+                                context.push('/transaction');
                               },
                               child: const Text(
                                 'See All',
@@ -268,6 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     color: Color.fromRGBO(29, 27, 32, 1)),
                               )),
                         ],
+// ! transations start here..
                       ),
                       gap(height: 10),
                       Consumer<TransactionHistoryProvider>(
@@ -291,6 +303,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(5.0),
                                     child: ListTile(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                                builder: (ctx) =>
+                                                    ViewTransaction(
+                                                      paymentModel: payment,
+                                                    )));
+                                      },
                                       leading: CircleAvatar(
                                         radius: 25,
                                         backgroundImage:
@@ -349,57 +369,59 @@ class _HomeScreenState extends State<HomeScreen> {
                         fontWeight: FontWeight.w500,
                       ),
                       gap(height: 20),
-                      SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 100,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            gap(width: 12),
-                            Container(
-                              height: 100,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            gap(width: 12),
-                            Container(
-                              height: 100,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            gap(width: 12),
-                            Container(
-                              height: 100,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            gap(width: 12),
-                            Container(
-                              height: 100,
-                              width: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            )
-                          ],
+// ! New scheme start here
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(30),
+                          image: const DecorationImage(
+                            
+                            image: AssetImage('assets/images/Header.jpg',),fit: BoxFit.cover)
                         ),
+                        height: 140,
+                        child: Consumer<SchemeListProvider>(
+                            builder: (context, schemeData, child) {
+                          return ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.zero,
+                              shrinkWrap: true,
+                              controller: scrollController,
+                              itemCount: schemeData.latestSchemes.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                final scheme = schemeData.latestSchemes[index];
+
+                                return Padding(
+                                    padding: const EdgeInsets.only(left: 12,top: 10,bottom: 10),
+                                    child: FrostedGlassBox(
+                                      theChild: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              ModifiedText(
+                                                text:
+                                                    '${scheme.poolAmount} Chitty Started',
+                                                size: 16,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              ModifiedText(
+                                                  text:
+                                                      'Monthly ${scheme.subscription}Only!!',
+                                                  size: 14,
+                                                  color: Colors.white),
+                                              ModifiedText(
+                                                  text:
+                                                      'Propose Date on \n ${scheme.proposeDate != null ? DateFormat('dd-MM-yyyy').format(scheme.proposeDate!) : ''}',
+                                                  size: 16,
+                                                  color: Colors.white),
+                                            ],
+                                          )),
+                                      theHeight: 120,
+                                      theWidth: 200,
+                                    ));
+                              });
+                        }),
                       ),
                       gap(height: 10),
                       Row(
@@ -414,7 +436,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           TextButton(
                               onPressed: () {
-                                context.go('/members');
+                                context.push('/members');
                               },
                               child: const Text(
                                 'See All',
@@ -505,9 +527,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           onPressed: () {
             final memberModel =
-        Provider.of<MemberListProvider>(context, listen: false);
-    memberModel.getMemberIds();
-    memberModel.fetchMemberDatas();
+                Provider.of<MemberListProvider>(context, listen: false);
+            memberModel.getMemberIds();
+            memberModel.fetchMemberDatas();
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) => const PaymentUpdateButton()));
           }),

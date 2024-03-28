@@ -3,7 +3,7 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/widgets/global/row_text.dart';
-import 'package:smart_chitty/widgets/features/textfield_schem.dart';
+import 'package:smart_chitty/widgets/features/custom_textfield.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class CallChitty extends StatefulWidget {

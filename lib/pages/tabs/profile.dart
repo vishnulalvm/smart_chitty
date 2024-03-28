@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/utils/colors.dart';
@@ -228,6 +229,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _performLogout(BuildContext context) {
     // Perform logout logic
 
-    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    context.pushReplacement('/login');
   }
 }

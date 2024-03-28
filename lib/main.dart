@@ -11,6 +11,7 @@ import 'package:smart_chitty/services/models/registration_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/services/providers/memberdata_provider.dart';
 import 'package:smart_chitty/services/providers/memberid_provider.dart';
+import 'package:smart_chitty/services/providers/schemedata_provider.dart';
 import 'package:smart_chitty/services/providers/schemeid_provider.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/page_routes.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MemberListProvider()),
         ChangeNotifierProvider(create: (context) => MemberDataProvider()),
         ChangeNotifierProvider(create: (context) => TransactionHistoryProvider()), 
+        ChangeNotifierProvider(create: (context) => SchemeListProvider()), 
       ],
       child: MaterialApp.router(
         routerConfig: router,

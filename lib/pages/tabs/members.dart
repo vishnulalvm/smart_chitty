@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
@@ -12,7 +13,9 @@ import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/widgets/features/choice_chips.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
- 
+
+String installment='';
+String memberId='';
 class MembersScreen extends StatefulWidget {
   const MembersScreen({
     super.key,
@@ -28,10 +31,11 @@ class _MembersScreenState extends State<MembersScreen> {
       selectedId = newSelectedId;
     });
   }
+
   @override
   void initState() {
     super.initState();
-   final schemeIdModel =
+    final schemeIdModel =
         Provider.of<MemberDataProvider>(context, listen: false);
     schemeIdModel.getSchemeIds();
   }
@@ -49,7 +53,7 @@ class _MembersScreenState extends State<MembersScreen> {
             final filteredMembers = memberdata
                 .where((member) => member.schemeId == selectedId)
                 .toList();
-                
+
             return Column(
               children: <Widget>[
                 gap(height: 5),
@@ -89,6 +93,8 @@ class _MembersScreenState extends State<MembersScreen> {
                     itemCount: filteredMembers.length,
                     itemBuilder: (context, index) {
                       if (filteredMembers.isEmpty) {
+                        memberId=filteredMembers.first.memberId;
+                        
                         return const Text('No data available');
                       }
 
@@ -102,8 +108,8 @@ class _MembersScreenState extends State<MembersScreen> {
                             padding: const EdgeInsets.all(5.0),
                             child: IntrinsicHeight(
                               child: ListTile(
-                                onTap: () {        
-                                  getPaymentCredentials(data.memberId);                     
+                                onTap: () {
+                                  getPaymentCredentials(data.memberId);
                                   Navigator.push(
                                       context,
                                       PageRouteBuilder(
@@ -111,20 +117,20 @@ class _MembersScreenState extends State<MembersScreen> {
                                             const Duration(milliseconds: 400),
                                         pageBuilder: (context, animation,
                                                 secondaryAnimation) =>
-                                             MemberDetails(
-                                               pool: data.schemeModel.poolAmount,
-                                              address: data.memberAddress,
-                                              avatar: data.avatar,
-                                              contact: data.contactNumber,
-                                              idBack: data.idBack,
-                                              idFront: data.idFront ,
-                                              installment: data.schemeModel.installment,
-                                              memberId: data.memberId,
-                                              memberName: data.memberName,
-                                              memberage: data.memberAge ,
-                                              scheme: data.schemeId!,
-
-                                             ),
+                                            MemberDetails(
+                                          pool: data.schemeModel.poolAmount,
+                                          address: data.memberAddress,
+                                          avatar: data.avatar,
+                                          contact: data.contactNumber,
+                                          idBack: data.idBack,
+                                          idFront: data.idFront,
+                                          installment:
+                                              data.schemeModel.installment,
+                                          memberId: data.memberId,
+                                          memberName: data.memberName,
+                                          memberage: data.memberAge,
+                                          scheme: data.schemeId!,
+                                        ),
                                         transitionsBuilder: (context, animation,
                                             secondaryAnimation, child) {
                                           final tween = Tween<Offset>(
@@ -169,7 +175,8 @@ class _MembersScreenState extends State<MembersScreen> {
                                         height:
                                             4), // Add some spacing between text widgets (optional)
                                     ModifiedText(
-                                        text: 'Installment : 32/${data.schemeModel.installment}',
+                                        text:
+                                            'Installment : $installment/${data.schemeModel.installment}',
                                         size: 12,
                                         color: AppColor.fontColor)
                                   ],
@@ -199,5 +206,13 @@ class _MembersScreenState extends State<MembersScreen> {
         ),
       ),
     );
+  }
+  void getInstallmentCounts()async{
+    installment = getInstallmentCount(memberId).toString();
+  }
+
+ Future<int> getInstallmentCount(String memberId) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('installment_$memberId') ?? 0;
   }
 }

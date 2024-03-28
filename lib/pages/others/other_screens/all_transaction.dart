@@ -1,11 +1,14 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/other_screens/transaction_details.dart';
-import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
-import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/db%20functions/payment_function.dart';
+import 'package:smart_chitty/services/models/payment_details_model.dart';
+import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
-import 'package:smart_chitty/pages/others/schemescreen_features/addscheme.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class TransactionScreen extends StatefulWidget {
@@ -35,16 +38,14 @@ class _TransactionScreenState extends State<TransactionScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BoldText(
-                  text: 'Sort Transactions',
+                  text: 'All Transactions',
                   color: AppColor.fontColor,
                   size: 15,
                 ),
-                ValueListenableBuilder(
-                    valueListenable: schemeListNotifer,
-                    builder: (BuildContext context,
-                        List<SchemeModel> schemedata, Widget? child) {
+                Consumer<TransactionHistoryProvider>(
+                    builder: (context, paymentData, child) {
                       return BoldText(
-                        text: schemeListNotifer.value.length.toString(),
+                        text: paymentData.sortedTransactionData.length.toString(),
                         color: AppColor.fontColor,
                         size: 16,
                       );
@@ -53,18 +54,27 @@ class _TransactionScreenState extends State<TransactionScreen> {
             ),
           ),
           Expanded(
-            child: ValueListenableBuilder(
-              valueListenable: schemeListNotifer,
-              builder: (BuildContext context, List<SchemeModel> schemedata,
-                  Widget? child) {
+            child: Consumer<TransactionHistoryProvider>(
+            
+              builder: (context, paymentData, child) {
+               String formattedDateTime;
+
+                if (paymentData.sortedTransactionData.isNotEmpty) {
+                  formattedDateTime = paymentData.sortedTransactionData.first.paymentDate != null
+                      ? DateFormat('dd-MM-yyyy HH:mm')
+                          .format(paymentData.sortedTransactionData.first.paymentDate!)
+                      : 'N/A';
+                } else {
+                  formattedDateTime = 'No payment data available';
+                }
                 return ListView.builder(
-                  itemCount: schemeListNotifer.value.length,
+                  itemCount: paymentData.sortedTransactionData.length,
                   itemBuilder: (context, index) {
-                    if (schemedata.isEmpty) {
+                    if (paymentData.sortedTransactionData.isEmpty) {
                       return const Text('No data available');
                     }
 
-                    final data = schemedata[index];
+                    final data = paymentData.sortedTransactionData[index];
                     return Padding(
                       padding:
                           const EdgeInsets.only(left: 6, right: 6, bottom: 4),
@@ -97,19 +107,16 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             leading: CircleAvatar(
                               radius: 25,
                               backgroundColor: Colors.blue,
-                              child: ModifiedText(
-                                  text: data.installment,
-                                  size: 26,
-                                  color: Colors.white),
+                              backgroundImage: FileImage(File(data.imagePath)),
                             ),
                             title: ModifiedText(
-                              text: '${data.subscription}×${data.totalMembers}',
+                              text: formattedDateTime,
                               size: 18,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
                             ),
                             subtitle: ModifiedText(
-                              text: 'Subscribers : ${data.totalMembers}',
+                              text: 'Installment : ${data.installmentCount}',
                               size: 14,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
@@ -120,7 +127,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               children: [
                                 gap(height: 2),
                                 ModifiedText(
-                                  text: '₹ ${data.poolAmount}',
+                                  text: '₹ ${data.payment}',
                                   size: 18,
                                   color: AppColor.fontColor,
                                   fontWeight: FontWeight.w600,
@@ -129,7 +136,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                     height:
                                         4), // Add some spacing between text widgets (optional)
                                 ModifiedText(
-                                    text: 'Commission : ${data.commission}%',
+                                    text: 'Member Id : ${data.memberId}%',
                                     size: 12,
                                     color: AppColor.fontColor)
                               ],
@@ -145,21 +152,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        shape: const CircleBorder(),
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (BuildContext context) => const AddSchemeBottomSheet());
-        },
-        child: const Icon(
-          Icons.add,
-          weight: 800,
-          color: Colors.white,
-        ),
-      ),
+     
     );
   }
 }

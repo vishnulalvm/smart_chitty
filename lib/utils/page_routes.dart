@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:smart_chitty/auth/login.dart';
 import 'package:smart_chitty/auth/splash.dart';
 import 'package:smart_chitty/pages/others/other_screens/all_transaction.dart';
+import 'package:smart_chitty/pages/tabs/set_reminder.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
 import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/statistics.dart';
@@ -37,6 +39,16 @@ final GoRouter router = GoRouter(
             return const StatisticsScreen();
           },
         ),
+         GoRoute(
+          path: 'setreminder',
+          builder: (BuildContext context, GoRouterState state) {
+            return const SetReminderScreen();
+          },
+        ),
+        GoRoute(
+      path: 'login', // Add this line to define the "/login" route
+      builder: (BuildContext context, GoRouterState state) => const LoginScreen(), // Replace LoginScreen with your actual login screen widget
+    ),
       ],
       
     ),

@@ -13,7 +13,7 @@ import 'package:smart_chitty/widgets/global/buttonwidget.dart';
 import 'package:smart_chitty/widgets/features/dropdown_addmember.dart';
 import 'package:smart_chitty/widgets/global/textfieldwidget.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
-
+XFile? imagepath;
 class AddMemberScreen extends StatefulWidget {
   const AddMemberScreen({super.key});
 
@@ -88,8 +88,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               child: Center(
                 child: CircleAvatar(
                   backgroundImage: FileImage(File(imagePaths['avatar']!)),
-                  // backgroundColor: const Color.fromRGBO(199, 245, 245, 1),
-                  // imagePath == '' ?  (File(imagePath)) :
                   radius: 55,
                   child: IconButton(
                       onPressed: () {
@@ -97,10 +95,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           pickAndSaveImage(context, 'avatar');
                         });
                       },
-                      icon: const Icon(
+                      icon:  Icon(
                         Icons.add_photo_alternate,
                         size: 35,
-                        color: Color.fromARGB(60, 0, 0, 1),
+                        color: imagepath != null ? Colors.transparent:Colors.black
                       )),
                 ),
               ),
@@ -209,7 +207,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                       onPressed: () {
                                         pickAndSaveImage(context, 'frontImage');
                                       },
-                                      icon: const Icon(
+                                      icon:  const Icon(
                                         Icons.add_photo_alternate,
                                         size: 30,
                                         color: Color.fromARGB(60, 0, 0, 1),
@@ -240,7 +238,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                       onPressed: () {
                                         pickAndSaveImage(context, 'backImage');
                                       },
-                                      icon: const Icon(
+                                      icon:  const Icon(
                                         Icons.add_photo_alternate,
                                         size: 30,
                                         color: Color.fromARGB(60, 0, 0, 0),
@@ -286,6 +284,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     final imagePicker = ImagePicker();
     final XFile? pickedImage =
         await imagePicker.pickImage(source: ImageSource.gallery);
+        imagepath=pickedImage;
     if (pickedImage != null) {
       setState(() {
         imagePaths[location] = pickedImage.path;
@@ -355,7 +354,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       final box = await Hive.openBox<MemberModel>('members');
       if (dropdownValue != null) {
         await box.put(uniqueId, member);
-        refreshMember(dropdownValue);
+        // refreshMember(dropdownValue);
 
         await saveLastGeneratedId(lastGeneratedId + 1);
         ScaffoldMessenger.of(_context!).showSnackBar(

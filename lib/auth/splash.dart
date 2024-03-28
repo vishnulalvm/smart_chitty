@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> gotohomeScreen() async {
-    Navigator.pushReplacementNamed(context, '/login');
+   context.pushReplacement('/login');
   }
 
   Future<void> checkLoglogin() async {
@@ -51,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (userloged == null || userloged == false) {
         gotohomeScreen();
       } else {
-        context.go('/');
+        context.pushReplacement('/');
       }
     });
   }

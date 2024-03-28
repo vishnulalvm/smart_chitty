@@ -13,7 +13,12 @@ class MemberDataProvider extends ChangeNotifier{
     final box = await Hive.openBox<SchemeModel>('schemes');
     final schemeData = box.values.toList();
     schemeIdList = schemeData.map((scheme) => scheme).toList();
+    if (schemeIdList.isNotEmpty) {
     fistvalue = schemeIdList.first.schemeId;
+  } else {
+    // Handle the case when schemeIdList is empty
+    fistvalue = null; // or assign a default value
+  }
      notifyListeners();
   }
 

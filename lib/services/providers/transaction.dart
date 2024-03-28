@@ -43,10 +43,7 @@ class TransactionHistoryProvider extends ChangeNotifier {
   List<PaymentModel> getTransactionsByMonth(String month) {
     return transactionData.where((transaction) {
       final monthPart = month;
-      print(monthPart);
-      // final monthInt = int.tryParse(monthPart) ?? 0;
       final date = transaction.paymentMonth;
-      print(date);
       return  date == monthPart ;
     }).toList();
   }

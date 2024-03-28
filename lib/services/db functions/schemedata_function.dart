@@ -5,12 +5,11 @@ import 'package:flutter/foundation.dart';
 
 ValueNotifier<List<SchemeModel>> schemeListNotifer = ValueNotifier([]);
 
-
 void getSchemeCredentials() async {
   schemeListNotifer.value.clear();
   final schemeDB = await Hive.openBox<SchemeModel>('schemes');
   schemeListNotifer.value.addAll(schemeDB.values);
   schemeListNotifer.notifyListeners();
-
-
 }
+
+

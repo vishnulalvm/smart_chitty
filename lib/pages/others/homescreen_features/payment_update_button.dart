@@ -14,7 +14,7 @@ import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/dropdown_selectmember.dart';
 import 'package:smart_chitty/widgets/global/buttonwidget.dart';
 import 'package:smart_chitty/widgets/global/row_text.dart';
-import 'package:smart_chitty/widgets/features/textfield_schem.dart';
+import 'package:smart_chitty/widgets/features/custom_textfield.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 int? installment;
@@ -303,7 +303,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
         paymentDate: now,
         schemeId: selectedMemberData.schemeId!,
       );
-      await box.add(paymentModel);
+      await box.put(selectedMemberData.memberId, paymentModel);
 
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
@@ -313,7 +313,6 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
         ),
       );
     }
-    
 
     final paymentModel =
         Provider.of<TransactionHistoryProvider>(_context!, listen: false);

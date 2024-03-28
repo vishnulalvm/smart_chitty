@@ -10,23 +10,48 @@ import 'package:smart_chitty/widgets/features/custom_textfield.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AddSchemeBottomSheet extends StatefulWidget {
-  const AddSchemeBottomSheet({super.key});
+class EditschemeScreen extends StatefulWidget {
+  final String chittyPattern;
+  final String chittySubcription;
+  final String chittyIstallment;
+  final String chittyMembers;
+  final String commission;
+  final DateTime? dateTime;
+  final String schemeId;
+  final String pool;
+
+  const EditschemeScreen(
+      {super.key,
+      required this.chittyPattern,
+      required this.chittySubcription,
+      required this.chittyIstallment,
+      required this.chittyMembers,
+      required this.commission,
+      this.dateTime,
+      required this.schemeId,
+      required this.pool});
 
   @override
-  State<AddSchemeBottomSheet> createState() => _AddSchemeBottomSheetState();
+  State<EditschemeScreen> createState() => _EditschemeScreenState();
 }
 
-class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
+class _EditschemeScreenState extends State<EditschemeScreen> {
+  late final TextEditingController noOfInstallmentController;
+  late final TextEditingController totalMembersController;
+  late final TextEditingController subscriptionController;
+  late final TextEditingController commissionController;
+
   int lastGeneratedId = 100;
-  final noOfInstallmentController = TextEditingController();
-  final totalMembersController = TextEditingController();
-  final subscriptionController = TextEditingController();
-  final commissionController = TextEditingController();
+
   DateTime? _selectedDate;
   BuildContext? _context;
   @override
   void initState() {
+    noOfInstallmentController = TextEditingController(text: widget.chittyIstallment);
+    totalMembersController = TextEditingController(text: widget.chittyMembers);
+    subscriptionController = TextEditingController(text: widget.chittySubcription);
+    commissionController = TextEditingController(text: widget.commission);
+
     super.initState();
     _context = context;
   }
@@ -51,7 +76,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-            color: AppColor.primaryColor, // Change this to your desired color
+            color: AppColor.primaryColor,
           ),
           child: Stack(
             children: [
@@ -249,7 +274,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
       );
       final box = await Hive.openBox<SchemeModel>('schemes');
       // await box.add(scheme);
-      await box.put(uniqueId, scheme);
+      await box.put(widget.schemeId, scheme);
       // adding value to v
       // addScheme(scheme);
       getSchemeCredentials();

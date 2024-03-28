@@ -52,7 +52,6 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
   late final TextEditingController memberAgeController;
   late final TextEditingController memberAddressController;
 
-
   List<String> schemeId = [];
   String avatar = '';
   String idFront = '';
@@ -62,14 +61,15 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
   BuildContext? _context;
   @override
   void initState() {
-    
     super.initState();
-    
-     memberNameController = TextEditingController(text: widget.memberName);
-    contactNumController = TextEditingController();
+    imagePaths['avatar']=widget.avatar;
+    imagePaths['frontImage']=widget.idFront;
+    imagePaths['backImage']=widget.idBack;
+    memberNameController = TextEditingController(text: widget.memberName);
+    contactNumController = TextEditingController(text: widget.contact);
     memberAgeController = TextEditingController(text: widget.memberage);
     memberAddressController = TextEditingController(text: widget.address);
-    
+
     _context = context;
     getSchemeNames();
   }
@@ -112,7 +112,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
               ),
               child: Center(
                 child: CircleAvatar(
-                  backgroundImage: FileImage(File(imagePaths[widget.avatar]!)),
+                  backgroundImage: FileImage(File(imagePaths['avatar']!)),
                   // backgroundColor: const Color.fromRGBO(199, 245, 245, 1),
                   // imagePath == '' ?  (File(imagePath)) :
                   radius: 55,
