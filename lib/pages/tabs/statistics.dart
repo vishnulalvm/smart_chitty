@@ -76,8 +76,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                         }),
                     zoomPanBehavior: zoomPanBehavior,
                     selectionType: SelectionType.cluster,
-                    onSelectionChanged: (value) {
-                    },
+                    onSelectionChanged: (value) {},
                     margin: EdgeInsets.zero,
                     enableAxisAnimation: true,
                     plotAreaBorderWidth: 0,
@@ -130,7 +129,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           // selectionController: ,
                           enable: true,
                           selectedColor: const Color.fromRGBO(1, 80, 136, 1),
-                          unselectedColor: const Color.fromRGBO(0, 185, 184, 1),
+                          unselectedColor:
+                              const Color.fromRGBO(0, 185, 184, 1),
                         ),
                       )
                     ],
@@ -163,86 +163,84 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               ),
             ),
             gap(height: 24),
-            Expanded(
-              child: paymentHistory.specificTransaction.isNotEmpty
-                  ? ListView.builder(
-                      controller: scrollController,
-                      padding: EdgeInsets.zero,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: paymentHistory.specificTransaction.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final payment =
-                            paymentHistory.specificTransaction[index];
-                        String formattedDateTime =
-                            DateFormat('dd-MM-yyyy HH:mm')
-                                .format(payment.paymentDate!);
-                        installmentcount = payment.installmentCount;
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                              left: 6, right: 6, bottom: 4),
-                          child: Card(
-                            elevation: 0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: ListTile(
-                                leading: CircleAvatar(
-                                  radius: 25,
-                                  backgroundImage:
-                                      FileImage(File(payment.imagePath)),
-                                  backgroundColor: Colors.blue,
-                                ),
-                                title: ModifiedText(
-                                  text: formattedDateTime,
-                                  size: 18,
-                                  color: AppColor.fontColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                subtitle: ModifiedText(
-                                  text:
-                                      'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
-                                  size: 14,
-                                  color: AppColor.fontColor,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                                trailing: Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    gap(height: 2),
-                                    ModifiedText(
-                                      text:
-                                          '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
-                                      size: 18,
-                                      color: AppColor.fontColor,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                    gap(height: 4),
-                                    ModifiedText(
-                                      text:
-                                          'scheme : ${payment.schemeId}', // Replace with the actual payment mode field from PaymentModel
-                                      size: 12,
-                                      color: AppColor.fontColor,
-                                    ),
-                                  ],
-                                ),
+            paymentHistory.specificTransaction.isNotEmpty
+                ? ListView.builder(
+                    controller: scrollController,
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: paymentHistory.specificTransaction.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final payment = paymentHistory.specificTransaction[index];
+                      String formattedDateTime = DateFormat('dd-MM-yyyy HH:mm')
+                          .format(payment.paymentDate!);
+                      installmentcount = payment.installmentCount;
+                      return Padding(
+                        padding:
+                            const EdgeInsets.only(left: 6, right: 6, bottom: 4),
+                        child: Card(
+                          elevation: 0,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: ListTile(
+                              leading: CircleAvatar(
+                                radius: 25,
+                                backgroundImage:
+                                    FileImage(File(payment.imagePath)),
+                                backgroundColor: Colors.blue,
+                              ),
+                              title: ModifiedText(
+                                text: formattedDateTime,
+                                size: 18,
+                                color: AppColor.fontColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              subtitle: ModifiedText(
+                                text:
+                                    'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
+                                size: 14,
+                                color: AppColor.fontColor,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              trailing: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  gap(height: 2),
+                                  ModifiedText(
+                                    text:
+                                        '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
+                                    size: 18,
+                                    color: AppColor.fontColor,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  gap(height: 4),
+                                  ModifiedText(
+                                    text:
+                                        'scheme : ${payment.schemeId}', // Replace with the actual payment mode field from PaymentModel
+                                    size: 12,
+                                    color: AppColor.fontColor,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                        );
-                      },
-                    )
-                  :  Padding(
+                        ),
+                      );
+                    },
+                  )
+                : Padding(
                     padding: const EdgeInsets.only(top: 100),
                     child: Center(
-                        child: ModifiedText(text: 'Select a Bar Graph to show History', size: 14, color: AppColor.fontColor),
-                      ),
+                      child: ModifiedText(
+                          text: 'Select a Bar Graph to show History',
+                          size: 14,
+                          color: AppColor.fontColor),
+                    ),
                   ),
-            ),
           ],
         ),
       );
     });
   }
-
 }
