@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> checkLogin(BuildContext context) async {
     getUserCredentials();
-    for (final data in allData) {
+    for (final data in companyDatas) {
       final userId = data.userId;
       final password = data.password;
       if (userId == userNameController.text &&

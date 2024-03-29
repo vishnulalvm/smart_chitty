@@ -43,6 +43,7 @@ dependencies:
   shared_preferences: ^2.2.2
   syncfusion_flutter_charts: ^25.1.35
   text_scroll: ^0.2.0
+  url_launcher: ^6.2.5
 
 dev_dependencies:
   build_runner: ^2.4.8

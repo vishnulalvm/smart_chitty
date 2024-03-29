@@ -4,6 +4,7 @@ import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 Widget customTextField({
+var maxline,
   required var hintText,
   required var title,
    TextEditingController? controller,
@@ -21,6 +22,7 @@ Widget customTextField({
       SizedBox(
         width: 200,
         child: TextFormField(
+          maxLines: maxline,
           controller: controller,
           keyboardType: keyboardtype,
           autovalidateMode: AutovalidateMode.onUserInteraction,

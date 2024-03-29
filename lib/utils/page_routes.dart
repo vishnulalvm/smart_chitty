@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:smart_chitty/auth/login.dart';
 import 'package:smart_chitty/auth/splash.dart';
 import 'package:smart_chitty/pages/others/other_screens/all_transaction.dart';
-import 'package:smart_chitty/pages/tabs/set_reminder.dart';
+import 'package:smart_chitty/pages/tabs/reminders.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
 import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/statistics.dart';
@@ -13,7 +13,8 @@ final GoRouter router = GoRouter(
   routes: <RouteBase>[
     GoRoute(
       path: '/splash', // Define the splash screen route
-      builder: (BuildContext context, GoRouterState state) => const SplashScreen(), // Replace SplashScreen with your actual splash screen widget
+      builder: (BuildContext context, GoRouterState state) =>
+          const SplashScreen(), // Replace SplashScreen with your actual splash screen widget
     ),
     GoRoute(
       path: '/',
@@ -33,24 +34,23 @@ final GoRouter router = GoRouter(
             return const MembersScreen();
           },
         ),
-         GoRoute(
+        GoRoute(
           path: 'statistics',
           builder: (BuildContext context, GoRouterState state) {
             return const StatisticsScreen();
           },
         ),
-         GoRoute(
-          path: 'setreminder',
-          builder: (BuildContext context, GoRouterState state) {
-            return const SetReminderScreen();
-          },
+        GoRoute(
+          path: 'reminder',
+          builder: (BuildContext context, GoRouterState state) =>
+              const ReminderScreen(),
         ),
         GoRoute(
-      path: 'login', // Add this line to define the "/login" route
-      builder: (BuildContext context, GoRouterState state) => const LoginScreen(), // Replace LoginScreen with your actual login screen widget
-    ),
+          path: 'login', // Add this line to define the "/login" route
+          builder: (BuildContext context, GoRouterState state) =>
+              const LoginScreen(), // Replace LoginScreen with your actual login screen widget
+        ),
       ],
-      
     ),
   ],
 );

@@ -2,10 +2,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/providers/memberid_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
@@ -13,7 +15,9 @@ import 'package:smart_chitty/widgets/global/buttonwidget.dart';
 import 'package:smart_chitty/widgets/features/dropdown_addmember.dart';
 import 'package:smart_chitty/widgets/global/textfieldwidget.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
+
 XFile? imagepath;
+
 class AddMemberScreen extends StatefulWidget {
   const AddMemberScreen({super.key});
 
@@ -54,7 +58,6 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     setState(() {
       schemeId = schemeData.map((scheme) => scheme.schemeId).toList();
     });
-    
   }
 
   Map<String, String> imagePaths = {
@@ -95,11 +98,11 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           pickAndSaveImage(context, 'avatar');
                         });
                       },
-                      icon:  Icon(
-                        Icons.add_photo_alternate,
-                        size: 35,
-                        color: imagepath != null ? Colors.transparent:Colors.black
-                      )),
+                      icon: Icon(Icons.add_photo_alternate,
+                          size: 35,
+                          color: imagepath != null
+                              ? Colors.transparent
+                              : Colors.black)),
                 ),
               ),
             ),
@@ -207,7 +210,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                       onPressed: () {
                                         pickAndSaveImage(context, 'frontImage');
                                       },
-                                      icon:  const Icon(
+                                      icon: const Icon(
                                         Icons.add_photo_alternate,
                                         size: 30,
                                         color: Color.fromARGB(60, 0, 0, 1),
@@ -238,7 +241,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                                       onPressed: () {
                                         pickAndSaveImage(context, 'backImage');
                                       },
-                                      icon:  const Icon(
+                                      icon: const Icon(
                                         Icons.add_photo_alternate,
                                         size: 30,
                                         color: Color.fromARGB(60, 0, 0, 0),
@@ -266,6 +269,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               buttonAction: () {
                 if (formKeys.currentState!.validate()) {
                   saveDataToHive();
+                  
                   Navigator.pop(context);
 
                   // collectDataOnclick(context);
@@ -284,7 +288,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
     final imagePicker = ImagePicker();
     final XFile? pickedImage =
         await imagePicker.pickImage(source: ImageSource.gallery);
-        imagepath=pickedImage;
+    imagepath = pickedImage;
     if (pickedImage != null) {
       setState(() {
         imagePaths[location] = pickedImage.path;
@@ -336,6 +340,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
 
       final schemebox = await Hive.openBox<SchemeModel>('schemes');
       final schemeData = schemebox.values.toList();
+
       final currentSchemeModel =
           schemeData.firstWhere((scheme) => scheme.schemeId == dropvalue);
 
@@ -354,6 +359,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
       final box = await Hive.openBox<MemberModel>('members');
       if (dropdownValue != null) {
         await box.put(uniqueId, member);
+       
         // refreshMember(dropdownValue);
 
         await saveLastGeneratedId(lastGeneratedId + 1);
@@ -364,6 +370,9 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
             duration: Duration(seconds: 2),
           ),
         );
+         final memberModel =
+            Provider.of<MemberListProvider>(_context!, listen: false);
+        memberModel.fetchMemberDatas();
       } else {
         ScaffoldMessenger.of(_context!).showSnackBar(
           const SnackBar(

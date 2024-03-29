@@ -47,5 +47,15 @@ class TransactionHistoryProvider extends ChangeNotifier {
       return  date == monthPart ;
     }).toList();
   }
+  Future<void> deleteTransaction(int index) async {
+    final box = await Hive.openBox<PaymentModel>('payments');
+    await box.deleteAt(index); // Delete by key value
+    lastFourTransaction.removeAt(index);
+    transactionData.removeAt(index);
+    sortedTransactionData.removeAt(index);
+    // specificTransaction.removeAt(index);
+
+    notifyListeners();
+  }
 
 }

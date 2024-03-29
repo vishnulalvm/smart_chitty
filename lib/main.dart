@@ -8,9 +8,11 @@ import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/monthly_collection_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/services/models/registration_model.dart';
+import 'package:smart_chitty/services/models/reminder_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/services/providers/memberdata_provider.dart';
 import 'package:smart_chitty/services/providers/memberid_provider.dart';
+import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
 import 'package:smart_chitty/services/providers/schemedata_provider.dart';
 import 'package:smart_chitty/services/providers/schemeid_provider.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
@@ -35,6 +37,9 @@ void main() async {
   }
   if (!Hive.isAdapterRegistered(MonthlyCollectionAdapter().typeId)) {
     Hive.registerAdapter(MonthlyCollectionAdapter());
+  }
+   if (!Hive.isAdapterRegistered(ReminderModelAdapter().typeId)) {
+    Hive.registerAdapter(ReminderModelAdapter());
   }
 
 
@@ -63,6 +68,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MemberDataProvider()),
         ChangeNotifierProvider(create: (context) => TransactionHistoryProvider()), 
         ChangeNotifierProvider(create: (context) => SchemeListProvider()), 
+         ChangeNotifierProvider(create: (context) => ReminderListProvider()), 
       ],
       child: MaterialApp.router(
         routerConfig: router,

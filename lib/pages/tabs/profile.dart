@@ -1,13 +1,22 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_chitty/pages/others/other_screens/set_reminder.dart';
+import 'package:smart_chitty/pages/tabs/home.dart';
+import 'package:smart_chitty/pages/tabs/reminders.dart';
+import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/contact_button.dart';
 import 'package:smart_chitty/widgets/global/list_tile_account.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
+import 'package:url_launcher/url_launcher.dart'as UrlLauncher;
+
+String companyName = '';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -26,17 +35,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    for (final company in companyDatas) {
+      companyName = company.companyName;
+    }
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('Smart Chitty'),
-        actions:  [
+        title: Text(companyName),
+        actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: CircleAvatar(
-              backgroundImage: AssetImage(appLogo),
+              backgroundImage: FileImage(File(companyLogo)),
               radius: 22,
             ),
           ),
@@ -47,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(
             width: MediaQuery.of(context).size.width,
             height: 500,
-            decoration:  BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
                     backgroundImage,
@@ -63,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Column(
                       children: [
                         contactButton(
-                            buttonName: 'Call President', icon: Icons.call),
+                            buttonName: 'Call President', icon: Icons.call,buttonAction: () => UrlLauncher.launchUrl("tel://21213123123"),),
                         gap(height: 20),
                         contactButton(
                             buttonName: 'Whatsapp Group', icon: Icons.chat),
@@ -92,18 +104,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         color: AppColor.fontColor,
                         fontWeight: FontWeight.w500,
                       ),
-                     
+
                       Expanded(
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
                               gap(height: 15),
                               customListTile(
-                                  onTap: () {},
-                                  title: 'Set Meet Time',
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const SetReminderScreen()));
+                                  },
+                                  title: 'Set Reminder',
                                   leading: Icons.alarm),
                               customListTile(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const ReminderScreen()));
+                                  },
                                   title: 'Notifications',
                                   leading: Icons.notifications_active),
                               customListTile(

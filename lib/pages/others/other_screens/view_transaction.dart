@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -14,8 +15,14 @@ import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class ViewTransaction extends StatefulWidget {
   final PaymentModel paymentModel;
+  final int index;
+  final TransactionHistoryProvider treansProvider;
 
-  const ViewTransaction({super.key, required this.paymentModel});
+  const ViewTransaction(
+      {super.key,
+      required this.paymentModel,
+      required this.index,
+      required this.treansProvider});
 
   @override
   State<ViewTransaction> createState() => _ViewTransactionState();
@@ -72,12 +79,6 @@ class _ViewTransactionState extends State<ViewTransaction> {
                   },
                   child: const ModifiedText(
                       text: 'Delete', size: 14, color: Colors.white)),
-              // rowText(
-              //     firstText: 'Total Members :',
-              //     secoundText: widget.chittyMembers),
-              // rowText(
-              //     firstText: 'Pool Amount :',
-              //     secoundText: widget.pool),
             ],
           ),
         ),
@@ -101,8 +102,10 @@ class _ViewTransactionState extends State<ViewTransaction> {
             ),
             TextButton(
               onPressed: () async {
-                final box = await Hive.openBox<PaymentModel>('payments');
-                box.delete(widget.paymentModel.memberId);
+                final paymentHistory = Provider.of<TransactionHistoryProvider>(
+                    context,
+                    listen: false);
+                paymentHistory.deleteTransaction(widget.index);
                 final amount =
                     double.tryParse(widget.paymentModel.payment) ?? 0;
                 final collectionBox =
@@ -124,9 +127,7 @@ class _ViewTransactionState extends State<ViewTransaction> {
                   await collectionBox.put(
                       widget.paymentModel.paymentMonth, collectionModel);
                 }
-                final paymentHistory = Provider.of<TransactionHistoryProvider>(
-                    _context!,
-                    listen: false);
+
                 paymentHistory.fetchMemberDatas();
 
                 final installmentCount =
@@ -134,7 +135,7 @@ class _ViewTransactionState extends State<ViewTransaction> {
                 await saveInstallmentCount(
                     widget.paymentModel.memberId, installmentCount);
 
-                Navigator.of(_context!).pop();
+                _context!.pushReplacement('/');
               },
               child: const Text('delete'),
             ),

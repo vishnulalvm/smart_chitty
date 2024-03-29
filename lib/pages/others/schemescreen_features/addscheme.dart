@@ -248,10 +248,8 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
         proposeDate: proposeDate,
       );
       final box = await Hive.openBox<SchemeModel>('schemes');
-      // await box.add(scheme);
       await box.put(uniqueId, scheme);
-      // adding value to v
-      // addScheme(scheme);
+
       getSchemeCredentials();
       await saveLastGeneratedId(lastGeneratedId + 1);
 

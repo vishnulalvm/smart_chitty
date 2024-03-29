@@ -6,8 +6,9 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_transaction.dart';
-import 'package:smart_chitty/pages/tabs/set_reminder.dart';
+import 'package:smart_chitty/pages/tabs/reminders.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
@@ -16,6 +17,7 @@ import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/scheme.dart';
 import 'package:smart_chitty/pages/others/homescreen_features/payment_update_button.dart';
 import 'package:smart_chitty/services/providers/memberid_provider.dart';
+import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
 import 'package:smart_chitty/services/providers/schemedata_provider.dart';
 import 'package:smart_chitty/services/providers/schemeid_provider.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
@@ -27,7 +29,7 @@ import 'package:smart_chitty/widgets/global/glasseffect.dart';
 import 'package:smart_chitty/widgets/global/icon_button.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:text_scroll/text_scroll.dart';
-
+String companyLogo='' ;
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -46,6 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       selectedId = '';
     }
+    final reminderModel =
+        Provider.of<ReminderListProvider>(context, listen: false);
+    reminderModel.getReminders();
     final schemeIdModel =
         Provider.of<SchemeIdListProvider>(context, listen: false);
     schemeIdModel.getSchemeIds();
@@ -66,6 +71,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+     for (final company in companyDatas) {
+    companyLogo =  company.imagePath;
+     }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -81,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     builder: (context) => const ProfileScreen()));
               },
               child: CircleAvatar(
-                backgroundImage: AssetImage(appLogo),
+                backgroundImage: FileImage(File(companyLogo)),
                 radius: 22,
               ),
             ),
@@ -175,10 +183,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       CircularIconhome(
                         icontype: Symbols.alarm,
                         buttonpress: () {
+                          final reminderModel =
+                              Provider.of<ReminderListProvider>(context,
+                                  listen: false);
+                          reminderModel.getReminders();
                           Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const SetReminderScreen()));
+                              builder: (ctx) => const ReminderScreen()));
                         },
-                        iconname: 'Reminder',
+                        iconname: 'Reminders',
                       ),
                     ],
                   ),
@@ -214,7 +226,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Color.fromRGBO(29, 27, 32, 1)),
                           ),
                           TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                final reminderModel =
+                                    Provider.of<ReminderListProvider>(context,
+                                        listen: false);
+                                reminderModel.getReminders();
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => const ReminderScreen()));
+                              },
                               child: const Text(
                                 'See All',
                                 style: TextStyle(
@@ -225,37 +244,72 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       ),
                       gap(height: 10),
-                      Container(
-                        width: double.maxFinite,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: const Color.fromRGBO(28, 167, 190, 1),
-                            borderRadius: BorderRadius.circular(5)),
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Icon(
-                                Icons.alarm,
-                                color: Colors.white,
-                              ),
-                              gap(width: 10),
-                              const ModifiedText(
-                                text: 'Next Meet @ 10.00 12-02-24',
-                                size: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              gap(width: 80),
-                              const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                      Consumer<ReminderListProvider>(
+                          builder: (context, reminderdata, child) {
+                        return ListView.builder(
+                            padding: EdgeInsets.zero,
+                            shrinkWrap: true,
+                            controller: scrollController,
+                            itemCount: reminderdata.lastFourReminders.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final reminder =
+                                  reminderdata.lastFourReminders[index];
+                              // isChecked =reminder.isChecked;
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 12,
+                                ),
+                                child: Container(
+                                  width: double.maxFinite,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      color:
+                                          const Color.fromRGBO(28, 167, 190, 1),
+                                      borderRadius: BorderRadius.circular(5)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 10, right: 20),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Icon(
+                                          Icons.alarm,
+                                          color: Colors.white,
+                                        ),
+                                        SizedBox(
+                                          width: 280,
+                                          child: RichText(
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            text: TextSpan(
+                                              text:
+                                                  '${reminder.reminderNote} @ ${reminder.reminderTime} ${reminder.reminderDate}',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        IconButton(
+                                          onPressed: () {
+                                            reminderdata.deleteReminder(index);
+                                          },
+                                          icon: const Icon(
+                                            Icons.close,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            });
+                      }),
+
                       gap(height: 10),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -308,6 +362,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MaterialPageRoute(
                                                 builder: (ctx) =>
                                                     ViewTransaction(
+                                                      index: index,
+                                                      treansProvider:
+                                                          paymentData,
                                                       paymentModel: payment,
                                                     )));
                                       },
@@ -372,11 +429,12 @@ class _HomeScreenState extends State<HomeScreen> {
 // ! New scheme start here
                       Container(
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30),
-                          image: const DecorationImage(
-                            
-                            image: AssetImage('assets/images/Header.jpg',),fit: BoxFit.cover)
-                        ),
+                            borderRadius: BorderRadius.circular(30),
+                            image: const DecorationImage(
+                                image: AssetImage(
+                                  'assets/images/Header.jpg',
+                                ),
+                                fit: BoxFit.cover)),
                         height: 140,
                         child: Consumer<SchemeListProvider>(
                             builder: (context, schemeData, child) {
@@ -390,7 +448,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 final scheme = schemeData.latestSchemes[index];
 
                                 return Padding(
-                                    padding: const EdgeInsets.only(left: 12,top: 10,bottom: 10),
+                                    padding: const EdgeInsets.only(
+                                        left: 12, top: 10, bottom: 10),
                                     child: FrostedGlassBox(
                                       theChild: Padding(
                                           padding: const EdgeInsets.all(8.0),
@@ -447,62 +506,72 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                         ],
                       ),
-                      ValueListenableBuilder(
-                          valueListenable: schemeListNotifer,
-                          builder: (BuildContext context,
-                              List<SchemeModel> schemedata, Widget? child) {
-                            return SizedBox(
-                              height: 300,
-                              child: ListView.builder(
-                                padding: EdgeInsets.zero,
-                                controller: scrollController,
-                                itemCount: schemedata.length,
-                                itemBuilder: (context, index) {
-                                  final data = schemedata[index];
-                                  return Padding(
-                                    padding: const EdgeInsets.only(bottom: 4),
-                                    child: Card(
-                                      elevation: 0,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: ListTile(
-                                          leading: CircleAvatar(
-                                            backgroundColor: Colors.blue,
-                                            radius: 20,
-                                            child: Text(
-                                              data.installment,
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 26,
-                                                  fontWeight: FontWeight.w700),
-                                            ),
-                                          ),
-                                          title: Text(
-                                              '${data.installment}×${data.subscription}'),
-                                          subtitle: Text(
-                                              'Subcribers :${data.totalMembers}'),
-                                          trailing: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.end,
-                                            children: [
-                                              Text(
-                                                  'Subcribers :${data.totalMembers}'),
-                                              const SizedBox(
-                                                  height:
-                                                      15), // Add some spacing between text widgets (optional)
-                                              const Text('item.trailingText2'),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
+                      // ! New members
+                      Consumer<MemberListProvider>(
+                          builder: (context, membersModel, child) {
+                        return ListView.builder(
+                          padding: EdgeInsets.zero,
+                          shrinkWrap: true,
+                          controller: scrollController,
+                          itemCount: membersModel.lastFourmember.length,
+                          itemBuilder: (context, index) {
+                            final data = membersModel.lastFourmember[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 4),
+                              child: Card(
+                                elevation: 0,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: ListTile(
+                                    leading: CircleAvatar(
+                                      backgroundColor: Colors.blue,
+                                      radius: 20,
+                                      backgroundImage:
+                                          FileImage(File(data.avatar)),
                                     ),
-                                  );
-                                },
+                                    title: ModifiedText(
+                                      text: data.memberName,
+                                      size: 18,
+                                      color: AppColor.fontColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    subtitle: ModifiedText(
+                                      text: 'Member Id : ${data.memberId}',
+                                      size: 14,
+                                      color: AppColor.fontColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    trailing: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.end,
+                                      children: [
+                                        gap(height: 2),
+                                        ModifiedText(
+                                          text:
+                                              '₹${data.schemeModel.poolAmount}',
+                                          size: 18,
+                                          color: AppColor.fontColor,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        gap(
+                                            height:
+                                                4), // Add some spacing between text widgets (optional)
+                                        ModifiedText(
+                                            text:
+                                                'Installment : 0/${data.schemeModel.installment}',
+                                            size: 12,
+                                            color: AppColor.fontColor)
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
                             );
-                          }),
+                          },
+                        );
+                      }),
                     ],
                   ),
                 )
