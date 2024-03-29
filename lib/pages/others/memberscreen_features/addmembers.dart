@@ -4,7 +4,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/services/providers/memberid_provider.dart';

@@ -11,7 +11,6 @@ import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
-import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/pages/tabs/profile.dart';
 import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/scheme.dart';

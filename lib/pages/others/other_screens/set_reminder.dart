@@ -160,7 +160,6 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-
     if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
         _selectedDate = pickedDate;
@@ -171,12 +170,9 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
   Future<void> saveSchemeToHive() async {
     try {
       final reminderNote = reminderController.text;
-      final reminderDate =
-          DateFormat('dd-MM-yyyy').format(_selectedDate!);
-      final reminderTime = _selectedTime!.format(context); 
-      print(reminderTime);
+      final reminderDate = DateFormat('dd-MM-yyyy').format(_selectedDate!);
+      final reminderTime = _selectedTime!.format(context);
       final now = DateTime.now();
-
       final reminder = ReminderModel(
         isChecked: false,
         now: now,
