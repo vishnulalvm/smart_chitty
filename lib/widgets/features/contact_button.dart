@@ -11,7 +11,7 @@ Widget contactButton({
     onTap: buttonAction,
     child: Container(
       alignment: Alignment.center,
-      width: 300,
+      width: 180,
       height: 40,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
@@ -32,8 +32,8 @@ Widget contactButton({
             icon,
             color: Colors.white,
           ),
-          gap(width: 10),
-          ModifiedText(text: buttonName, size: 16, color: Colors.white)
+          gap(width: 5),
+          ModifiedText(text: buttonName, size: 14, color: Colors.white)
         ],
       ),
     ),

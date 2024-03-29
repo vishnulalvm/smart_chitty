@@ -1,4 +1,5 @@
 import 'dart:io';
+// import 'dart:nativewrappers/_internal/vm/lib/core_patch.dart' hide String;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -14,9 +15,11 @@ import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/contact_button.dart';
 import 'package:smart_chitty/widgets/global/list_tile_account.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
-import 'package:url_launcher/url_launcher.dart'as UrlLauncher;
+import 'package:url_launcher/url_launcher.dart';
 
 String companyName = '';
+ String presidentPhoneNumber = '8138946412';
+ String whatsappUrl = 'https://chat.whatsapp.com/GD9M49Vc4a8JiuAcHJXqww';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -30,13 +33,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _context = context; // Store context in state variable
+    _context = context;
   }
 
   @override
   Widget build(BuildContext context) {
     for (final company in companyDatas) {
       companyName = company.companyName;
+      presidentPhoneNumber=company.phoneNumber;
+      whatsappUrl=company.whatsappLink;
     }
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -45,13 +50,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         title: Text(companyName),
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: CircleAvatar(
-              backgroundImage: FileImage(File(companyLogo)),
-              radius: 22,
-            ),
+       PopupMenuButton<int>(
+        onSelected: (value){},
+        itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+           const PopupMenuItem<int>(
+            value: 1,
+            child: Text('Info'),
           ),
+           const PopupMenuItem<int>(
+            value: 2,
+            child: Text('Settings'),
+          ),
+        ],
+      ),
         ],
       ),
       body: Stack(
@@ -69,17 +80,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Stack(
               children: [
                 Positioned(
-                    top: 150,
+                  top: 130,
+                  right: 0,
+                  left: 0,
+                  child: Column(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage: FileImage(File(companyLogo)),
+                        radius: 40,
+                      ),
+                      gap(height: 10),
+                       ModifiedText(text: companyName, size: 30, color: Colors.white)
+                    ],
+                  ),
+                ),
+                Positioned(
+                    top: 280,
                     right: 0,
                     left: 0,
-                    child: Column(
-                      children: [
-                        contactButton(
-                            buttonName: 'Call President', icon: Icons.call,buttonAction: () => UrlLauncher.launchUrl("tel://21213123123"),),
-                        gap(height: 20),
-                        contactButton(
-                            buttonName: 'Whatsapp Group', icon: Icons.chat),
-                      ],
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 12, right: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          contactButton(
+                              buttonName: 'Call President',
+                              icon: Icons.call,
+                              buttonAction: () => makePhoneCall()),
+                          gap(height: 20),
+                          contactButton(
+                            buttonName: 'Whatsapp Group',
+                            icon: Icons.chat,
+                            buttonAction: () => launchWhatsApp(whatsappUrl),
+                          ),
+                        ],
+                      ),
                     ))
               ],
             ),
@@ -252,5 +287,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
     // Perform logout logic
 
     context.pushReplacement('/login');
+  }
+
+  Future<void> makePhoneCall() async {
+    final Uri launchUri = Uri(
+      scheme: 'tel',
+      path: presidentPhoneNumber,
+    );
+    await launchUrl(launchUri);
+  }
+
+  Future<void> launchWhatsApp(String groupUrl) async {
+    final Uri url = Uri.parse(groupUrl);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
