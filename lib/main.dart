@@ -10,6 +10,7 @@ import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/services/models/registration_model.dart';
 import 'package:smart_chitty/services/models/reminder_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/providers/filter_member_provider.dart';
 import 'package:smart_chitty/services/providers/memberdata_provider.dart';
 import 'package:smart_chitty/services/providers/memberid_provider.dart';
 import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
@@ -68,7 +69,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => MemberDataProvider()),
         ChangeNotifierProvider(create: (context) => TransactionHistoryProvider()), 
         ChangeNotifierProvider(create: (context) => SchemeListProvider()), 
-         ChangeNotifierProvider(create: (context) => ReminderListProvider()), 
+         ChangeNotifierProvider(create: (context) => ReminderListProvider()),
+         ChangeNotifierProvider(create: (context) => FilterMemberProvider()), 
       ],
       child: MaterialApp.router(
         routerConfig: router,

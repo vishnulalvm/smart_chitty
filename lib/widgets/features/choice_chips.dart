@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/providers/filter_member_provider.dart';
 import 'package:smart_chitty/services/providers/memberdata_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 
@@ -30,8 +31,6 @@ class _MemberFillterState extends State<MemberFillter> {
   @override
   Widget build(BuildContext context) {
     return Consumer<MemberDataProvider>(builder: (context, schememodel, child) {
-      
-
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -67,6 +66,9 @@ class _MemberFillterState extends State<MemberFillter> {
                   selectedSchemeId = selected ? schemeIdInt : fistvalue;
                   selectedId = schemeIdInt.toString().padLeft(4, '0');
                   widget.onChipSelected(selectedId);
+                  final memberModel =
+                      Provider.of<FilterMemberProvider>(context, listen: false);
+                  memberModel.getMemberCredentials(selectedId);
                 });
               }
             }),

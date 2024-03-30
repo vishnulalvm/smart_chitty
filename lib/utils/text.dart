@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class ModifiedText extends StatelessWidget {
@@ -44,7 +45,7 @@ class BoldText extends StatelessWidget {
       text,
       style: TextStyle(
         color: color,
-        fontSize: size,
+        // fontSize: size,
         fontWeight: FontWeight.bold,
       ),
     );

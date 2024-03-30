@@ -232,23 +232,33 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                 ),
               ),
             ),
-            Positioned(
-              top: 850,
-              left: 100,
-              right: 100,
-              child: buttons(
-                buttonAction: () {
-                  if (formKeys.currentState!.validate()) {
+       
+          ],
+        ),
+
+            floatingActionButton: FloatingActionButton.extended(
+              extendedPadding: EdgeInsets.only(left: 40,right: 40),
+          label: const Text(
+            'Register',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+            weight: 800,
+          ),
+          backgroundColor: Colors.blue,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30), // Adjust radius as needed
+          ),
+          onPressed: () {
+            if (formKeys.currentState!.validate()) {
                     collectionToHive();
                     saveSchemeToHive();
                   }
-                },
-                buttonName: 'Register',
-                color: const Color.fromRGBO(0, 205, 255, 1),
-              ),
-            )
-          ],
-        ),
+           
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       );
     });
   }

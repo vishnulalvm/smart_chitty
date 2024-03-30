@@ -15,6 +15,7 @@ import 'package:smart_chitty/pages/tabs/profile.dart';
 import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/scheme.dart';
 import 'package:smart_chitty/pages/others/homescreen_features/payment_update_button.dart';
+import 'package:smart_chitty/services/providers/filter_member_provider.dart';
 import 'package:smart_chitty/services/providers/memberid_provider.dart';
 import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
 import 'package:smart_chitty/services/providers/schemedata_provider.dart';
@@ -28,7 +29,10 @@ import 'package:smart_chitty/widgets/global/glasseffect.dart';
 import 'package:smart_chitty/widgets/global/icon_button.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:text_scroll/text_scroll.dart';
-String companyLogo='' ;
+import 'package:auto_size_text/auto_size_text.dart';
+
+String companyLogo = '';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -43,7 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     if (schemeListNotifer.value.isNotEmpty) {
       selectedId = schemeListNotifer.value.first.schemeId;
-      getMemberCredentials(selectedId);
+      final memberModel =
+          Provider.of<FilterMemberProvider>(context, listen: false);
+      memberModel.getMemberCredentials(selectedId);
     } else {
       selectedId = '';
     }
@@ -70,9 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-     for (final company in companyDatas) {
-    companyLogo =  company.imagePath;
-     }
+    for (final company in companyDatas) {
+      companyLogo = company.imagePath;
+    }
     return Scaffold(
       resizeToAvoidBottomInset: false,
       extendBodyBehindAppBar: true,
@@ -99,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 500,
+            height: MediaQuery.of(context).size.height * 0.4,
             decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
@@ -109,89 +115,96 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Stack(
               children: [
-                const Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 190,
+                const Positioned.fill(
+                  // top: 0,
+                  // left: 0,
+                  // right: 0,
+                  // bottom: 190,
                   child: Center(
                       child: Padding(
-                    padding: EdgeInsets.all(20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Updates:',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700),
-                        ),
-                        TextScroll(
-                          fadeBorderSide: FadeBorderSide.both,
-                          'New Chitty Scheme is start on \'january\' ,Start saving Money!!  ',
-                          mode: TextScrollMode.endless,
-                          velocity: Velocity(pixelsPerSecond: Offset(70, 0)),
-                          delayBefore: Duration(milliseconds: 100),
-                          numberOfReps: 100,
-                          pauseBetween: Duration(seconds: 1),
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700),
-                          textAlign: TextAlign.right,
-                          selectable: true,
-                        ),
-                      ],
+                    padding: EdgeInsets.only(bottom: 30, left: 12, right: 12),
+                    child: FractionallySizedBox(
+                      widthFactor: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Updates:',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          TextScroll(
+                            fadeBorderSide: FadeBorderSide.both,
+                            'New Chitty Scheme is start on \'january\' ,Start saving Money!!  ',
+                            mode: TextScrollMode.endless,
+                            velocity: Velocity(pixelsPerSecond: Offset(70, 0)),
+                            delayBefore: Duration(milliseconds: 100),
+                            numberOfReps: 100,
+                            pauseBetween: Duration(seconds: 1),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.w700),
+                            textAlign: TextAlign.right,
+                            selectable: true,
+                          ),
+                        ],
+                      ),
                     ),
                   )),
                 ),
                 Positioned(
-                  top: 240,
-                  left: 25,
-                  right: 25,
-                  bottom: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      CircularIconhome(
-                        icontype: Symbols.finance,
-                        buttonpress: () {
-                          fetchMemberDatas();
-                          context.push('/statistics');
-                        },
-                        iconname: 'Statistics',
-                      ),
-                      CircularIconhome(
-                        icontype: Symbols.keyboard_command_key,
-                        buttonpress: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const SchemeButtonHome()));
-                        },
-                        iconname: 'Scheme',
-                      ),
-                      CircularIconhome(
-                        icontype: Symbols.group,
-                        buttonpress: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const MembersScreen()));
-                        },
-                        iconname: 'Members',
-                      ),
-                      CircularIconhome(
-                        icontype: Symbols.alarm,
-                        buttonpress: () {
-                          final reminderModel =
-                              Provider.of<ReminderListProvider>(context,
-                                  listen: false);
-                          reminderModel.getReminders();
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => const ReminderScreen()));
-                        },
-                        iconname: 'Reminders',
-                      ),
-                    ],
+                  left: 0,
+                  right: 0,
+                  bottom: 40,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Wrap(
+                      spacing: MediaQuery.of(context).size.width * 0.08,
+                      runSpacing: MediaQuery.of(context).size.width * 0.08,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        CircularIconhome(
+                          icontype: Symbols.finance,
+                          buttonpress: () {
+                            fetchMemberDatas();
+                            context.push('/statistics');
+                          },
+                          iconname: 'Statistics',
+                        ),
+                        CircularIconhome(
+                          icontype: Symbols.keyboard_command_key,
+                          buttonpress: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => const SchemeButtonHome()));
+                          },
+                          iconname: 'Scheme',
+                        ),
+                        CircularIconhome(
+                          icontype: Symbols.group,
+                          buttonpress: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => const MembersScreen()));
+                          },
+                          iconname: 'Members',
+                        ),
+                        CircularIconhome(
+                          icontype: Symbols.alarm,
+                          buttonpress: () {
+                            final reminderModel =
+                                Provider.of<ReminderListProvider>(context,
+                                    listen: false);
+                            reminderModel.getReminders();
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (ctx) => const ReminderScreen()));
+                          },
+                          iconname: 'Reminders',
+                        ),
+                      ],
+                    ),
                   ),
                 )
               ],
@@ -375,14 +388,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       title: ModifiedText(
                                         text: formattedDateTime,
-                                        size: 18,
+                                        size: 16,
                                         color: AppColor.fontColor,
                                         fontWeight: FontWeight.w500,
                                       ),
                                       subtitle: ModifiedText(
                                         text:
                                             'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
-                                        size: 14,
+                                        size: 12,
                                         color: AppColor.fontColor,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -434,7 +447,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   'assets/images/Header.jpg',
                                 ),
                                 fit: BoxFit.cover)),
-                        height: 140,
+                        height: MediaQuery.of(context).size.height * 0.16,
                         child: Consumer<SchemeListProvider>(
                             builder: (context, schemeData, child) {
                           return ListView.builder(
@@ -449,35 +462,43 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Padding(
                                     padding: const EdgeInsets.only(
                                         left: 12, top: 10, bottom: 10),
-                                    child: FrostedGlassBox(
+                                    child: SizedBox(
+                                        // width: maxWidth * 0.8,
+                                        // height: maxHeight * 0.8,
+                                        child: FrostedGlassBox(
                                       theChild: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              ModifiedText(
-                                                text:
-                                                    '${scheme.poolAmount} Chitty Started',
-                                                size: 16,
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
+                                              AutoSizeText(
+                                                '${scheme.poolAmount} Chitty Started',
+                                                maxLines: 1,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
-                                              ModifiedText(
-                                                  text:
-                                                      'Monthly ${scheme.subscription}Only!!',
-                                                  size: 14,
-                                                  color: Colors.white),
-                                              ModifiedText(
-                                                  text:
-                                                      'Propose Date on \n ${scheme.proposeDate != null ? DateFormat('dd-MM-yyyy').format(scheme.proposeDate!) : ''}',
-                                                  size: 16,
-                                                  color: Colors.white),
+                                              AutoSizeText(
+                                                'Monthly ${scheme.subscription}Only!!',
+                                                maxLines: 1,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              AutoSizeText(
+                                                'Propose Date on \n ${scheme.proposeDate != null ? DateFormat('dd-MM-yyyy').format(scheme.proposeDate!) : ''}',
+                                                maxLines: 2,
+                                                style: const TextStyle(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ],
                                           )),
                                       theHeight: 120,
                                       theWidth: 200,
-                                    ));
+                                    )));
                               });
                         }),
                       ),

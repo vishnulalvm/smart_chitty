@@ -25,11 +25,11 @@ class TransactionHistoryProvider extends ChangeNotifier {
       final bDate = b.paymentDate;
 
       if (aDate == null && bDate == null) {
-        return 0; // Both paymentDates are null, consider them equal
+        return 0;
       } else if (aDate == null) {
-        return 1; // a is null, so it should come after b
+        return 1; 
       } else if (bDate == null) {
-        return -1; // b is null, so it should come after a
+        return -1; 
       } else {
         return bDate.compareTo(aDate);
       }
@@ -49,12 +49,10 @@ class TransactionHistoryProvider extends ChangeNotifier {
   }
   Future<void> deleteTransaction(int index) async {
     final box = await Hive.openBox<PaymentModel>('payments');
-    await box.deleteAt(index); // Delete by key value
+    await box.deleteAt(index); 
     lastFourTransaction.removeAt(index);
     transactionData.removeAt(index);
     sortedTransactionData.removeAt(index);
-    // specificTransaction.removeAt(index);
-
     notifyListeners();
   }
 

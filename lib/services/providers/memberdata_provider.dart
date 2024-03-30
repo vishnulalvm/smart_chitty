@@ -16,7 +16,6 @@ class MemberDataProvider extends ChangeNotifier{
     if (schemeIdList.isNotEmpty) {
     fistvalue = schemeIdList.first.schemeId;
   } else {
-    // Handle the case when schemeIdList is empty
     fistvalue = null; // or assign a default value
   }
      notifyListeners();
