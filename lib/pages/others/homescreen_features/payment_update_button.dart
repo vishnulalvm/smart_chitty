@@ -12,7 +12,6 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/dropdown_selectmember.dart';
-import 'package:smart_chitty/widgets/global/buttonwidget.dart';
 import 'package:smart_chitty/widgets/global/row_text.dart';
 import 'package:smart_chitty/widgets/features/custom_textfield.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
@@ -237,7 +236,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
         ),
 
             floatingActionButton: FloatingActionButton.extended(
-              extendedPadding: EdgeInsets.only(left: 40,right: 40),
+              extendedPadding: const EdgeInsets.only(left: 40,right: 40),
           label: const Text(
             'Register',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),

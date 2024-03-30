@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -31,7 +30,6 @@ class _MembersScreenState extends State<MembersScreen> {
   void handleChipSelection(String? newSelectedId) {
     setState(() {
       selectedId = newSelectedId;
-      print(selectedId);
     });
   }
 
@@ -210,42 +208,6 @@ class _MembersScreenState extends State<MembersScreen> {
   }
 }
 
-
-         //   onTap: () {
-                            //     getPaymentCredentials(data.memberId);
-                            //     Navigator.push(
-                            //         context,
-                            //         PageRouteBuilder(
-                            //           transitionDuration:
-                            //               const Duration(milliseconds: 400),
-                            //           pageBuilder: (context, animation,
-                            //                   secondaryAnimation) =>
-                            //               MemberDetails(
-                            //             pool: data.schemeModel.poolAmount,
-                            //             address: data.memberAddress,
-                            //             avatar: data.avatar,
-                            //             contact: data.contactNumber,
-                            //             idBack: data.idBack,
-                            //             idFront: data.idFront,
-                            //             installment:
-                            //                 data.schemeModel.installment,
-                            //             memberId: data.memberId,
-                            //             memberName: data.memberName,
-                            //             memberage: data.memberAge,
-                            //             scheme: data.schemeId ?? '',
-                            //           ),
-                            //           transitionsBuilder: (context, animation,
-                            //               secondaryAnimation, child) {
-                            //             final tween = Tween<Offset>(
-                            //                 begin: const Offset(1.0, 0.0),
-                            //                 end: Offset.zero);
-                            //             return SlideTransition(
-                            //               position: animation.drive(tween),
-                            //               child: child,
-                            //             );
-                            //           },
-                            //         ));
-                            //   },
 
 
                               

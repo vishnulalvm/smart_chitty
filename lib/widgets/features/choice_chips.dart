@@ -18,11 +18,13 @@ class MemberFillter extends StatefulWidget {
 }
 
 class _MemberFillterState extends State<MemberFillter> {
+ final String allChipId = 'ALL';
   String? selectedIdon;
 
   @override
   void initState() {
     super.initState();
+    selectedSchemeId = allChipId;
     final schemeIdModel =
         Provider.of<MemberDataProvider>(context, listen: false);
     schemeIdModel.getSchemeIds();
@@ -42,7 +44,35 @@ class _MemberFillterState extends State<MemberFillter> {
   }
 
   List<Widget> _buildChoiceChips(List<SchemeModel> schememodels) {
-    return schememodels.map((schemeModel) {
+    List<Widget> chips = [
+    Padding(
+      padding: const EdgeInsets.only(left: 12),
+      child: ChoiceChip(
+        selectedColor: Colors.blue,
+        showCheckmark: false,
+        labelStyle: TextStyle(
+          color: selectedSchemeId == allChipId ? Colors.white : AppColor.fontColor,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        label: const Text('All'),
+        selected: selectedSchemeId == allChipId,
+        onSelected: (bool selected) {
+          if (mounted) {
+            setState(() {
+              selectedSchemeId = selected ? allChipId : null;
+              selectedId = null;
+              widget.onChipSelected(selectedId);
+              final memberModel = Provider.of<FilterMemberProvider>(context, listen: false);
+              memberModel.getMemberCredentials(selectedId);
+            });
+          }
+        },
+      ),
+    ),
+  ];
+    chips.addAll( schememodels.map((schemeModel) {
       String? schemeIdInt = schemeModel.schemeId;
 
       return Padding(
@@ -73,6 +103,7 @@ class _MemberFillterState extends State<MemberFillter> {
               }
             }),
       );
-    }).toList();
+    }).toList());
+    return chips;
   }
 }

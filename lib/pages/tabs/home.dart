@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_transaction.dart';
 import 'package:smart_chitty/pages/tabs/reminders.dart';
-import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
@@ -49,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       selectedId = schemeListNotifer.value.first.schemeId;
       final memberModel =
           Provider.of<FilterMemberProvider>(context, listen: false);
-      memberModel.getMemberCredentials(selectedId);
+      memberModel.getMemberCredentials(null);
     } else {
       selectedId = '';
     }
@@ -116,10 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Stack(
               children: [
                 const Positioned.fill(
-                  // top: 0,
-                  // left: 0,
-                  // right: 0,
-                  // bottom: 190,
+        
                   child: Center(
                       child: Padding(
                     padding: EdgeInsets.only(bottom: 30, left: 12, right: 12),
