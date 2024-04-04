@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_chitty/pages/others/other_screens/transaction_details.dart';
+import 'package:smart_chitty/pages/others/other_screens/view_transaction.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
@@ -42,37 +42,33 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 ),
                 Consumer<TransactionHistoryProvider>(
                     builder: (context, paymentData, child) {
-                      return BoldText(
-                        text: paymentData.sortedTransactionData.length.toString(),
-                        color: AppColor.fontColor,
-                        size: 16,
-                      );
-                    }),
+                  return BoldText(
+                    text: paymentData.sortedTransactionData.length.toString(),
+                    color: AppColor.fontColor,
+                    size: 16,
+                  );
+                }),
               ],
             ),
           ),
           Expanded(
             child: Consumer<TransactionHistoryProvider>(
-            
               builder: (context, paymentData, child) {
-               String formattedDateTime;
-
-                if (paymentData.sortedTransactionData.isNotEmpty) {
-                  formattedDateTime = paymentData.sortedTransactionData.first.paymentDate != null
-                      ? DateFormat('dd-MM-yyyy HH:mm')
-                          .format(paymentData.sortedTransactionData.first.paymentDate!)
-                      : 'N/A';
-                } else {
-                  formattedDateTime = 'No payment data available';
-                }
                 return ListView.builder(
                   itemCount: paymentData.sortedTransactionData.length,
                   itemBuilder: (context, index) {
+                    String formattedDateTime;
+                    final data = paymentData.sortedTransactionData[index];
+                    if (paymentData.sortedTransactionData.isNotEmpty) {
+                      formattedDateTime = DateFormat('dd-MMM-yy h:mm a')
+                          .format(data.paymentDate!);
+                    } else {
+                      formattedDateTime = 'No payment data available';
+                    }
                     if (paymentData.sortedTransactionData.isEmpty) {
                       return const Text('No data available');
                     }
 
-                    final data = paymentData.sortedTransactionData[index];
                     return Padding(
                       padding:
                           const EdgeInsets.only(left: 6, right: 6, bottom: 4),
@@ -89,7 +85,11 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                         const Duration(milliseconds: 400),
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
-                                        const TransactionDetails(),
+                                        ViewTransaction(
+                                      index: index,
+                                      paymentModel: data,
+                                      treansProvider: paymentData,
+                                    ),
                                     transitionsBuilder: (context, animation,
                                         secondaryAnimation, child) {
                                       final tween = Tween<Offset>(
@@ -109,7 +109,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                             ),
                             title: ModifiedText(
                               text: formattedDateTime,
-                              size: 18,
+                              size: 16,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
                             ),
@@ -134,7 +134,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                     height:
                                         4), // Add some spacing between text widgets (optional)
                                 ModifiedText(
-                                    text: 'Member Id : ${data.memberId}%',
+                                    text: 'Member Id : ${data.memberId}',
                                     size: 12,
                                     color: AppColor.fontColor)
                               ],
@@ -150,7 +150,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
           ),
         ],
       ),
-     
     );
   }
 }

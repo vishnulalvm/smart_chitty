@@ -2,12 +2,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:scroll_to_hide/scroll_to_hide.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/call_chitty.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/edit_member.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_id_screen.dart';
+import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
+import 'package:smart_chitty/services/providers/filter_member_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
@@ -48,11 +52,26 @@ class MemberDetails extends StatefulWidget {
 }
 
 class _MemberDetailsState extends State<MemberDetails> {
+  BuildContext? _context;
+  final ScrollController scrollController = ScrollController();
+  @override
+  void initState() {
+    super.initState();
+    _context = context;
+  }
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       body: CustomScrollView(
+        controller: scrollController,
         slivers: [
           SliverAppBar(
             centerTitle: false,
@@ -95,29 +114,24 @@ class _MemberDetailsState extends State<MemberDetails> {
             actions: [
               PopupMenuButton<int>(
                 onSelected: (value) {
-                  if(value==1){
+                  if (value == 1) {
                     Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) => 
-                                
-                    EditMemberScreen(
-                      address: widget.address,
-                      avatar: widget.avatar,
-                      contact: widget.contact,
-                      idBack: widget.idBack,
-                      idFront: widget.idFront,
-                      installment: widget.installment,
-                      memberId: widget.memberId,
-                      memberName:widget.memberName ,
-                      memberage: widget.memberage,
-                      pool: widget.pool,
-                      scheme: widget.scheme,
-                    )));
-                    
-
-                  }else{
+                        builder: (ctx) => EditMemberScreen(
+                              address: widget.address,
+                              avatar: widget.avatar,
+                              contact: widget.contact,
+                              idBack: widget.idBack,
+                              idFront: widget.idFront,
+                              installment: widget.installment,
+                              memberId: widget.memberId,
+                              memberName: widget.memberName,
+                              memberage: widget.memberage,
+                              pool: widget.pool,
+                              scheme: widget.scheme,
+                            )));
+                  } else {
                     showLogoutDialog();
                   }
-
                 },
                 itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
                   const PopupMenuItem<int>(
@@ -266,7 +280,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                                     text: 'Back Side',
                                     size: 16,
                                     color: AppColor.fontColor),
-                                gap(height: 10),
+                                gap(height: 12),
                                 InkWell(
                                   onTap: () {
                                     Navigator.of(context)
@@ -313,6 +327,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                       ),
                     ),
                   ),
+                  gap(height: 12),
                 ],
               ),
             ),
@@ -323,12 +338,13 @@ class _MemberDetailsState extends State<MemberDetails> {
               builder: (BuildContext context, List<PaymentModel> paymentData,
                   Widget? child) {
                 return ListView.builder(
+                  padding: const EdgeInsets.only(bottom: 100),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: paymentData.length,
                   itemBuilder: (BuildContext context, int index) {
                     final payment = paymentData[index];
-                    String formattedDateTime = DateFormat('dd-MM-yyyy HH:mm')
+                    String formattedDateTime = DateFormat('dd-MMM-yy h:mm a')
                         .format(payment.paymentDate!);
                     installmentcount = payment.installmentCount;
                     return Padding(
@@ -390,26 +406,34 @@ class _MemberDetailsState extends State<MemberDetails> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          label: const Text(
-            '   Call Chitty   ',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-          ),
-          backgroundColor: Colors.blue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30), // Adjust radius as needed
-          ),
-          onPressed: () {
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => CallChitty(
-                      memberId: widget.scheme,
-                      schemeId: widget.memberId,
-                    )));
-          }),
+      floatingActionButton: ScrollToHide(
+        height: 60,
+        hideDirection: Axis.vertical,
+        scrollController: scrollController,
+        child: FloatingActionButton.extended(
+            label: const Text(
+              '   Call Chitty   ',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+            ),
+            backgroundColor: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius:
+                  BorderRadius.circular(30), // Adjust radius as needed
+            ),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => CallChitty(
+                        memberId: widget.scheme,
+                        schemeId: widget.memberId,
+                      )));
+            }),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-    void showLogoutDialog() {
+
+  void showLogoutDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -427,7 +451,11 @@ class _MemberDetailsState extends State<MemberDetails> {
               onPressed: () async {
                 final box = await Hive.openBox<MemberModel>('members');
                 box.delete(widget.memberId);
-               
+                final memberModel =
+                    Provider.of<FilterMemberProvider>(_context!, listen: false);
+                memberModel.getMemberCredentials(null);
+                Navigator.of(_context!).push(
+                    MaterialPageRoute(builder: (ctx) => const MembersScreen()));
               },
               child: const Text('delete'),
             ),

@@ -72,6 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
     paymentHistory.fetchMemberDatas();
     fetchMemberDatas();
   }
+   @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Stack(
               children: [
                 const Positioned.fill(
-        
                   child: Center(
                       child: Padding(
                     padding: EdgeInsets.only(bottom: 30, left: 12, right: 12),
@@ -157,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   right: 0,
                   bottom: 40,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
                     child: Wrap(
                       spacing: MediaQuery.of(context).size.width * 0.08,
                       runSpacing: MediaQuery.of(context).size.width * 0.08,
@@ -177,18 +181,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (ctx) => const SchemeButtonHome()));
                           },
-                          iconname: 'Scheme',
+                          iconname: 'New Chits',
                         ),
                         CircularIconhome(
                           icontype: Symbols.group,
                           buttonpress: () {
+                            final memberModel =
+                                Provider.of<FilterMemberProvider>(context,
+                                    listen: false);
+                            memberModel.getMemberCredentials(null);
                             Navigator.of(context).push(MaterialPageRoute(
                                 builder: (ctx) => const MembersScreen()));
                           },
                           iconname: 'Members',
                         ),
                         CircularIconhome(
-                          icontype: Symbols.alarm,
+                          icontype: Symbols.note_stack_add_rounded,
                           buttonpress: () {
                             final reminderModel =
                                 Provider.of<ReminderListProvider>(context,
@@ -211,7 +219,7 @@ class _HomeScreenState extends State<HomeScreen> {
             initialChildSize: 0.63,
             minChildSize: 0.63,
             maxChildSize: 0.88,
-            builder: (context, scrollControllers) => Container(
+            builder: (context, scrollController) => Container(
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(199, 245, 245, 1),
                   borderRadius: BorderRadius.circular(20),
@@ -221,13 +229,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ListView(
 // !Notification start here...
                     padding: EdgeInsets.zero,
-                    controller: scrollControllers,
+                    controller: scrollController,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            'Notification',
+                            'Reminder Notes',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -251,7 +259,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                         ],
                       ),
-                      gap(height: 10),
+
                       Consumer<ReminderListProvider>(
                           builder: (context, reminderdata, child) {
                         return ListView.builder(
@@ -343,7 +351,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
 // ! transations start here..
                       ),
-                      gap(height: 10),
                       Consumer<TransactionHistoryProvider>(
                         builder: (context, paymentData, child) {
                           return ListView.builder(
@@ -352,10 +359,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             controller: scrollController,
                             itemCount: paymentData.lastFourTransaction.length,
                             itemBuilder: (BuildContext context, int index) {
+                              
                               final payment =
                                   paymentData.lastFourTransaction[index];
                               String formattedDateTime =
-                                  DateFormat('dd-MM-yyyy HH:mm')
+                                  DateFormat('dd-MMM-yy h:mm a')
                                       .format(payment.paymentDate!);
                               installmentcount = payment.installmentCount;
                               return Padding(
@@ -366,6 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.all(5.0),
                                     child: ListTile(
                                       onTap: () {
+                                        
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (ctx) =>
@@ -446,56 +455,58 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: MediaQuery.of(context).size.height * 0.16,
                         child: Consumer<SchemeListProvider>(
                             builder: (context, schemeData, child) {
-                          return ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              padding: EdgeInsets.zero,
-                              shrinkWrap: true,
-                              controller: scrollController,
-                              itemCount: schemeData.latestSchemes.length,
-                              itemBuilder: (BuildContext context, int index) {
-                                final scheme = schemeData.latestSchemes[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                right: 15, top: 12, bottom: 12),
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                controller: scrollController,
+                                itemCount: schemeData.latestSchemes.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final scheme =
+                                      schemeData.latestSchemes[index];
 
-                                return Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 12, top: 10, bottom: 10),
-                                    child: SizedBox(
-                                        // width: maxWidth * 0.8,
-                                        // height: maxHeight * 0.8,
-                                        child: FrostedGlassBox(
-                                      theChild: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              AutoSizeText(
-                                                '${scheme.poolAmount} Chitty Started',
-                                                maxLines: 1,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
+                                  return Padding(
+                                      padding: const EdgeInsets.only(
+                                        left: 12,
+                                      ),
+                                      child: SizedBox(
+                                          child: FrostedGlassBox(
+                                        theChild: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            AutoSizeText(
+                                              '${scheme.poolAmount} Chitty Started',
+                                              maxLines: 1,
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
                                               ),
-                                              AutoSizeText(
-                                                'Monthly ${scheme.subscription}Only!!',
-                                                maxLines: 1,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
+                                            ),
+                                            AutoSizeText(
+                                              'Monthly ${scheme.subscription}Only!!',
+                                              maxLines: 1,
+                                              style: const TextStyle(
+                                                color: Colors.white,
                                               ),
-                                              AutoSizeText(
-                                                'Propose Date on \n ${scheme.proposeDate != null ? DateFormat('dd-MM-yyyy').format(scheme.proposeDate!) : ''}',
-                                                maxLines: 2,
-                                                style: const TextStyle(
-                                                  color: Colors.white,
-                                                ),
+                                            ),
+                                            AutoSizeText(
+                                              'Propose Date on \n ${scheme.proposeDate != null ? DateFormat('dd-MM-yyyy').format(scheme.proposeDate!) : ''}',
+                                              maxLines: 2,
+                                              style: const TextStyle(
+                                                color: Colors.white,
                                               ),
-                                            ],
-                                          )),
-                                      theHeight: 120,
-                                      theWidth: 200,
-                                    )));
-                              });
+                                            ),
+                                          ],
+                                        ),
+                                        theHeight: 120,
+                                        theWidth: 200,
+                                      )));
+                                }),
+                          );
                         }),
                       ),
                       gap(height: 10),
@@ -511,6 +522,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           TextButton(
                               onPressed: () {
+                                final memberModel =
+                                    Provider.of<FilterMemberProvider>(context,
+                                        listen: false);
+                                memberModel.getMemberCredentials(null);
                                 context.push('/members');
                               },
                               child: const Text(
@@ -522,7 +537,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                         ],
                       ),
-                      // ! New members
+// ! New members Start here
                       Consumer<MemberListProvider>(
                           builder: (context, membersModel, child) {
                         return ListView.builder(
@@ -588,6 +603,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         );
                       }),
+                      gap(height: 100)
                     ],
                   ),
                 )

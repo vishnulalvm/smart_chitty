@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/providers/filter_member_provider.dart';
 import 'package:smart_chitty/services/providers/memberid_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
@@ -259,13 +260,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
               ),
             ),
           ),
-     
         ],
       ),
-
-
-   floatingActionButton: FloatingActionButton.extended(
-     extendedPadding: const EdgeInsets.only(left: 40,right: 40),
+      floatingActionButton: FloatingActionButton.extended(
+          extendedPadding: const EdgeInsets.only(left: 40, right: 40),
           label: const Text(
             'Register',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
@@ -280,18 +278,12 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
             borderRadius: BorderRadius.circular(30), // Adjust radius as needed
           ),
           onPressed: () {
-              if (formKeys.currentState!.validate()) {
-                  saveDataToHive();
-                  
-                  Navigator.pop(context);
-
-                  // collectDataOnclick(context);
-                }
-           
+            if (formKeys.currentState!.validate()) {
+              saveDataToHive();
+              Navigator.pop(context);
+            }
           }),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-
-      
     );
   }
 
@@ -346,6 +338,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         );
         return;
       }
+
       lastGeneratedId = await getLastGeneratedId();
       final uniqueId = 'M${(lastGeneratedId + 1).toString().padLeft(3, '0')}';
 
@@ -367,11 +360,10 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
         idBack: idBack,
         schemeId: dropdownValue,
       );
+
       final box = await Hive.openBox<MemberModel>('members');
       if (dropdownValue != null) {
         await box.put(uniqueId, member);
-       
-        // refreshMember(dropdownValue);
 
         await saveLastGeneratedId(lastGeneratedId + 1);
         ScaffoldMessenger.of(_context!).showSnackBar(
@@ -381,9 +373,16 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
             duration: Duration(seconds: 2),
           ),
         );
-         final memberModel =
+// ! to get home screen last four members
+        final memberModel =
             Provider.of<MemberListProvider>(_context!, listen: false);
         memberModel.fetchMemberDatas();
+// ! to get all member in member screen
+        final memberModels =
+            Provider.of<FilterMemberProvider>(_context!, listen: false);
+        memberModels.getMemberCredentials(null);
+        imagepath=null;
+
       } else {
         ScaffoldMessenger.of(_context!).showSnackBar(
           const SnackBar(

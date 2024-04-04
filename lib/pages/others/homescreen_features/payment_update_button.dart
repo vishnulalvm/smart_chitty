@@ -107,7 +107,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                       children: [
                         Container(
                           width: MediaQuery.of(context).size.width,
-                          height: 300,
+                          height: 250,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             color: Colors.white,
@@ -138,29 +138,15 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                               rowText(
                                   firstText: 'Total Installment :',
                                   secoundText:
-                                      '${memberModel.memberDatas.isNotEmpty ? installment : 'N/A'}/${memberModel.memberDatas.isNotEmpty ? memberModel.memberDatas.first.schemeModel.installment : 'N/A'}'),
+                                      '${memberModel.memberDatas.isNotEmpty ? installment : 'N/A'}/${memberModel.memberDatas.isNotEmpty ?
+                                       memberModel.memberDatas.first.schemeModel.installment : 'N/A'}'),
                               rowText(
                                 firstText: 'Scheme id :',
                                 secoundText: memberModel.memberDatas.isNotEmpty
                                     ? memberModel.memberDatas.first.schemeId!
                                     : 'N/A',
                               ),
-                              gap(height: 12),
-                              ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.blue),
-                                  onPressed: () async {
-                                    memberModel.fetchMemberData(context);
-                                    String memberid = selectedMember == null
-                                        ? 'selectedMember'
-                                        : selectedMember!;
-                                    installment =
-                                        await getInstallmentCount(memberid);
-                                  },
-                                  child: const ModifiedText(
-                                      text: 'Get Details',
-                                      size: 14,
-                                      color: Colors.white)),
+
                             ],
                           ),
                         ),
@@ -181,6 +167,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                                 if (value != subscription) {
                                   return 'Enter correct subscription amount';
                                 }
+                                
                               }
                               return null; // No error
                             },
@@ -223,7 +210,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                           ),
                         ),
                         const SizedBox(
-                          height: 400,
+                          height: 600,
                         )
                       ],
                     ),
@@ -238,7 +225,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
             floatingActionButton: FloatingActionButton.extended(
               extendedPadding: const EdgeInsets.only(left: 40,right: 40),
           label: const Text(
-            'Register',
+            'Update',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
           ),
           icon: const Icon(
@@ -264,6 +251,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
 
   Future<void> saveSchemeToHive() async {
     final member = await Hive.openBox<MemberModel>('members');
+
     final memberData = member.values.toList();
     final memberid = selectedMember ?? 'a';
     final selectedMemberData =
@@ -287,7 +275,8 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
         imagePath.isEmpty &&
         memberId.isEmpty &&
         schemeId.isEmpty &&
-        selectedMember == null) {
+        selectedMember == null && 
+        selectedMonthString.isEmpty) {
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
           content: Text('Invalid input. Please check the values.'),
@@ -303,6 +292,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
       final box = await Hive.openBox<PaymentModel>('payments');
 
       final paymentModel = PaymentModel(
+        key: DateTime.now().toString(),
         paymentMonth: selectedMonthString,
         imagePath: selectedMemberData.avatar,
         installmentCount: installmentCount,
@@ -312,7 +302,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
         paymentDate: now,
         schemeId: selectedMemberData.schemeId!,
       );
-      await box.put(selectedMemberData.memberId, paymentModel);
+      await box.put(DateTime.now().toString(), paymentModel);
 
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
@@ -353,13 +343,16 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
     if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
         _selectedDate = pickedDate;
-        selectedMonthString = DateFormat('MM-yy').format(pickedDate);
+        selectedMonthString = DateFormat('MMM-yy').format(pickedDate);
       });
     }
+   
   }
 
   Future<void> collectionToHive() async {
+
     final amount = double.tryParse(paymetController.text) ?? 0;
+
     final collectionBox = await Hive.openBox<MonthlyCollection>('collections');
 
     MonthlyCollection? existingData = collectionBox.get(selectedMonthString);

@@ -3,7 +3,9 @@ import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/other_screens/set_reminder.dart';
 import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
+import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
+import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class ReminderScreen extends StatefulWidget {
   const ReminderScreen({super.key});
@@ -13,10 +15,8 @@ class ReminderScreen extends StatefulWidget {
 }
 
 class _ReminderScreenState extends State<ReminderScreen> {
+  bool gridview = true;
   bool isChecked = false;
-
-  // TimeOfDay? _selectedTime;
-  // DateTime? _selectedDate;
   final reminderController = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -28,60 +28,191 @@ class _ReminderScreenState extends State<ReminderScreen> {
       ),
       body: Consumer<ReminderListProvider>(
           builder: (context, reminderdata, child) {
-        return ListView.builder(
-            // controller: scrollController,
-            itemCount: reminderdata.reminders.length,
-            itemBuilder: (BuildContext context, int index) {
-              final reminder = reminderdata.reminders[index];
-              // isChecked =reminder.isChecked;
-              return Padding(
-                padding: const EdgeInsets.only(top: 12, left: 12, right: 12),
-                child: Container(
-                  width: double.maxFinite,
-                  height: 50,
-                  decoration: BoxDecoration(
-                      color: const Color.fromRGBO(28, 167, 190, 1),
-                      borderRadius: BorderRadius.circular(5)),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10, right: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Icon(
-                          Icons.alarm,
-                          color: Colors.white,
-                        ),
-                        SizedBox(
-                          width: 280,
-                          child: RichText(
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            text: TextSpan(
-                              text:
-                                  '${reminder.reminderNote} @ ${reminder.reminderTime} ${reminder.reminderDate}',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                decoration: isChecked
-                                    ? TextDecoration.lineThrough
-                                    : TextDecoration.none,
-                              ),
-                            ),
-                          ),
-                        ),
-                        IconButton(onPressed: (){
-                         reminderdata.deleteReminder(index);
-                        }, icon: const Icon(
-                                Icons.close,
-                                color: Colors.white,
-                              ),)
-                      ],
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Total Reminders : ${reminderdata.sortedReminders.length}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
-              );
-            });
+                  IconButton(
+                      onPressed: () {
+                        setState(() {
+                          gridview == true ? gridview = false : gridview = true;
+                        });
+                      },
+                      icon: gridview == true
+                          ? const Icon(
+                              Icons.grid_3x3,
+                              size: 25,
+                            )
+                          : const Icon(
+                              Icons.list,
+                              size: 25,
+                            )),
+                ],
+              ),
+            ),
+            Expanded(
+                child: gridview
+                    ? ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) {
+                          final reminder = reminderdata.reminders[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 12),
+                            child: Row(children: <Widget>[
+                              const Expanded(
+                                  child: Divider(
+                                thickness: 1,
+                                endIndent: 12,
+                                indent: 12,
+                                color: Colors.blue,
+                              )),
+                              Text(reminder.reminderDate),
+                              const Expanded(
+                                  child: Divider(
+                                endIndent: 12,
+                                indent: 12,
+                                thickness: 1,
+                                color: Colors.blue,
+                              )),
+                            ]),
+                          );
+                        },
+                        itemCount: reminderdata.reminders.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final reminder = reminderdata.reminders[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                top: 12, left: 12, right: 12),
+                            child: Container(
+                              width: double.maxFinite,
+                              height: 50,
+                              decoration: BoxDecoration(
+                                color: const Color.fromRGBO(28, 167, 190, 1),
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 20),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Icon(
+                                      Icons.alarm,
+                                      color: Colors.white,
+                                    ),
+                                    SizedBox(
+                                      width: 280,
+                                      child: RichText(
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        text: TextSpan(
+                                          text:
+                                              '${reminder.reminderNote} @ ${reminder.reminderTime} ${reminder.reminderDate}',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        reminderdata.deleteReminder(index);
+                                      },
+                                      icon: const Icon(
+                                        Icons.close,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        })
+                    : Padding(
+                        padding: const EdgeInsets.only(left: 12, right: 12),
+                        child: GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 12,
+                          ),
+                          itemCount: reminderdata.reminders.length,
+                          itemBuilder: (context, index) {
+                            final data = reminderdata.reminders[index];
+                            return Container(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                    bottomRight: Radius.circular(20)),
+                                color: const Color.fromRGBO(28, 167, 190, 1),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    spreadRadius: 2,
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.2),
+                                    spreadRadius: 2,
+                                    blurRadius: 2,
+                                    offset: const Offset(3, 0),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12),
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    RichText(
+                                      maxLines: 4,
+                                      overflow: TextOverflow.ellipsis,
+                                      text: TextSpan(
+                                        text: data.reminderNote,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        ModifiedText(
+                                            text: data.reminderDate,
+                                            size: 14,
+                                            color: Colors.white),
+                                        gap(width: 10),
+                                        ModifiedText(
+                                            text: data.reminderTime,
+                                            size: 14,
+                                            color: Colors.white)
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )),
+          ],
+        );
       }),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,

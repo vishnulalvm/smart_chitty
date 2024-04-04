@@ -9,6 +9,9 @@ class SchemeListProvider extends ChangeNotifier {
   List<SchemeModel> latestSchemes = [];
 
   void getSchemeCredentials() async {
+    schemeListData.clear();
+    sortedTransactionData.clear();
+    latestSchemes.clear();
     final schemeDB = await Hive.openBox<SchemeModel>('schemes');
     schemeListData.addAll(schemeDB.values);
     schemeListData.sort((a, b) {

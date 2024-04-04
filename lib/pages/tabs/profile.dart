@@ -1,13 +1,13 @@
 import 'dart:io';
-// import 'dart:nativewrappers/_internal/vm/lib/core_patch.dart' hide String;
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:smart_chitty/pages/others/other_screens/set_reminder.dart';
+import 'package:smart_chitty/pages/others/profilescreen_features/about_company.dart';
+import 'package:smart_chitty/pages/others/profilescreen_features/connect_developer.dart';
+import 'package:smart_chitty/pages/others/profilescreen_features/convert_exel.dart';
+import 'package:smart_chitty/pages/others/profilescreen_features/help.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
-import 'package:smart_chitty/pages/tabs/reminders.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
@@ -18,8 +18,8 @@ import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 String companyName = '';
- String presidentPhoneNumber = '8138946412';
- String whatsappUrl = 'https://chat.whatsapp.com/GD9M49Vc4a8JiuAcHJXqww';
+String presidentPhoneNumber = '8138946412';
+String whatsappUrl = 'https://chat.whatsapp.com/GD9M49Vc4a8JiuAcHJXqww';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -40,8 +40,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     for (final company in companyDatas) {
       companyName = company.companyName;
-      presidentPhoneNumber=company.phoneNumber;
-      whatsappUrl=company.whatsappLink;
+      presidentPhoneNumber = company.phoneNumber;
+      whatsappUrl = company.whatsappLink;
     }
     return Scaffold(
       extendBodyBehindAppBar: true,
@@ -50,26 +50,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         title: Text(companyName),
         actions: [
-       PopupMenuButton<int>(
-        onSelected: (value){},
-        itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-           const PopupMenuItem<int>(
-            value: 1,
-            child: Text('Info'),
+          PopupMenuButton<int>(
+            onSelected: (value) {},
+            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
+              const PopupMenuItem<int>(
+                value: 1,
+                child: Text('Info'),
+              ),
+              const PopupMenuItem<int>(
+                value: 2,
+                child: Text('Settings'),
+              ),
+            ],
           ),
-           const PopupMenuItem<int>(
-            value: 2,
-            child: Text('Settings'),
-          ),
-        ],
-      ),
         ],
       ),
       body: Stack(
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            height: 500,
+            height: MediaQuery.of(context).size.height * 0.4,
             decoration: BoxDecoration(
               image: DecorationImage(
                   image: AssetImage(
@@ -79,25 +79,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             child: Stack(
               children: [
-                Positioned(
-                  top: 130,
-                  right: 0,
-                  left: 0,
-                  child: Column(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: FileImage(File(companyLogo)),
-                        radius: 40,
+                Positioned.fill(
+                  // top: 130,
+                  // right: 0,
+                  // left: 0,
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FractionallySizedBox(
+                        widthFactor: 1,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircleAvatar(
+                              backgroundImage: FileImage(File(companyLogo)),
+                              radius: 40,
+                            ),
+                            gap(height: 10),
+                            ModifiedText(
+                                text: companyName,
+                                size: 30,
+                                color: Colors.white)
+                          ],
+                        ),
                       ),
-                      gap(height: 10),
-                       ModifiedText(text: companyName, size: 30, color: Colors.white)
-                    ],
+                    ),
                   ),
                 ),
                 Positioned(
-                    top: 280,
-                    right: 0,
                     left: 0,
+                    right: 0,
+                    bottom: 50,
                     child: Padding(
                       padding: const EdgeInsets.only(left: 12, right: 12),
                       child: Row(
@@ -150,35 +163,56 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (ctx) =>
-                                                const SetReminderScreen()));
+                                                const AboutCompany()));
                                   },
-                                  title: 'Set Reminder',
-                                  leading: Icons.alarm),
+                                  title: 'About Company',
+                                  leading: Icons.info),
                               customListTile(
                                   onTap: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (ctx) =>
-                                                const ReminderScreen()));
+                                                const AboutCompany()));
                                   },
                                   title: 'Notifications',
                                   leading: Icons.notifications_active),
                               customListTile(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const ConvertExel()));
+                                  },
                                   title: 'Convert to Excel Sheet',
                                   leading: Icons.picture_as_pdf),
                               customListTile(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const AboutCompany()));
+                                  },
                                   title: 'Change Username & Password',
                                   leading: Symbols.encrypted_rounded),
                               customListTile(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const HelperScreen()));
+                                  },
                                   title: 'Help',
                                   leading: Icons.help),
                               customListTile(
-                                  onTap: () {},
+                                  onTap: () {
+                                     Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const ConnectDeveloper()));
+
+                                  },
                                   title: 'Connect to Developer',
-                                  leading: Symbols.exclamation),
+                                  leading: Symbols.code),
                               gap(height: 15),
                               const Divider(
                                 thickness: 1.5,

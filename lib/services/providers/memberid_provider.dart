@@ -12,6 +12,8 @@ class MemberListProvider extends ChangeNotifier {
   List<MemberModel> lastFourmember = [];
 
   Future<void> fetchMemberDatas() async {
+    sortedmembers.clear();
+    lastFourmember.clear();
     final box = await Hive.openBox<MemberModel>('members');
     final memberData = box.values.toList();
     memberDatasdrop = memberData;

@@ -17,6 +17,8 @@ class TransactionHistoryProvider extends ChangeNotifier {
   }
 
   Future<void> fetchMemberDatas() async {
+    sortedTransactionData.clear();
+    lastFourTransaction.clear();
     final box = await Hive.openBox<PaymentModel>('payments');
     final transactionDb = box.values.toList();
     transactionData = transactionDb;
@@ -47,9 +49,9 @@ class TransactionHistoryProvider extends ChangeNotifier {
       return  date == monthPart ;
     }).toList();
   }
-  Future<void> deleteTransaction(int index) async {
+  Future<void> deleteTransaction(String key, int index) async {
     final box = await Hive.openBox<PaymentModel>('payments');
-    await box.deleteAt(index); 
+    await box.deleteAt(index) ;
     lastFourTransaction.removeAt(index);
     transactionData.removeAt(index);
     sortedTransactionData.removeAt(index);

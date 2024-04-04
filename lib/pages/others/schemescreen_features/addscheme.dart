@@ -1,8 +1,10 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/providers/schemedata_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/dropdown_timeperiod.dart';
@@ -252,6 +254,9 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
 
       getSchemeCredentials();
       await saveLastGeneratedId(lastGeneratedId + 1);
+      final schemeSlider =
+          Provider.of<SchemeListProvider>(_context!, listen: false);
+      schemeSlider.getSchemeCredentials();
 
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(

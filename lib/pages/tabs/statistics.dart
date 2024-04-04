@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
+import 'package:smart_chitty/pages/others/other_screens/view_transaction.dart';
 import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
 import 'package:smart_chitty/services/models/monthly_collection_model.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
@@ -72,7 +73,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           final monthlyCollection = data as MonthlyCollection;
                           month = monthlyCollection.month;
                           paymentHistory.fetchTransactionsForMonth(month);
-                          return Text(month.toString());
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ModifiedText(
+                              text: month.toString(),
+                              color: Colors.white,
+                              size: 12,
+                            ),
+                          );
                         }),
                     zoomPanBehavior: zoomPanBehavior,
                     selectionType: SelectionType.cluster,
@@ -86,7 +94,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       initialVisibleMaximum: 12,
                       interval: 1,
                       arrangeByIndex: true,
-                      labelStyle: TextStyle(fontWeight: FontWeight.w500),
+                      labelStyle:
+                          TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
                       autoScrollingMode: AutoScrollingMode.start,
                       autoScrollingDelta: 12,
                       axisLine: AxisLine(
@@ -129,8 +138,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           // selectionController: ,
                           enable: true,
                           selectedColor: const Color.fromRGBO(1, 80, 136, 1),
-                          unselectedColor:
-                              const Color.fromRGBO(0, 185, 184, 1),
+                          unselectedColor: const Color.fromRGBO(0, 185, 184, 1),
                         ),
                       )
                     ],
@@ -172,7 +180,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     itemCount: paymentHistory.specificTransaction.length,
                     itemBuilder: (BuildContext context, int index) {
                       final payment = paymentHistory.specificTransaction[index];
-                      String formattedDateTime = DateFormat('dd-MM-yyyy HH:mm')
+                      String formattedDateTime = DateFormat('dd-MMM-yy h:mm a')
                           .format(payment.paymentDate!);
                       installmentcount = payment.installmentCount;
                       return Padding(
@@ -183,6 +191,14 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
                             child: ListTile(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => ViewTransaction(
+                                          index: index,
+                                          treansProvider: paymentHistory,
+                                          paymentModel: payment,
+                                        )));
+                              },
                               leading: CircleAvatar(
                                 radius: 25,
                                 backgroundImage:

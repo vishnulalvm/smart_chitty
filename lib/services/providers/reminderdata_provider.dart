@@ -8,6 +8,8 @@ class ReminderListProvider extends ChangeNotifier {
   List<ReminderModel> lastFourReminders = [];
 
   Future<void> getReminders() async {
+    sortedReminders.clear();
+    lastFourReminders.clear();
     final box = await Hive.openBox<ReminderModel>('reminders');
     final reminderdata = box.values.toList();
     reminders = reminderdata;
@@ -18,8 +20,8 @@ class ReminderListProvider extends ChangeNotifier {
       return bDate.compareTo(aDate);
     });
     sortedReminders.addAll(reminders);
-    final lastFourReminderss = sortedReminders.take(4).toList();
-    lastFourReminders = lastFourReminderss;
+    lastFourReminders = sortedReminders.take(4).toList();
+    // lastFourReminders = lastFourReminderss;
     }
     notifyListeners();
   }

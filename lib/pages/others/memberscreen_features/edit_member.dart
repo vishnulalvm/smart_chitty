@@ -294,11 +294,9 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                 if (formKeys.currentState!.validate()) {
                   saveDataToHive();
                   Navigator.pop(context);
-
-                  // collectDataOnclick(context);
                 }
               },
-              buttonName: 'Register',
+              buttonName: 'Update Member',
               color: const Color.fromRGBO(0, 205, 255, 1),
             ),
           )

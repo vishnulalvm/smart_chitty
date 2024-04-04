@@ -17,6 +17,7 @@ class PaymentModelAdapter extends TypeAdapter<PaymentModel> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return PaymentModel(
+      key: fields[8] as String,
       paymentMonth: fields[7] as dynamic,
       imagePath: fields[5] as String,
       memberModel: fields[6] as MemberModel,
@@ -31,7 +32,7 @@ class PaymentModelAdapter extends TypeAdapter<PaymentModel> {
   @override
   void write(BinaryWriter writer, PaymentModel obj) {
     writer
-      ..writeByte(8)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.schemeId)
       ..writeByte(1)
@@ -47,7 +48,9 @@ class PaymentModelAdapter extends TypeAdapter<PaymentModel> {
       ..writeByte(6)
       ..write(obj.memberModel)
       ..writeByte(7)
-      ..write(obj.paymentMonth);
+      ..write(obj.paymentMonth)
+      ..writeByte(8)
+      ..write(obj.key);
   }
 
   @override

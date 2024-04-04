@@ -73,14 +73,45 @@ class _LoginScreenState extends State<LoginScreen> {
                     validator: (name) =>
                         name!.length < 3 ? 'Name should be 3 character' : null),
                 widgetSpace(height: 20),
-                textField(
-                    hintText: 'Enter password',
-                    icons: Icons.lock,
-                    controller: passwordController,
-                    key: formKeypass,
-                    validator: (password) => password!.length < 3
-                        ? 'Name should be 3 character'
-                        : null),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.lock),
+                      const SizedBox(
+                        width: 20,
+                      ),
+                      Expanded(
+                        child: TextFormField(
+                          obscureText: true,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          autofocus: true,
+                          validator: (name) => name!.length < 3
+                              ? 'Name should be 3 character'
+                              : null,
+                          controller: passwordController,
+                          decoration: InputDecoration(
+                            hintText: 'Enter Password',
+                            hintStyle: const TextStyle(color: Colors.black54),
+                            filled: true,
+                            fillColor: Colors.white, // Background color
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(30.0), // Rounded border
+                              borderSide: BorderSide.none, // No border side
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(30.0), // Rounded border
+                              borderSide: const BorderSide(
+                                  color: Colors.blue), // Border color
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
                 widgetSpace(height: 20),
                 buttons(
                   buttonAction: () {
@@ -139,7 +170,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final sharedPre = await SharedPreferences.getInstance();
         sharedPre.setBool(saveKeyName, true);
 
-       _context!.pushReplacement('/');
+        _context!.pushReplacement('/');
         return;
       }
     }

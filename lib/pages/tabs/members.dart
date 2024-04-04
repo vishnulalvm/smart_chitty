@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/addmembers.dart';
+import 'package:smart_chitty/widgets/features/search_feature.dart';
 import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/services/providers/filter_member_provider.dart';
@@ -46,44 +47,67 @@ class _MembersScreenState extends State<MembersScreen> {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: customAppBar(title: 'Members', onpresed: (value) {}),
-      body: Column(
-        children: [
-          gap(height: 5),
-          MemberFillter(onChipSelected: handleChipSelection),
-          Padding(
-            padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
-            child: Container(
-              height: 40,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10), color: Colors.white),
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 20,
-                  right: 20,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    BoldText(
-                        text: 'Members', size: 18, color: AppColor.fontColor),
-                    BoldText(text: '30', size: 18, color: AppColor.fontColor)
-                  ],
+      body:
+          Consumer<FilterMemberProvider>(builder: (context, memberdata, child) {
+        // if (memberdata.memberDataListNotifer.isEmpty) {
+        //   return const Text('No data available');
+        // }
+        return Column(
+          children: [
+            gap(height: 5),
+            MemberFillter(onChipSelected: handleChipSelection),
+            Padding(
+              padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
+              child: Container(
+                height: 45,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                        cursorWidth: 0,
+                        cursorHeight: 0,
+                          onTap: () async {
+                            await showSearch(
+                              context: context,
+                              delegate: CustomSearchDelegate(
+                                  memberdata.memberDataListNotifer),
+                            );
+                          },
+                          decoration: const InputDecoration(
+                              prefixIcon: Icon(
+                                Icons.search,
+                                size: 20,
+                              ),
+                              border: InputBorder.none,
+                              hintText: 'Search Members',
+      
+                              hintStyle: TextStyle()),
+                        ),
+                      ),
+                      Text(
+                        'Total: ${memberdata.memberDataListNotifer.length.toString()}',
+                        style: TextStyle(
+                          color: AppColor.fontColor,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          gap(height: 12),
-          Expanded(
-            child: Consumer<FilterMemberProvider>(
-                builder: (context, memberdata, child) {
-              // final filteredMembers = memberdata.memberDataListNotifer
-              //     .where((member) => member.schemeId == selectedId)
-              //     .toList();
-              if (memberdata.memberDataListNotifer.isEmpty) {
-                return const Text('No data available');
-              }
-              return ListView.builder(
+            gap(height: 12),
+            Expanded(
+              child:
+                  ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: memberdata.memberDataListNotifer.length,
                 itemBuilder: (context, index) {
@@ -176,11 +200,11 @@ class _MembersScreenState extends State<MembersScreen> {
                     ),
                   );
                 },
-              );
-            }),
-          ),
-        ],
-      ),
+              ),
+            ),
+          ],
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blue,
         shape: const CircleBorder(),
@@ -207,7 +231,3 @@ class _MembersScreenState extends State<MembersScreen> {
     return prefs.getInt('installment_$memberId') ?? 0;
   }
 }
-
-
-
-                              
