@@ -18,7 +18,7 @@ class MemberFillter extends StatefulWidget {
 }
 
 class _MemberFillterState extends State<MemberFillter> {
- final String allChipId = 'ALL';
+  final String allChipId = 'ALL';
   String? selectedIdon;
 
   @override
@@ -45,34 +45,37 @@ class _MemberFillterState extends State<MemberFillter> {
 
   List<Widget> _buildChoiceChips(List<SchemeModel> schememodels) {
     List<Widget> chips = [
-    Padding(
-      padding: const EdgeInsets.only(left: 12),
-      child: ChoiceChip(
-        selectedColor: Colors.blue,
-        showCheckmark: false,
-        labelStyle: TextStyle(
-          color: selectedSchemeId == allChipId ? Colors.white : AppColor.fontColor,
+      Padding(
+        padding: const EdgeInsets.only(left: 12),
+        child: ChoiceChip(
+          selectedColor: Colors.blue,
+          showCheckmark: false,
+          labelStyle: TextStyle(
+            color: selectedSchemeId == allChipId
+                ? Colors.white
+                : AppColor.fontColor,
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          label: const Text('All'),
+          selected: selectedSchemeId == allChipId,
+          onSelected: (bool selected) {
+            if (mounted) {
+              setState(() {
+                selectedSchemeId = selected ? allChipId : null;
+                selectedId = null;
+                widget.onChipSelected(selectedId);
+                final memberModel =
+                    Provider.of<FilterMemberProvider>(context, listen: false);
+                memberModel.getMemberCredentials(selectedId);
+              });
+            }
+          },
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        label: const Text('All'),
-        selected: selectedSchemeId == allChipId,
-        onSelected: (bool selected) {
-          if (mounted) {
-            setState(() {
-              selectedSchemeId = selected ? allChipId : null;
-              selectedId = null;
-              widget.onChipSelected(selectedId);
-              final memberModel = Provider.of<FilterMemberProvider>(context, listen: false);
-              memberModel.getMemberCredentials(selectedId);
-            });
-          }
-        },
       ),
-    ),
-  ];
-    chips.addAll( schememodels.map((schemeModel) {
+    ];
+    chips.addAll(schememodels.map((schemeModel) {
       String? schemeIdInt = schemeModel.schemeId;
 
       return Padding(
@@ -88,7 +91,7 @@ class _MemberFillterState extends State<MemberFillter> {
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
-            label: Text('Scheme: ${schemeModel.schemeId}'),
+            label: Text('Chitty: ${schemeModel.schemeId}'),
             selected: selectedSchemeId == schemeIdInt,
             onSelected: (bool selected) {
               if (mounted) {

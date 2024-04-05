@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -48,22 +49,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text(companyName),
-        actions: [
-          PopupMenuButton<int>(
-            onSelected: (value) {},
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-              const PopupMenuItem<int>(
-                value: 1,
-                child: Text('Info'),
-              ),
-              const PopupMenuItem<int>(
-                value: 2,
-                child: Text('Settings'),
-              ),
-            ],
-          ),
-        ],
       ),
       body: Stack(
         children: [
@@ -80,12 +65,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Stack(
               children: [
                 Positioned.fill(
-                  // top: 130,
-                  // right: 0,
-                  // left: 0,
                   child: Center(
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding: const EdgeInsets.only(bottom: 20),
                       child: FractionallySizedBox(
                         widthFactor: 1,
                         child: Column(
@@ -117,13 +99,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           contactButton(
-                              buttonName: 'Call President',
+                              buttonName: 'Customer Care',
                               icon: Icons.call,
                               buttonAction: () => makePhoneCall()),
                           gap(height: 20),
                           contactButton(
                             buttonName: 'Whatsapp Group',
-                            icon: Icons.chat,
+                            icon: FontAwesomeIcons.whatsapp,
                             buttonAction: () => launchWhatsApp(whatsappUrl),
                           ),
                         ],
@@ -193,7 +175,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 const AboutCompany()));
                                   },
                                   title: 'Change Username & Password',
-                                  leading: Symbols.encrypted_rounded),
+                                  leading: FontAwesomeIcons.userLock),
                               customListTile(
                                   onTap: () {
                                     Navigator.of(context).push(
@@ -205,11 +187,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   leading: Icons.help),
                               customListTile(
                                   onTap: () {
-                                     Navigator.of(context).push(
+                                    Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (ctx) =>
                                                 const ConnectDeveloper()));
-
                                   },
                                   title: 'Connect to Developer',
                                   leading: Symbols.code),

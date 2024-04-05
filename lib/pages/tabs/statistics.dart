@@ -13,6 +13,7 @@ import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 String month = '';
+String sales = '';
 
 class StatisticsScreen extends StatefulWidget {
   const StatisticsScreen({super.key});
@@ -64,14 +65,21 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       fit: BoxFit.cover),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 150),
+                  padding: const EdgeInsets.only(top: 110),
                   child: SfCartesianChart(
+                    title: ChartTitle(
+                        text: 'Total :₹ $sales/-',
+                        alignment: ChartAlignment.center,
+                        textStyle: const TextStyle(
+                            fontSize: 25, 
+                            fontWeight: FontWeight.w800)),
                     tooltipBehavior: TooltipBehavior(
                         enable: true,
                         builder: (dynamic data, dynamic point, dynamic series,
                             int pointIndex, int seriesIndex) {
                           final monthlyCollection = data as MonthlyCollection;
                           month = monthlyCollection.month;
+                          sales = monthlyCollection.sales.toString();
                           paymentHistory.fetchTransactionsForMonth(month);
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -180,6 +188,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     itemCount: paymentHistory.specificTransaction.length,
                     itemBuilder: (BuildContext context, int index) {
                       final payment = paymentHistory.specificTransaction[index];
+
                       String formattedDateTime = DateFormat('dd-MMM-yy h:mm a')
                           .format(payment.paymentDate!);
                       installmentcount = payment.installmentCount;

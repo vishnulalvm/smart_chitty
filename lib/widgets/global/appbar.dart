@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 
-AppBar customAppBar({required String title,required void Function(int)? onpresed,String item1='',String item2='',}) {
+AppBar customAppBar({
+  required String title,
+  required void Function(int)? onpresed,
+  String item1 = '',
+  String item2 = '',
+  bool showMenu = true,
+}) {
   return AppBar(
     actions: [
-       PopupMenuButton<int>(
+      showMenu ?
+      PopupMenuButton<int>(
         onSelected: onpresed,
         itemBuilder: (BuildContext context) => <PopupMenuEntry<int>>[
-           PopupMenuItem<int>(
+          PopupMenuItem<int>(
             value: 1,
             child: Text(item1),
           ),
-           PopupMenuItem<int>(
+          PopupMenuItem<int>(
             value: 2,
             child: Text(item2),
           ),
         ],
-      ),
+      ):const SizedBox(),
     ],
     title: Text(
       title,

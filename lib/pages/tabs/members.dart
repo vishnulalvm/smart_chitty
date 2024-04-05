@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,12 +47,10 @@ class _MembersScreenState extends State<MembersScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
-      appBar: customAppBar(title: 'Members', onpresed: (value) {}),
+      appBar:
+          customAppBar(title: 'Members', onpresed: (value) {}, showMenu: false),
       body:
           Consumer<FilterMemberProvider>(builder: (context, memberdata, child) {
-        // if (memberdata.memberDataListNotifer.isEmpty) {
-        //   return const Text('No data available');
-        // }
         return Column(
           children: [
             gap(height: 5),
@@ -71,8 +70,8 @@ class _MembersScreenState extends State<MembersScreen> {
                     children: [
                       Expanded(
                         child: TextField(
-                        cursorWidth: 0,
-                        cursorHeight: 0,
+                          cursorWidth: 0,
+                          cursorHeight: 0,
                           onTap: () async {
                             await showSearch(
                               context: context,
@@ -87,7 +86,6 @@ class _MembersScreenState extends State<MembersScreen> {
                               ),
                               border: InputBorder.none,
                               hintText: 'Search Members',
-      
                               hintStyle: TextStyle()),
                         ),
                       ),
@@ -106,96 +104,93 @@ class _MembersScreenState extends State<MembersScreen> {
             ),
             gap(height: 12),
             Expanded(
-              child:
-                  ListView.builder(
+              child: ListView.builder(
                 padding: EdgeInsets.zero,
                 itemCount: memberdata.memberDataListNotifer.length,
                 itemBuilder: (context, index) {
                   final data = memberdata.memberDataListNotifer[index];
                   return Padding(
                     padding:
-                        const EdgeInsets.only(left: 6, right: 6, bottom: 4),
-                    child: Card(
-                      elevation: 0,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: IntrinsicHeight(
-                          child: ListTile(
-                            onTap: () {
-                              getPaymentCredentials(data.memberId);
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  transitionDuration:
-                                      const Duration(milliseconds: 400),
-                                  pageBuilder: (context, animation,
-                                          secondaryAnimation) =>
-                                      MemberDetails(
-                                    pool: data.schemeModel.poolAmount,
-                                    address: data.memberAddress,
-                                    avatar: data.avatar,
-                                    contact: data.contactNumber,
-                                    idBack: data.idBack,
-                                    idFront: data.idFront,
-                                    installment: data.schemeModel.installment,
-                                    memberId: data.memberId,
-                                    memberName: data.memberName,
-                                    memberage: data.memberAge,
-                                    scheme: data.schemeId ?? '',
-                                  ),
-                                  transitionsBuilder: (context, animation,
-                                      secondaryAnimation, child) {
-                                    final tween = Tween<Offset>(
-                                        begin: const Offset(1.0, 0.0),
-                                        end: Offset.zero);
-                                    return SlideTransition(
-                                      position: animation.drive(tween),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                            },
-                            leading: CircleAvatar(
-                              backgroundImage: FileImage(File(data.avatar)),
-                              radius: 25,
-                              backgroundColor: Colors.blue,
-                            ),
-                            title: ModifiedText(
-                              text: data.memberName,
-                              size: 16,
-                              color: AppColor.fontColor,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            subtitle: ModifiedText(
-                              text: 'Member Id : ${data.memberId}',
-                              size: 12,
-                              color: AppColor.fontColor,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            trailing: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                gap(height: 5),
-                                ModifiedText(
-                                  text: '₹${data.schemeModel.poolAmount}',
-                                  size: 14,
-                                  color: AppColor.fontColor,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                                gap(
-                                    height:
-                                        2), // Add some spacing between text widgets (optional)
-                                ModifiedText(
-                                    text:
-                                        'Installment : $installment/${data.schemeModel.installment}',
-                                    size: 12,
-                                    color: AppColor.fontColor)
-                              ],
-                            ),
-                          ),
+                        const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                    child: IntrinsicHeight(
+                      child: OpenContainer(
+                        openColor: Colors.white,
+                        transitionDuration: Durations.long2,
+                        transitionType: ContainerTransitionType
+                            .fadeThrough, // Adjust the transition type as needed
+                        openBuilder: (BuildContext context, VoidCallback _) {
+                          return MemberDetails(
+                            pool: data.schemeModel.poolAmount,
+                            address: data.memberAddress,
+                            avatar: data.avatar,
+                            contact: data.contactNumber,
+                            idBack: data.idBack,
+                            idFront: data.idFront,
+                            installment: data.schemeModel.installment,
+                            memberId: data.memberId,
+                            memberName: data.memberName,
+                            memberage: data.memberAge,
+                            scheme: data.schemeId ?? '',
+                          );
+                        },
+                        closedElevation: 0,
+                        closedShape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
                         ),
+                        closedColor: Colors.white,
+                        closedBuilder:
+                            (BuildContext context, VoidCallback openContainer) {
+                          return Padding(
+                            padding: const EdgeInsets.all(3),
+                            child: Card(
+                              color: Colors.white,
+                              elevation: 0,
+                              child: ListTile(
+                                onTap: () {
+                                  getPaymentCredentials(data.memberId);
+                                  openContainer();
+                                },
+                                leading: CircleAvatar(
+                                  backgroundImage: FileImage(File(data.avatar)),
+                                  radius: 25,
+                                  backgroundColor: Colors.blue,
+                                ),
+                                title: ModifiedText(
+                                  text: data.memberName,
+                                  size: 16,
+                                  color: AppColor.fontColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                subtitle: ModifiedText(
+                                  text: 'Member Id : ${data.memberId}',
+                                  size: 12,
+                                  color: AppColor.fontColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                trailing: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    gap(height: 5),
+                                    ModifiedText(
+                                      text: '₹${data.schemeModel.poolAmount}',
+                                      size: 14,
+                                      color: AppColor.fontColor,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    gap(height: 2),
+                                    ModifiedText(
+                                      text:
+                                          'Installment : $installment/${data.schemeModel.installment}',
+                                      size: 12,
+                                      color: AppColor.fontColor,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   );

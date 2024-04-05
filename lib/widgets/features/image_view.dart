@@ -17,7 +17,7 @@ class ImageView extends StatelessWidget {
         width: 380,
         height: 480,
         decoration: BoxDecoration(
-          color: Color(0XFF9486F7),
+          color: const Color(0XFF9486F7),
           borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
@@ -25,7 +25,7 @@ class ImageView extends StatelessWidget {
               blurRadius: 15,
               blurStyle: BlurStyle.outer,
               spreadRadius: .2,
-              offset: Offset(0, 0),
+              offset: const Offset(0, 0),
             )
           ],
         ),
@@ -43,7 +43,7 @@ class ImageView extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               content,
               

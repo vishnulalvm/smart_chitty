@@ -44,7 +44,7 @@ class _SchemeDetailsState extends State<SchemeDetails> {
     return Scaffold(
         backgroundColor: AppColor.primaryColor,
         appBar: customAppBar(
-            title: 'Scheme : ${widget.chittyPattern}',
+            title: 'Chitty : ${widget.chittyPattern}',
             onpresed: (value) {
               if (value == 1) {
                 Navigator.of(context).push(MaterialPageRoute(
@@ -87,7 +87,7 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                       ),
                       child: Center(
                         child: BoldText(
-                          text: 'Scheme Details',
+                          text: 'Chitty Details',
                           size: 20,
                           color: AppColor.fontColor,
                         ),

@@ -1,9 +1,11 @@
 import 'dart:io';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_transaction.dart';
 import 'package:smart_chitty/pages/tabs/reminders.dart';
@@ -40,39 +42,46 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  BuildContext? _context;
+  var newupdates = '';
   ScrollController scrollController = ScrollController();
+  final newupdateController = TextEditingController();
   @override
   void initState() {
+    _context = context;
+    getNewUpdate();
     super.initState();
     if (schemeListNotifer.value.isNotEmpty) {
       selectedId = schemeListNotifer.value.first.schemeId;
       final memberModel =
-          Provider.of<FilterMemberProvider>(context, listen: false);
+          Provider.of<FilterMemberProvider>(_context!, listen: false);
       memberModel.getMemberCredentials(null);
     } else {
       selectedId = '';
     }
     final reminderModel =
-        Provider.of<ReminderListProvider>(context, listen: false);
+        Provider.of<ReminderListProvider>(_context!, listen: false);
     reminderModel.getReminders();
     final schemeIdModel =
-        Provider.of<SchemeIdListProvider>(context, listen: false);
+        Provider.of<SchemeIdListProvider>(_context!, listen: false);
     schemeIdModel.getSchemeIds();
 
     final schemeSlider =
-        Provider.of<SchemeListProvider>(context, listen: false);
+        Provider.of<SchemeListProvider>(_context!, listen: false);
     schemeSlider.getSchemeCredentials();
 
-    final memberModel = Provider.of<MemberListProvider>(context, listen: false);
+    final memberModel =
+        Provider.of<MemberListProvider>(_context!, listen: false);
     memberModel.getMemberIds();
     memberModel.fetchMemberDatas();
 
     final paymentHistory =
-        Provider.of<TransactionHistoryProvider>(context, listen: false);
+        Provider.of<TransactionHistoryProvider>(_context!, listen: false);
     paymentHistory.fetchMemberDatas();
     fetchMemberDatas();
   }
-   @override
+
+  @override
   void dispose() {
     super.dispose();
     scrollController.dispose();
@@ -92,15 +101,26 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 12),
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => const ProfileScreen()));
+            child: OpenContainer(
+              transitionDuration: Durations.long2,
+              transitionType: ContainerTransitionType
+                  .fade, // Adjust the transition type as needed
+              openBuilder: (BuildContext context, VoidCallback _) {
+                return const ProfileScreen();
               },
-              child: CircleAvatar(
-                backgroundImage: FileImage(File(companyLogo)),
-                radius: 22,
-              ),
+              closedElevation: 6.0,
+              closedShape: const CircleBorder(),
+              closedColor: Colors.transparent,
+              closedBuilder:
+                  (BuildContext context, VoidCallback openContainer) {
+                return InkWell(
+                  onTap: openContainer,
+                  child: CircleAvatar(
+                    backgroundImage: FileImage(File(companyLogo)),
+                    radius: 22,
+                  ),
+                );
+              },
             ),
           ),
         ],
@@ -119,37 +139,42 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             child: Stack(
               children: [
-                const Positioned.fill(
+                Positioned.fill(
                   child: Center(
                       child: Padding(
-                    padding: EdgeInsets.only(bottom: 30, left: 12, right: 12),
+                    padding:
+                        const EdgeInsets.only(bottom: 30, left: 12, right: 12),
                     child: FractionallySizedBox(
                       widthFactor: 1,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
+                          const Text(
                             'Updates:',
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 22,
                                 fontWeight: FontWeight.w700),
                           ),
-                          TextScroll(
-                            fadeBorderSide: FadeBorderSide.both,
-                            'New Chitty Scheme is start on \'january\' ,Start saving Money!!  ',
-                            mode: TextScrollMode.endless,
-                            velocity: Velocity(pixelsPerSecond: Offset(70, 0)),
-                            delayBefore: Duration(milliseconds: 100),
-                            numberOfReps: 100,
-                            pauseBetween: Duration(seconds: 1),
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700),
-                            textAlign: TextAlign.right,
-                            selectable: true,
+                          InkWell(
+                            onDoubleTap: () => showLogoutDialog(context),
+                            child: TextScroll(
+                              fadeBorderSide: FadeBorderSide.both,
+                              newupdates.toString(),
+                              mode: TextScrollMode.endless,
+                              velocity: const Velocity(
+                                  pixelsPerSecond: Offset(70, 0)),
+                              delayBefore: const Duration(milliseconds: 100),
+                              numberOfReps: 100,
+                              pauseBetween: const Duration(seconds: 1),
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w700),
+                              textAlign: TextAlign.right,
+                              selectable: true,
+                            ),
                           ),
                         ],
                       ),
@@ -219,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
             initialChildSize: 0.63,
             minChildSize: 0.63,
             maxChildSize: 0.88,
-            builder: (context, scrollController) => Container(
+            builder: (context, scrollControllers) => Container(
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(199, 245, 245, 1),
                   borderRadius: BorderRadius.circular(20),
@@ -227,9 +252,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 12, right: 12, top: 20),
                   child: ListView(
-// !Notification start here...
+                    physics: const ScrollPhysics(),
                     padding: EdgeInsets.zero,
-                    controller: scrollController,
+                    controller: scrollControllers,
                     children: [
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -259,13 +284,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               )),
                         ],
                       ),
-
+// !Notification start here...
                       Consumer<ReminderListProvider>(
                           builder: (context, reminderdata, child) {
                         return ListView.builder(
                             padding: EdgeInsets.zero,
                             shrinkWrap: true,
-                            controller: scrollController,
+                            controller: scrollControllers,
                             itemCount: reminderdata.lastFourReminders.length,
                             itemBuilder: (BuildContext context, int index) {
                               final reminder =
@@ -359,7 +384,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             controller: scrollController,
                             itemCount: paymentData.lastFourTransaction.length,
                             itemBuilder: (BuildContext context, int index) {
-                              
                               final payment =
                                   paymentData.lastFourTransaction[index];
                               String formattedDateTime =
@@ -374,7 +398,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     padding: const EdgeInsets.all(5.0),
                                     child: ListTile(
                                       onTap: () {
-                                        
                                         Navigator.of(context).push(
                                             MaterialPageRoute(
                                                 builder: (ctx) =>
@@ -462,7 +485,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 scrollDirection: Axis.horizontal,
                                 padding: EdgeInsets.zero,
                                 shrinkWrap: true,
-                                controller: scrollController,
+                                controller: scrollControllers,
                                 itemCount: schemeData.latestSchemes.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   final scheme =
@@ -612,29 +635,112 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-          label: const Text(
-            'Update Payment',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
-          ),
-          icon: const Icon(
-            Icons.add,
-            color: Colors.white,
-            weight: 800,
-          ),
-          backgroundColor: Colors.blue,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30), // Adjust radius as needed
-          ),
-          onPressed: () {
-            final memberModel =
-                Provider.of<MemberListProvider>(context, listen: false);
-            memberModel.getMemberIds();
-            memberModel.fetchMemberDatas();
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const PaymentUpdateButton()));
-          }),
+      floatingActionButton: OpenContainer(
+        transitionDuration: Durations.long2,
+        transitionType: ContainerTransitionType
+            .fadeThrough, // Adjust the transition type as needed
+        openBuilder: (BuildContext context, VoidCallback _) {
+          return const PaymentUpdateButton();
+        },
+        closedElevation: 6.0,
+        closedShape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
+        closedColor: Colors.blue,
+        closedBuilder: (BuildContext context, VoidCallback openContainer) {
+          return FloatingActionButton.extended(
+            label: const Text(
+              'Update Payment',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+              weight: 800,
+            ),
+            backgroundColor: Colors.blue,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            onPressed: () {
+              final memberModel =
+                  Provider.of<MemberListProvider>(context, listen: false);
+              memberModel.getMemberIds();
+              memberModel.fetchMemberDatas();
+              openContainer();
+            },
+          );
+        },
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  void showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('New Update'),
+          content: SizedBox(
+            width: 100,
+            child: TextFormField(
+              maxLines: 2,
+              controller: newupdateController,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              autofocus: false,
+              decoration: InputDecoration(
+                hintText: 'Add new update',
+                hintStyle: const TextStyle(color: Colors.black54, fontSize: 14),
+                filled: true,
+                fillColor: Colors.white, // Background color
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0), // Rounded border
+                  borderSide: BorderSide.none, // No border side
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30.0), // Rounded border
+                  borderSide:
+                      const BorderSide(color: Colors.blue), // Border color
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                String update = newupdateController.text;
+                saveNewUpdate(update);
+                getNewUpdate();
+                Navigator.of(context).pop();
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> saveNewUpdate(String update) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('newUpdate', update);
+  }
+
+  Future<void> getNewUpdate() async {
+    final prefs = await SharedPreferences.getInstance();
+    final updates = prefs.getString('newUpdate') ?? 'No New Update';
+    setState(() {
+      newupdates = updates;
+    });
   }
 }

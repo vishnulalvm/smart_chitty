@@ -21,7 +21,7 @@ class SkipButton extends StatelessWidget {
         onPressed: () {
           _pageController.jumpToPage(3); // Skip to the last page
         },
-        child: Text(
+        child: const Text(
           'Skip',
           style: TextStyle(color: Colors.white),
         ),

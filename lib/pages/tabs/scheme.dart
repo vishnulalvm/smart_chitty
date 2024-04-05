@@ -23,10 +23,7 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: customAppBar(
-          title: 'Scheme',
-          onpresed: (value) {},
-          item1: 'Settings',
-          item2: 'Info'),
+          title: 'New Chits', onpresed: (value) {}, showMenu: false),
       body: Column(
         children: [
           Padding(
@@ -35,7 +32,7 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 BoldText(
-                  text: 'Total Schemes',
+                  text: 'Total Chits',
                   color: AppColor.fontColor,
                   size: 15,
                 ),
@@ -171,4 +168,22 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
       ),
     );
   }
+  Widget fabIcon() {
+  return FloatingActionButton(
+    backgroundColor: Colors.blue,
+    shape: const CircleBorder(),
+    onPressed: () {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) => const AddSchemeBottomSheet(),
+      );
+    },
+    child: const Icon(
+      Icons.add,
+      weight: 800,
+      color: Colors.white,
+    ),
+  );
+}
 }

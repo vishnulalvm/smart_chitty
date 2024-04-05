@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:smart_chitty/pages/others/other_screens/set_reminder.dart';
+import 'package:smart_chitty/pages/others/Reminder_features/set_reminder.dart';
 import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
@@ -24,6 +24,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
       backgroundColor: AppColor.primaryColor,
       appBar: customAppBar(
         title: 'Reminders',
+        showMenu: false,
         onpresed: (onpresed) {},
       ),
       body: Consumer<ReminderListProvider>(
