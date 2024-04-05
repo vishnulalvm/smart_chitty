@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
-import 'package:smart_chitty/widgets/global/icon_button.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class ConnectDeveloper extends StatelessWidget {
@@ -38,7 +37,12 @@ class ConnectDeveloper extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ModifiedText(text: 'Social Profiles', size: 20, color: AppColor.fontColor,fontWeight: FontWeight.w700,),
+                  ModifiedText(
+                    text: 'Social Profiles',
+                    size: 20,
+                    color: AppColor.fontColor,
+                    fontWeight: FontWeight.w700,
+                  ),
                   gap(height: 5),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
@@ -46,7 +50,6 @@ class ConnectDeveloper extends StatelessWidget {
                     runSpacing: MediaQuery.of(context).size.width * 0.08,
                     alignment: WrapAlignment.center,
                     children: [
-                      
                       ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
@@ -146,7 +149,12 @@ class ConnectDeveloper extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            const Text('Email Me',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700),)
+                            const Text(
+                              'Email Me',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            )
                           ],
                         ),
                       ),
@@ -167,7 +175,7 @@ class ConnectDeveloper extends StatelessWidget {
                             ),
                           ],
                         ),
-                           child: Column(
+                        child: Column(
                           children: [
                             ElevatedButton(
                               onPressed: () {},
@@ -183,7 +191,12 @@ class ConnectDeveloper extends StatelessWidget {
                                 color: Colors.white,
                               ),
                             ),
-                            const Text('Call Me',style: TextStyle(color: Colors.black,fontWeight: FontWeight.w700),)
+                            const Text(
+                              'Call Me',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w700),
+                            )
                           ],
                         ),
                       ),
