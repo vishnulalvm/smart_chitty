@@ -155,24 +155,10 @@ class _ReminderScreenState extends State<ReminderScreen> {
                           itemBuilder: (context, index) {
                             final data = reminderdata.reminders[index];
                             return Container(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.only(
                                     bottomRight: Radius.circular(20)),
-                                color: const Color.fromRGBO(28, 167, 190, 1),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 2,
-                                    blurRadius: 2,
-                                    offset: const Offset(0, 3),
-                                  ),
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.2),
-                                    spreadRadius: 2,
-                                    blurRadius: 2,
-                                    offset: const Offset(3, 0),
-                                  ),
-                                ],
+                                color: Color.fromRGBO(28, 167, 190, 1),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(12),

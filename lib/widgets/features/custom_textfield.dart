@@ -4,23 +4,30 @@ import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 Widget customTextField({
-var maxline,
+  var maxline,
+  required BuildContext context,
   required var hintText,
   required var title,
-   TextEditingController? controller,
+  TextEditingController? controller,
   Key? key,
   required String? Function(String?)? validator,
-  TextInputType? keyboardtype, required TextInputType keyboardType,
+  TextInputType? keyboardtype,
+  required TextInputType keyboardType,
 }) {
   return Row(
-    
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
-      ModifiedText(text: title, size: 14, color: AppColor.fontColor,fontWeight: FontWeight.w500,),
-     gap(width: 50),
+      ModifiedText(
+        text: title,
+        size: 14,
+        color: AppColor.fontColor,
+        fontWeight: FontWeight.w500,
+      ),
+      gap(
+        width: MediaQuery.of(context).size.height * 0.03,
+      ),
       SizedBox(
-        width: 200,
+        width: MediaQuery.of(context).size.height * 0.23,
         child: TextFormField(
           maxLines: maxline,
           controller: controller,
@@ -30,7 +37,7 @@ var maxline,
           validator: validator,
           decoration: InputDecoration(
             hintText: hintText,
-            hintStyle: const TextStyle(color: Colors.black54,fontSize: 14),
+            hintStyle: const TextStyle(color: Colors.black54, fontSize: 14),
             filled: true,
             fillColor: Colors.white, // Background color
             border: OutlineInputBorder(

@@ -50,6 +50,7 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
                 child: Column(
                   children: [
                     customTextField(
+                       context: context,
                         maxline: 3,
                         hintText: 'Reminder Note',
                         title: 'Reminder Note :',

@@ -33,6 +33,7 @@ class _CallChittyState extends State<CallChitty> {
               rowText(firstText: 'Scheme Id :', secoundText: widget.schemeId),
               gap(height: 12),
               customTextField(
+                 context: context,
                   controller: poolAmountController,
                   hintText: 'Enter your Amount',
                   title: 'Your Pool Amount : ',
@@ -45,7 +46,9 @@ class _CallChittyState extends State<CallChitty> {
               Padding(
                 padding: const EdgeInsets.only(right: 12),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
                   style: ElevatedButton.styleFrom(
                     
                     padding: const EdgeInsets.only(left: 30,right: 30,top: 12,bottom: 12),

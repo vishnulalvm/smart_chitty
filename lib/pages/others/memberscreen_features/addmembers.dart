@@ -135,7 +135,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ModifiedText(
-                              text: 'Selected Scheme Id :',
+                              text: 'Selected Chit Id :',
                               size: 16,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,

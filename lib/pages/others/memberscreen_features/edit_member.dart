@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
+import 'package:smart_chitty/services/providers/filter_member_provider.dart';
+import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
@@ -62,9 +65,9 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
   @override
   void initState() {
     super.initState();
-    imagePaths['avatar']=widget.avatar;
-    imagePaths['frontImage']=widget.idFront;
-    imagePaths['backImage']=widget.idBack;
+    imagePaths['avatar'] = widget.avatar;
+    imagePaths['frontImage'] = widget.idFront;
+    imagePaths['backImage'] = widget.idBack;
     memberNameController = TextEditingController(text: widget.memberName);
     contactNumController = TextEditingController(text: widget.contact);
     memberAgeController = TextEditingController(text: widget.memberage);
@@ -377,6 +380,9 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
       if (dropdownValue != null) {
         await box.put(widget.memberId, member);
         refreshMember(dropdownValue);
+        final memberModels =
+            Provider.of<FilterMemberProvider>(_context!, listen: false);
+        memberModels.getMemberCredentials(null);
 
         ScaffoldMessenger.of(_context!).showSnackBar(
           const SnackBar(

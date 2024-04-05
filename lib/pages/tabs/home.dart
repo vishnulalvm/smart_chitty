@@ -33,6 +33,7 @@ import 'package:text_scroll/text_scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 String companyLogo = '';
+String companyName = '';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -91,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     for (final company in companyDatas) {
       companyLogo = company.imagePath;
+      companyName =company.companyName;
     }
     return Scaffold(
       resizeToAvoidBottomInset: false,

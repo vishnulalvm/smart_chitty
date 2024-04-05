@@ -48,7 +48,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           backgroundColor: Colors.transparent,
           elevation: 5,
           title: ModifiedText(
-              text: 'Statistics', size: 20, color: AppColor.fontColor),
+              text: 'Total: ₹$sales/month', size: 25, color: AppColor.fontColor,fontWeight: FontWeight.w600,),
         ),
         body: ListView(
           padding: EdgeInsets.zero,
@@ -67,12 +67,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 110),
                   child: SfCartesianChart(
-                    title: ChartTitle(
-                        text: 'Total :₹ $sales/-',
-                        alignment: ChartAlignment.center,
-                        textStyle: const TextStyle(
-                            fontSize: 25, 
-                            fontWeight: FontWeight.w800)),
                     tooltipBehavior: TooltipBehavior(
                         enable: true,
                         builder: (dynamic data, dynamic point, dynamic series,

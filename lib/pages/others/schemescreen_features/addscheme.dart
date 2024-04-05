@@ -75,6 +75,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       ),
                       gap(height: 20),
                       customTextField(
+                         context: context,
                         hintText: 'No.Of Installment in Months',
                         title: 'No.Of Installment :',
                         controller: noOfInstallmentController,
@@ -84,6 +85,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       ),
                       gap(height: 20),
                       customTextField(
+                         context: context,
                         hintText: 'Number of Members',
                         title: 'Total Members :',
                         controller: totalMembersController,
@@ -93,6 +95,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       ),
                       gap(height: 20),
                       customTextField(
+                        context: context,
                         hintText: 'Subcription Amount',
                         title: 'Subcription Amount :',
                         controller: subscriptionController,
@@ -104,6 +107,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       ),
                       gap(height: 20),
                       customTextField(
+                         context: context,
                         hintText: '% Pool Cummission',
                         title: 'Pool Cummission :',
                         controller: commissionController,

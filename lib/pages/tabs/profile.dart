@@ -9,6 +9,7 @@ import 'package:smart_chitty/pages/others/profilescreen_features/connect_develop
 import 'package:smart_chitty/pages/others/profilescreen_features/convert_exel.dart';
 import 'package:smart_chitty/pages/others/profilescreen_features/help.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
+import 'package:smart_chitty/pages/tabs/reminders.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
@@ -154,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (ctx) =>
-                                                const AboutCompany()));
+                                                const ReminderScreen()));
                                   },
                                   title: 'Notifications',
                                   leading: Icons.notifications_active),
