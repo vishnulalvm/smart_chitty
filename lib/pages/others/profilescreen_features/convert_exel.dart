@@ -9,6 +9,7 @@ class ConvertExel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColor.primaryColor,
       appBar: customAppBar(title: 'Excel Convert', onpresed: (value){}),
       body: Center(
         child: ModifiedText(text: 'Add In Future Update', size: 30, color: AppColor.fontColor),

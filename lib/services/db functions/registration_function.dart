@@ -5,9 +5,9 @@ final List<RegistrationModel> companyDatas = [];
 final List<RegistrationModel> listofcompanydata = [];
 
 
-void insertData(RegistrationModel value) async {
+void insertData(RegistrationModel value,String key) async {
   final companyDb = await Hive.openBox<RegistrationModel>('company_data');
-  await companyDb.add(value);
+  await companyDb.put(value.companyName,value);
   for (final company in companyDatas) {
     listofcompanydata.add(company);
      }

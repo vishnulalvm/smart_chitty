@@ -134,6 +134,7 @@ class ConnectDeveloper extends StatelessWidget {
                           ],
                         ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
                               onPressed: () {},
@@ -176,6 +177,7 @@ class ConnectDeveloper extends StatelessWidget {
                           ],
                         ),
                         child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
                               onPressed: () {},

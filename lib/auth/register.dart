@@ -222,7 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         whatsappLink: whatsapplink,
         imagePath: imagePath);
     // passing and adding data from textfield to hive
-    insertData(data);
+    insertData(data,chittyName);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Registration Successful'),
