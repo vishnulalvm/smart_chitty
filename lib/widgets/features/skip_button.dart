@@ -15,15 +15,12 @@ class SkipButton extends StatelessWidget {
           0.12, // Adjust according to your layout
       right: 20,
       child: TextButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all(Color(0XFF9486F7)),
-        ),
         onPressed: () {
           _pageController.jumpToPage(3); // Skip to the last page
         },
         child: const Text(
           'Skip',
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: Colors.black, fontSize: 20),
         ),
       ),
     );

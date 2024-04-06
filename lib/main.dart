@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
@@ -19,10 +20,13 @@ import 'package:smart_chitty/services/providers/schemeid_provider.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/page_routes.dart';
 import 'package:smart_chitty/widgets/features/choice_chips.dart';
-
+int? initScreen;
 late Box<MemberModel> membersBox;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  initScreen = prefs.getInt("initScreen")??0;
+  await prefs.setInt("initScreen", 1);
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(RegistrationModelAdapter().typeId)) {
     Hive.registerAdapter(RegistrationModelAdapter());

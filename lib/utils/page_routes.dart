@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smart_chitty/auth/login.dart';
+import 'package:smart_chitty/auth/onboarding.dart';
 import 'package:smart_chitty/auth/splash.dart';
+import 'package:smart_chitty/main.dart';
 import 'package:smart_chitty/pages/others/other_screens/all_transaction.dart';
 import 'package:smart_chitty/pages/tabs/reminders.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
@@ -9,10 +11,15 @@ import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/statistics.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/splash', // Set the initial location to '/splash'
+  initialLocation: initScreen == 0 || initScreen == null ? "/first" : "/splash",
   routes: <RouteBase>[
     GoRoute(
-      path: '/splash', // Define the splash screen route
+      path: '/first', 
+      builder: (BuildContext context, GoRouterState state) =>
+          const OnboardingScreen(), // Replace SplashScreen with your actual splash screen widget
+    ),
+    GoRoute(
+      path: '/splash', 
       builder: (BuildContext context, GoRouterState state) =>
           const SplashScreen(), // Replace SplashScreen with your actual splash screen widget
     ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+
+
 class ImageView extends StatelessWidget {
   const ImageView({
     super.key,
@@ -13,43 +15,26 @@ class ImageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Container(
-        width: 380,
-        height: 480,
-        decoration: BoxDecoration(
-          color: const Color(0XFF9486F7),
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(.4),
-              blurRadius: 15,
-              blurStyle: BlurStyle.outer,
-              spreadRadius: .2,
-              offset: const Offset(0, 0),
-            )
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Image.asset(
-                imagePath,
-                width: 300,
-                height: 300,
-                fit: BoxFit.cover,
-              ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 1.1,
+            height: MediaQuery.of(context).size.height * .6,
+            child: Image.asset(
+              imagePath,
+              fit: BoxFit.cover,
             ),
-            const SizedBox(height: 20),
-            Text(
-              content,
-              
-            ),
-          ],
-        ),
+          ),
+          Text(
+    content,
+    style: const TextStyle(
+      fontSize: 35,
+      fontWeight: FontWeight.bold,
+    ),
+    textAlign: TextAlign.center,
+  ),
+        ],
       ),
     );
   }
