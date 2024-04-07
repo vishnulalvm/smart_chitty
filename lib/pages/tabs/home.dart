@@ -425,7 +425,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       subtitle: ModifiedText(
                                         text:
                                             'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
-                                        size: 12,
+                                        size: 13,
                                         color: AppColor.fontColor,
                                         fontWeight: FontWeight.w500,
                                       ),
@@ -447,7 +447,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ModifiedText(
                                             text:
                                                 'scheme : ${payment.schemeId}', // Replace with the actual payment mode field from PaymentModel
-                                            size: 12,
+                                            size: 13,
                                             color: AppColor.fontColor,
                                           ),
                                         ],
@@ -581,7 +581,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: ListTile(
                                     leading: CircleAvatar(
                                       backgroundColor: Colors.blue,
-                                      radius: 20,
+                                      radius: 25,
                                       backgroundImage:
                                           FileImage(File(data.avatar)),
                                     ),

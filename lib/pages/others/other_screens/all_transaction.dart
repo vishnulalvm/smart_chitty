@@ -24,10 +24,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: customAppBar(
-          title: 'Transaction',
+          title: 'Transactions',
           onpresed: (value) {},
-          item1: 'Settings',
-          item2: 'Info'),
+          showMenu: false
+          ),
       body: Column(
         children: [
           Padding(

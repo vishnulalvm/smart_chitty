@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -8,6 +10,7 @@ import 'package:smart_chitty/services/models/monthly_collection_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/colors.dart';
+import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/widgets/global/row_text.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
@@ -54,13 +57,34 @@ class _ViewTransactionState extends State<ViewTransaction> {
       body: Padding(
         padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
         child: Container(
-          height: 350,
+          height: 400,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: Colors.white),
           child: Column(
             children: [
               gap(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  gap(width: 10),
+                  CircleAvatar(
+                    backgroundColor: Colors.blue,
+                    radius: 40,
+                    backgroundImage:
+                        FileImage(File(widget.paymentModel.imagePath)),
+                  ),
+                  
+                  ModifiedText(
+                    text: widget.paymentModel.memberModel.memberName,
+                    size: 24,
+                    color: AppColor.fontColor,
+                    fontWeight: FontWeight.w700,
+                  ),
+                  gap(width: 10),
+                ],
+              ),
+              
               rowText(
                   firstText: 'Payment Date :', secoundText: formattedDateTime),
               rowText(

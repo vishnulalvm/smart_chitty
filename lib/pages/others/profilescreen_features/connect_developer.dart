@@ -4,6 +4,12 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+String instagram = 'https://www.instagram.com/vishnulal_vm/';
+String twitter = 'https://twitter.com/vishnulal_vm';
+String github = 'https://github.com/vishnulalvm';
+String linkedin = 'https://www.linkedin.com/in/vishnulal-v-m-b1015a1b9/';
 
 class ConnectDeveloper extends StatelessWidget {
   const ConnectDeveloper({super.key});
@@ -15,7 +21,7 @@ class ConnectDeveloper extends StatelessWidget {
       appBar:
           customAppBar(title: 'Connect With Developer', onpresed: (value) {}),
       body: Padding(
-        padding: const EdgeInsets.only(top: 50, left: 12, right: 12),
+        padding: const EdgeInsets.only(top: 30, left: 12, right: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -39,11 +45,11 @@ class ConnectDeveloper extends StatelessWidget {
                 children: [
                   ModifiedText(
                     text: 'Social Profiles',
-                    size: 20,
+                    size: 25,
                     color: AppColor.fontColor,
                     fontWeight: FontWeight.w700,
                   ),
-                  gap(height: 5),
+                  gap(height: 12),
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: MediaQuery.of(context).size.width * 0.08,
@@ -51,7 +57,7 @@ class ConnectDeveloper extends StatelessWidget {
                     alignment: WrapAlignment.center,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => launchApps(instagram),
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
                           padding: const EdgeInsets.all(12),
@@ -65,7 +71,7 @@ class ConnectDeveloper extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => launchApps(twitter),
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
                           padding: const EdgeInsets.all(12),
@@ -79,7 +85,7 @@ class ConnectDeveloper extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => launchApps(github),
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
                           padding: const EdgeInsets.all(12),
@@ -93,7 +99,7 @@ class ConnectDeveloper extends StatelessWidget {
                         ),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () => launchApps(linkedin),
                         style: ElevatedButton.styleFrom(
                           shape: const CircleBorder(),
                           padding: const EdgeInsets.all(12),
@@ -177,7 +183,7 @@ class ConnectDeveloper extends StatelessWidget {
                           ],
                         ),
                         child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             ElevatedButton(
                               onPressed: () {},
@@ -211,5 +217,12 @@ class ConnectDeveloper extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future<void> launchApps(String accountUrl) async {
+    final Uri url = Uri.parse(accountUrl);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
