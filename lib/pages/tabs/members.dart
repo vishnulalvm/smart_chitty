@@ -15,7 +15,6 @@ import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/widgets/features/choice_chips.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
-String installment = '';
 String memberId = '';
 
 class MembersScreen extends StatefulWidget {
@@ -28,6 +27,7 @@ class MembersScreen extends StatefulWidget {
 }
 
 class _MembersScreenState extends State<MembersScreen> {
+  final Map<String, int> installmentCounts = {};
   ScrollController scrollController = ScrollController();
   void handleChipSelection(String? newSelectedId) {
     setState(() {
@@ -41,6 +41,7 @@ class _MembersScreenState extends State<MembersScreen> {
     final schemeIdModel =
         Provider.of<MemberDataProvider>(context, listen: false);
     schemeIdModel.getSchemeIds();
+    fetchInstallmentCounts();
   }
 
   @override
@@ -109,6 +110,7 @@ class _MembersScreenState extends State<MembersScreen> {
                 itemCount: memberdata.memberDataListNotifer.length,
                 itemBuilder: (context, index) {
                   final data = memberdata.memberDataListNotifer[index];
+                  final installment = installmentCounts[data.memberId] ?? 0;
                   return Padding(
                     padding:
                         const EdgeInsets.only(left: 12, right: 12, bottom: 12),
@@ -217,8 +219,15 @@ class _MembersScreenState extends State<MembersScreen> {
     );
   }
 
-  void getInstallmentCounts() async {
-    installment = getInstallmentCount(memberId).toString();
+  Future<void> fetchInstallmentCounts() async {
+    final memberdata =
+        Provider.of<FilterMemberProvider>(context, listen: false);
+    for (final member in memberdata.memberDataListNotifer) {
+      final installmentCount = await getInstallmentCount(member.memberId);
+      setState(() {
+        installmentCounts[member.memberId] = installmentCount;
+      });
+    }
   }
 
   Future<int> getInstallmentCount(String memberId) async {

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:smart_chitty/pages/others/schemescreen_features/editscheme.dart';
 import 'package:smart_chitty/services/db%20functions/memberdata_fuction.dart';
+import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/utils/colors.dart';
@@ -192,6 +193,7 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                               child: IntrinsicHeight(
                                 child: ListTile(
                                   onTap: () {
+                                    getPaymentCredentials(data.memberId);
                                     Navigator.push(
                                         context,
                                         PageRouteBuilder(
