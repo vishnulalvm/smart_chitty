@@ -39,8 +39,10 @@ class CustomSearchDelegate extends SearchDelegate<MemberModel> {
   Widget buildResults(BuildContext context) {
     List<MemberModel> searchResults = memberList
         .where((member) =>
-            member.memberName.toLowerCase().contains(query.toLowerCase()))
+            member.memberName.toLowerCase().contains(query.toLowerCase()) ||
+            member.memberId.toString().contains(query.toLowerCase()))
         .toList();
+
     return ListView.builder(
       itemCount: searchResults.length,
       itemBuilder: (context, index) {
@@ -135,8 +137,9 @@ class CustomSearchDelegate extends SearchDelegate<MemberModel> {
   @override
   Widget buildSuggestions(BuildContext context) {
     List<MemberModel> searchResults = memberList
-        .where((student) =>
-            student.memberName.toLowerCase().contains(query.toLowerCase()))
+        .where((member) =>
+            member.memberName.toLowerCase().contains(query.toLowerCase()) ||
+            member.memberId.toLowerCase().contains(query.toLowerCase()))
         .toList();
     // You can provide suggestions as users type
     return ListView.builder(

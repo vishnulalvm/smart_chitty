@@ -7,23 +7,46 @@ Future<void> fetchMemberDatas() async {
   final collectionBox = await Hive.openBox<MonthlyCollection>('collections');
   final transactionDb = collectionBox.values.toList();
   data = transactionDb;
-data.sort((b, a) {
-  try {
+
+  data.sort((a, b) {
     final aMonthComponents = a.month.split('-');
     final bMonthComponents = b.month.split('-');
-    final aMonthNum = int.parse(aMonthComponents[0]);
-    final bMonthNum = int.parse(bMonthComponents[0]);
-    final aYear = int.parse(aMonthComponents[1]);
-    final bYear = int.parse(bMonthComponents[1]);
+
+    final aYear = int.parse(
+        '20${aMonthComponents[1]}'); // Assuming the year format is 'yy'
+    final bYear = int.parse('20${bMonthComponents[1]}');
+
+    final aMonthAbbr = aMonthComponents[0];
+    final bMonthAbbr = bMonthComponents[0];
+
+    final aMonthNum = _getMonthNumber(aMonthAbbr);
+    final bMonthNum = _getMonthNumber(bMonthAbbr);
+
+    // Compare years first
     if (aYear != bYear) {
-      return aYear.compareTo(bYear);
+      return bYear.compareTo(aYear);
     }
-    return aMonthNum.compareTo(bMonthNum);
-  } catch (e) {
-   
-    return 0;
-  }
-});
+
+    // If years are the same, compare months
+    return bMonthNum.compareTo(aMonthNum);
+  });
 }
 
+int _getMonthNumber(String monthAbbr) {
+  final months = {
+    'Jan': 1,
+    'Feb': 2,
+    'Mar': 3,
+    'Apr': 4,
+    'May': 5,
+    'Jun': 6,
+    'Jul': 7,
+    'Aug': 8,
+    'Sep': 9,
+    'Oct': 10,
+    'Nov': 11,
+    'Dec': 12,
+  };
 
+  return months[monthAbbr] ?? 0;
+}

@@ -1,12 +1,17 @@
 import 'dart:io';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
+import 'package:smart_chitty/services/models/addmember_model.dart';
+import 'package:smart_chitty/services/models/monthly_collection_model.dart';
+import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/services/models/registration_model.dart';
+import 'package:smart_chitty/services/models/reminder_model.dart';
+import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
@@ -247,7 +252,9 @@ class _AboutCompanyState extends State<AboutCompany> {
                               fontWeight: FontWeight.w600,
                             ),
                             ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  showLogoutDialog(context);
+                                },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.red),
                                 child: const Text(
@@ -323,12 +330,52 @@ class _AboutCompanyState extends State<AboutCompany> {
         whatsappLink: whatsapplink,
         imagePath: imagePath);
     // passing and adding data from textfield to hive
-    insertData(data,companyName);
+    insertData(data, companyName);
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Registration Successful'),
         duration: Duration(seconds: 2),
       ),
+    );
+  }
+
+  void showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm'),
+          content: const Text('Are you sure you want to Clear All?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                final paymentDb = await Hive.openBox<PaymentModel>('payments');
+                await paymentDb.clear();
+                final companyDb =
+                    await Hive.openBox<RegistrationModel>('company_data');
+                await companyDb.clear();
+                final schemeDB = await Hive.openBox<SchemeModel>('schemes');
+                await schemeDB.clear();
+                final collectionBox =
+                    await Hive.openBox<MonthlyCollection>('collections');
+                await collectionBox.clear();
+                final box = await Hive.openBox<MemberModel>('members');
+                await box.clear();
+                final box2 = await Hive.openBox<ReminderModel>('reminders');
+                await box2.clear();
+                _context!.pushReplacement('login');
+              },
+              child: const Text('delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

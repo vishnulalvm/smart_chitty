@@ -30,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               children: const [
                 ImageView(
                     imagePath: "assets/images/business.jpg",
-                    content: "Efficient Business\n Oversight"),
+                    content: "Unlock Greater Financial\nFlexibility"),
                 ImageView(
                     imagePath: "assets/images/invest.jpg",
                     content: "User-Friendly Platform"),
