@@ -68,14 +68,14 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       Padding(
                         padding: const EdgeInsets.all(20),
                         child: BoldText(
-                          text: 'New Schemes',
+                          text: 'Add New Chits',
                           color: AppColor.fontColor,
                           size: 24,
                         ),
                       ),
                       gap(height: 20),
                       customTextField(
-                         context: context,
+                        context: context,
                         hintText: 'No.Of Installment in Months',
                         title: 'No.Of Installment :',
                         controller: noOfInstallmentController,
@@ -85,7 +85,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       ),
                       gap(height: 20),
                       customTextField(
-                         context: context,
+                        context: context,
                         hintText: 'Number of Members',
                         title: 'Total Members :',
                         controller: totalMembersController,
@@ -107,7 +107,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       ),
                       gap(height: 20),
                       customTextField(
-                         context: context,
+                        context: context,
                         hintText: '% Pool Cummission',
                         title: 'Pool Cummission :',
                         controller: commissionController,
@@ -179,7 +179,7 @@ class _AddSchemeBottomSheetState extends State<AddSchemeBottomSheet> {
                       Icons.add,
                       size: 30,
                     ),
-                    label: const Text('Add New Scheme'),
+                    label: const Text('Add New Chit'),
                     style: ElevatedButton.styleFrom(
                       foregroundColor: Colors.white,
                       backgroundColor: Colors.blue,

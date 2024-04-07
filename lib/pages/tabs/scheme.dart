@@ -6,6 +6,7 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/pages/others/schemescreen_features/addscheme.dart';
+import 'package:smart_chitty/widgets/global/scroll_to_hide.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class SchemeButtonHome extends StatefulWidget {
@@ -18,6 +19,7 @@ class SchemeButtonHome extends StatefulWidget {
 }
 
 class _SchemeButtonHomeState extends State<SchemeButtonHome> {
+    ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,6 +57,7 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
               builder: (BuildContext context, List<SchemeModel> schemedata,
                   Widget? child) {
                 return ListView.builder(
+                  controller: scrollController,
                   itemCount: schemeListNotifer.value.length,
                   itemBuilder: (context, index) {
                     if (schemedata.isEmpty) {
@@ -151,19 +154,24 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        shape: const CircleBorder(),
-        onPressed: () {
-          showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (BuildContext context) => const AddSchemeBottomSheet());
-        },
-        child: const Icon(
-          Icons.add,
-          weight: 800,
-          color: Colors.white,
+      floatingActionButton: ScrollToHide(
+         height: 60,
+        hideDirection: Axis.vertical,
+        scrollController: scrollController,
+        child: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          shape: const CircleBorder(),
+          onPressed: () {
+            showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                builder: (BuildContext context) => const AddSchemeBottomSheet());
+          },
+          child: const Icon(
+            Icons.add,
+            weight: 800,
+            color: Colors.white,
+          ),
         ),
       ),
     );

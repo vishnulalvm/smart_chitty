@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:scroll_to_hide/scroll_to_hide.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/call_chitty.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/edit_member.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_id_screen.dart';
@@ -16,6 +15,7 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/row_text.dart';
+import 'package:smart_chitty/widgets/global/scroll_to_hide.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 int? installmentcount;
@@ -407,9 +407,11 @@ class _MemberDetailsState extends State<MemberDetails> {
         ],
       ),
       floatingActionButton: ScrollToHide(
+        
         height: 60,
         hideDirection: Axis.vertical,
         scrollController: scrollController,
+
         child: FloatingActionButton.extended(
             label: const Text(
               '   Call Chitty   ',

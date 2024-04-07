@@ -20,12 +20,13 @@ import 'package:smart_chitty/services/providers/schemeid_provider.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
 import 'package:smart_chitty/utils/page_routes.dart';
 import 'package:smart_chitty/widgets/features/choice_chips.dart';
+
 int? initScreen;
 late Box<MemberModel> membersBox;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  initScreen = prefs.getInt("initScreen")??0;
+  initScreen = prefs.getInt("initScreen") ?? 0;
   await prefs.setInt("initScreen", 1);
   await Hive.initFlutter();
   if (!Hive.isAdapterRegistered(RegistrationModelAdapter().typeId)) {
@@ -43,10 +44,9 @@ void main() async {
   if (!Hive.isAdapterRegistered(MonthlyCollectionAdapter().typeId)) {
     Hive.registerAdapter(MonthlyCollectionAdapter());
   }
-   if (!Hive.isAdapterRegistered(ReminderModelAdapter().typeId)) {
+  if (!Hive.isAdapterRegistered(ReminderModelAdapter().typeId)) {
     Hive.registerAdapter(ReminderModelAdapter());
   }
-
 
   getUserCredentials();
   getSchemeCredentials();
@@ -71,10 +71,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => SchemeIdListProvider()),
         ChangeNotifierProvider(create: (context) => MemberListProvider()),
         ChangeNotifierProvider(create: (context) => MemberDataProvider()),
-        ChangeNotifierProvider(create: (context) => TransactionHistoryProvider()), 
-        ChangeNotifierProvider(create: (context) => SchemeListProvider()), 
-         ChangeNotifierProvider(create: (context) => ReminderListProvider()),
-         ChangeNotifierProvider(create: (context) => FilterMemberProvider()), 
+        ChangeNotifierProvider(
+            create: (context) => TransactionHistoryProvider()),
+        ChangeNotifierProvider(create: (context) => SchemeListProvider()),
+        ChangeNotifierProvider(create: (context) => ReminderListProvider()),
+        ChangeNotifierProvider(create: (context) => FilterMemberProvider()),
       ],
       child: MaterialApp.router(
         routerConfig: router,

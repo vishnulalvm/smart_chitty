@@ -13,6 +13,7 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/widgets/features/choice_chips.dart';
+import 'package:smart_chitty/widgets/global/scroll_to_hide.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 String memberId = '';
@@ -106,6 +107,7 @@ class _MembersScreenState extends State<MembersScreen> {
             gap(height: 12),
             Expanded(
               child: ListView.builder(
+                controller: scrollController,
                 padding: EdgeInsets.zero,
                 itemCount: memberdata.memberDataListNotifer.length,
                 itemBuilder: (context, index) {
@@ -202,17 +204,23 @@ class _MembersScreenState extends State<MembersScreen> {
           ],
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const AddMemberScreen()));
-        },
-        child: const Icon(
-          Icons.add,
-          weight: 800,
-          color: Colors.white,
+      floatingActionButton: ScrollToHide(
+        height: 60,
+        hideDirection: Axis.vertical,
+        scrollController: scrollController,
+
+        child: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          shape: const CircleBorder(),
+          onPressed: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const AddMemberScreen()));
+          },
+          child: const Icon(
+            Icons.add,
+            weight: 800,
+            color: Colors.white,
+          ),
         ),
       ),
       // resizeToAvoidBottomInset: false
