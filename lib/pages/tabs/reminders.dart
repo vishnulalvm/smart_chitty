@@ -5,6 +5,7 @@ import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
 import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
+import 'package:smart_chitty/widgets/global/scroll_to_hide.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class ReminderScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class ReminderScreen extends StatefulWidget {
 }
 
 class _ReminderScreenState extends State<ReminderScreen> {
+    final ScrollController scrollController = ScrollController();
   bool gridview = true;
   bool isChecked = false;
   final reminderController = TextEditingController();
@@ -64,6 +66,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
             Expanded(
                 child: gridview
                     ? ListView.separated(
+                      controller: scrollController,
                         separatorBuilder: (BuildContext context, int index) {
                           final reminder = reminderdata.reminders[index];
                           return Padding(
@@ -145,6 +148,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                     : Padding(
                         padding: const EdgeInsets.only(left: 12, right: 12),
                         child: GridView.builder(
+                          controller: scrollController,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
@@ -201,17 +205,22 @@ class _ReminderScreenState extends State<ReminderScreen> {
           ],
         );
       }),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blue,
-        shape: const CircleBorder(),
-        onPressed: () {
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (ctx) => const SetReminderScreen()));
-        },
-        child: const Icon(
-          Icons.add,
-          weight: 800,
-          color: Colors.white,
+      floatingActionButton: ScrollToHide(
+        height: 60,
+        hideDirection: Axis.vertical,
+        scrollController: scrollController,
+        child: FloatingActionButton(
+          backgroundColor: Colors.blue,
+          shape: const CircleBorder(),
+          onPressed: () {
+            Navigator.of(context).push(
+                MaterialPageRoute(builder: (ctx) => const SetReminderScreen()));
+          },
+          child: const Icon(
+            Icons.add,
+            weight: 800,
+            color: Colors.white,
+          ),
         ),
       ),
     );
