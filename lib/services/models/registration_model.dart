@@ -1,9 +1,8 @@
-
 import 'package:hive_flutter/hive_flutter.dart';
 part 'registration_model.g.dart';
 
 @HiveType(typeId: 1)
-class RegistrationModel{
+class RegistrationModel {
   @HiveField(0)
   final String companyName;
 
@@ -18,9 +17,15 @@ class RegistrationModel{
 
   @HiveField(4)
   final String password;
-@HiveField(5)
+  @HiveField(5)
   final String imagePath;
 
-  RegistrationModel( {required this.companyName, required this.phoneNumber, required this.whatsappLink, required this.userId, required this.password,required this.imagePath,});
-
+  RegistrationModel({
+    required this.companyName,
+    required this.phoneNumber,
+    required this.whatsappLink,
+    required this.userId,
+    required this.password,
+    required this.imagePath,
+  });
 }

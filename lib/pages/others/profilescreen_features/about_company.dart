@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
@@ -78,7 +79,7 @@ class _AboutCompanyState extends State<AboutCompany> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white),
-                    height: 400,
+                    height: MediaQuery.of(context).size.height*0.6,
                     width: MediaQuery.of(context).size.width,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
@@ -369,7 +370,11 @@ class _AboutCompanyState extends State<AboutCompany> {
                 await box.clear();
                 final box2 = await Hive.openBox<ReminderModel>('reminders');
                 await box2.clear();
-                _context!.pushReplacement('login');
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.remove('lasGeneratedMemberId');
+                final pref = await SharedPreferences.getInstance();
+                await pref.remove('lastGeneratedId');
+                _context!.pushReplacement('/login');
               },
               child: const Text('delete'),
             ),

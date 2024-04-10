@@ -52,7 +52,7 @@ class ContinueButton extends StatelessWidget {
                 );
               } else {
                 // Navigate to the next screen when on the last page
-                context.pushReplacement('/');
+                context.pushReplacement('/splash');
               }
             },
             style: ElevatedButton.styleFrom(

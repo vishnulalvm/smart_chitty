@@ -13,7 +13,6 @@ import 'package:smart_chitty/services/db%20functions/registration_function.dart'
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
 import 'package:smart_chitty/pages/tabs/profile.dart';
-import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/pages/tabs/scheme.dart';
 import 'package:smart_chitty/pages/others/homescreen_features/payment_update_button.dart';
 import 'package:smart_chitty/services/providers/filter_member_provider.dart';
@@ -92,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     for (final company in companyDatas) {
       companyLogo = company.imagePath;
-      companyName =company.companyName;
+      companyName = company.companyName;
     }
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -217,8 +216,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Provider.of<FilterMemberProvider>(context,
                                     listen: false);
                             memberModel.getMemberCredentials(null);
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) => const MembersScreen()));
+                            context.push('/members');
                           },
                           iconname: 'Members',
                         ),
@@ -229,8 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Provider.of<ReminderListProvider>(context,
                                     listen: false);
                             reminderModel.getReminders();
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) => const ReminderScreen()));
+                            context.push('/reminder');
                           },
                           iconname: 'Reminders',
                         ),
@@ -404,6 +401,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             MaterialPageRoute(
                                                 builder: (ctx) =>
                                                     ViewTransaction(
+                                                      
+                                                      keys: payment.key,
                                                       index: index,
                                                       treansProvider:
                                                           paymentData,
@@ -431,11 +430,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       trailing: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment.spaceBetween,
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
                                         children: [
-                                          gap(height: 2),
+                                        
                                           ModifiedText(
                                             text:
                                                 '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel

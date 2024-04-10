@@ -6,7 +6,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/pages/others/profilescreen_features/about_company.dart';
 import 'package:smart_chitty/pages/others/profilescreen_features/connect_developer.dart';
-import 'package:smart_chitty/pages/others/profilescreen_features/convert_exel.dart';
+import 'package:smart_chitty/pages/others/profilescreen_features/change_password.dart';
 import 'package:smart_chitty/pages/others/profilescreen_features/help.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
 import 'package:smart_chitty/pages/tabs/reminders.dart';
@@ -161,19 +161,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   leading: Icons.notifications_active),
                               customListTile(
                                   onTap: () {
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (ctx) =>
-                                                const ConvertExel()));
+                                    context.push('/members');
                                   },
-                                  title: 'Convert to Excel Sheet',
-                                  leading: Icons.picture_as_pdf),
+                                  title: 'Members',
+                                  leading: Symbols.group),
                               customListTile(
                                   onTap: () {
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (ctx) =>
-                                                const AboutCompany()));
+                                                const ChangeUserPassword()));
                                   },
                                   title: 'Change Username & Password',
                                   leading: FontAwesomeIcons.userLock),

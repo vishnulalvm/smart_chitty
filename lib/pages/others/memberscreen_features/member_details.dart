@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/call_chitty.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/edit_member.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_id_screen.dart';
-import 'package:smart_chitty/pages/tabs/members.dart';
 import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
@@ -456,8 +456,10 @@ class _MemberDetailsState extends State<MemberDetails> {
                 final memberModel =
                     Provider.of<FilterMemberProvider>(_context!, listen: false);
                 memberModel.getMemberCredentials(null);
-                Navigator.of(_context!).push(
-                    MaterialPageRoute(builder: (ctx) => const MembersScreen()));
+             _context!.pushReplacement('/');
+            
+                // Navigator.of(_context!).pushAndRemoveUntil(
+                //     MaterialPageRoute(builder: (ctx) => const MembersScreen()),(route) => false,);
               },
               child: const Text('delete'),
             ),

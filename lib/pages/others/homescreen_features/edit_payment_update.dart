@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/monthly_collection_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
@@ -21,25 +20,34 @@ String? selectedSchemeValue;
 String? selectedMemberValue;
 String selectedMonthString = '';
 
-class PaymentUpdateButton extends StatefulWidget {
-  
-  const PaymentUpdateButton({super.key});
+class EditPaymentUpdateButton extends StatefulWidget {
+  final String keys;
+  final PaymentModel paymentModel;
+  final String amount;
+  const EditPaymentUpdateButton(
+      {super.key,
+      required this.amount,
+      required this.paymentModel,
+      required this.keys});
 
   @override
-  State<PaymentUpdateButton> createState() => _PaymentUpdateButtonState();
+  State<EditPaymentUpdateButton> createState() =>
+      _EditPaymentUpdateButtonState();
 }
 
-class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
+class _EditPaymentUpdateButtonState extends State<EditPaymentUpdateButton> {
   DateTime? _selectedDate;
   BuildContext? _context;
 
-  final paymetController = TextEditingController();
+  // final paymetController = TextEditingController();
+  late final TextEditingController paymetController;
   final formKeys = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
     _context = context;
+    paymetController = TextEditingController(text: widget.amount);
   }
 
   @override
@@ -139,7 +147,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                               rowText(
                                   firstText: 'Total Installment :',
                                   secoundText:
-                                      '${memberModel.memberDatas.isNotEmpty ? installment : 'N/A'}/${memberModel.memberDatas.isNotEmpty ? memberModel.memberDatas.first.schemeModel.installment : 'N/A'}'),
+                                      '${widget.paymentModel.installmentCount}/${memberModel.memberDatas.isNotEmpty ? memberModel.memberDatas.first.schemeModel.installment : 'N/A'}'),
                               rowText(
                                 firstText: 'Scheme id :',
                                 secoundText: memberModel.memberDatas.isNotEmpty
@@ -158,9 +166,8 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                             hintText: 'Enter Amount',
                             title: 'Chit Amount :',
                             controller: paymetController,
-                            validator: (value) => value!.isEmpty
-                                ? 'Enter Amount'
-                                : null,
+                            validator: (value) =>
+                                value!.isEmpty ? 'Enter Amount' : null,
                             keyboardType: TextInputType.phone,
                           ),
                         ),
@@ -274,28 +281,30 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
         ),
       );
     } else {
-      final installmentCount =
-          await getInstallmentCount(selectedMemberData.memberId) + 1;
-      await saveInstallmentCount(selectedMemberData.memberId, installmentCount);
+      // final installmentCount =
+      //     await getInstallmentCount(selectedMemberData.memberId) + 1;
+      // await saveInstallmentCount(selectedMemberData.memberId, installmentCount);
 
       final box = await Hive.openBox<PaymentModel>('payments');
 
-      final paymentModel = PaymentModel(
-        key: DateTime.now().toString(),
+      final updatedPaymentModel = PaymentModel(
+        key: widget.paymentModel.key,
         paymentMonth: selectedMonthString,
         imagePath: selectedMemberData.avatar,
-        installmentCount: installmentCount,
+        installmentCount: widget.paymentModel.installmentCount,
         memberId: selectedMemberData.memberId,
         memberModel: selectedMemberData,
         payment: payment,
         paymentDate: now,
         schemeId: selectedMemberData.schemeId!,
       );
-      await box.put(DateTime.now().toString(), paymentModel);
+// ! check print key
+
+      await box.put(widget.keys, updatedPaymentModel);
 
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
-          content: Text('Payment saved successfully.'),
+          content: Text('Payment Update successfully.'),
           backgroundColor: Colors.green,
           duration: Duration(seconds: 2),
         ),
@@ -307,19 +316,6 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
     paymentModel.fetchMemberDatas();
     Navigator.pop(_context!);
   }
-
-  Future<void> saveInstallmentCount(
-      String memberId, int installmentCount) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('installment_$memberId', installmentCount);
-  }
-
-  Future<int> getInstallmentCount(String memberId) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt('installment_$memberId') ?? 0;
-  }
-
-  // store the month
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -344,7 +340,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
 
     MonthlyCollection? existingData = collectionBox.get(selectedMonthString);
     if (existingData != null) {
-      final updatedSales = existingData.sales + amount;
+      final updatedSales = amount;
 
       final updatedCollectionModel =
           MonthlyCollection(month: selectedMonthString, sales: updatedSales);

@@ -86,6 +86,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                                     pageBuilder: (context, animation,
                                             secondaryAnimation) =>
                                         ViewTransaction(
+                                          keys: data.key,
                                       index: index,
                                       paymentModel: data,
                                       treansProvider: paymentData,

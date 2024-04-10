@@ -197,6 +197,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                               onTap: () {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (ctx) => ViewTransaction(
+                                      keys: payment.key,
                                           index: index,
                                           treansProvider: paymentHistory,
                                           paymentModel: payment,

@@ -48,5 +48,10 @@ int _getMonthNumber(String monthAbbr) {
     'Dec': 12,
   };
 
-  return months[monthAbbr] ?? 0;
+  if (months.containsKey(monthAbbr)) {
+    return months[monthAbbr]!;
+  } else {
+    // Handle the case where the monthAbbr is not found in the months map
+    return 0;
+  }
 }

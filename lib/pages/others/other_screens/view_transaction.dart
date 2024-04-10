@@ -6,6 +6,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_chitty/pages/others/homescreen_features/edit_payment_update.dart';
 import 'package:smart_chitty/services/models/monthly_collection_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
 import 'package:smart_chitty/services/providers/transaction.dart';
@@ -16,6 +17,7 @@ import 'package:smart_chitty/widgets/global/row_text.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class ViewTransaction extends StatefulWidget {
+  final String keys;
   final PaymentModel paymentModel;
   final int index;
   final TransactionHistoryProvider treansProvider;
@@ -24,7 +26,8 @@ class ViewTransaction extends StatefulWidget {
       {super.key,
       required this.paymentModel,
       required this.index,
-      required this.treansProvider});
+      required this.treansProvider,
+      required this.keys});
 
   @override
   State<ViewTransaction> createState() => _ViewTransactionState();
@@ -48,6 +51,13 @@ class _ViewTransactionState extends State<ViewTransaction> {
           title: 'Transaction Details',
           onpresed: (value) {
             if (value == 1) {
+             
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => EditPaymentUpdateButton(
+                    keys: widget.keys,
+                        paymentModel: widget.paymentModel,
+                        amount: widget.paymentModel.payment,
+                      )));
             } else if (value == 2) {
               showLogoutDialog(context);
             }
@@ -74,7 +84,6 @@ class _ViewTransactionState extends State<ViewTransaction> {
                     backgroundImage:
                         FileImage(File(widget.paymentModel.imagePath)),
                   ),
-                  
                   ModifiedText(
                     text: widget.paymentModel.memberModel.memberName,
                     size: 24,
@@ -84,7 +93,6 @@ class _ViewTransactionState extends State<ViewTransaction> {
                   gap(width: 10),
                 ],
               ),
-              
               rowText(
                   firstText: 'Payment Date :', secoundText: formattedDateTime),
               rowText(
