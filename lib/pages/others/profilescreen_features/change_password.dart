@@ -56,49 +56,46 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
               fontWeight: FontWeight.w500,
             ),
             children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 12,right: 12),
-                child: Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Colors.white),
-                  height: 260,
-                  width: MediaQuery.of(context).size.width,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(height: 20),
-                        textField(
-                            hintText: 'Enter User id',
-                            icons: Icons.account_box,
-                            controller: userIdSignupController,
-                            validator: (userId) => userId!.length < 3
-                                ? 'User Id should be 4 character'
-                                : null),
-                        const SizedBox(height: 20),
-                        textField(
-                            hintText: 'Enter password',
-                            icons: Icons.lock,
-                            controller: passwordSignupController,
-                            validator: (password) => password!.length < 3
-                                ? 'Name should be 3 character'
-                                : null),
-                        gap(height: 10),
-                        ElevatedButton(
-                            onPressed: () {
-                              collectDataOnclick(context);
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue),
-                            child: const Text(
-                              'Save',
-                              style: TextStyle(color: Colors.white),
-                            ))
-                      ],
-                    ),
+              Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white),
+                height: 260,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      textField(
+                          hintText: 'Enter User id',
+                          icons: Icons.account_box,
+                          controller: userIdSignupController,
+                          validator: (userId) => userId!.length < 3
+                              ? 'User Id should be 4 character'
+                              : null),
+                      const SizedBox(height: 20),
+                      textField(
+                          hintText: 'Enter password',
+                          icons: Icons.lock,
+                          controller: passwordSignupController,
+                          validator: (password) => password!.length < 3
+                              ? 'Name should be 3 character'
+                              : null),
+                      gap(height: 10),
+                      ElevatedButton(
+                          onPressed: () {
+                            collectDataOnclick(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue),
+                          child: const Text(
+                            'Save',
+                            style: TextStyle(color: Colors.white),
+                          ))
+                    ],
                   ),
                 ),
               )

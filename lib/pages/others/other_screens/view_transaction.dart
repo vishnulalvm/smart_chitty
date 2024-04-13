@@ -72,6 +72,7 @@ class _ViewTransactionState extends State<ViewTransaction> {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: Colors.white),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               gap(height: 15),
               Row(

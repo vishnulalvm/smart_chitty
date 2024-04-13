@@ -81,17 +81,15 @@ class _AboutCompanyState extends State<AboutCompany> {
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         color: Colors.white),
-                    height: MediaQuery.of(context).size.height*0.6,
+                    height: MediaQuery.of(context).size.height*0.5,
                     width: MediaQuery.of(context).size.width,
                     child: Padding(
                       padding: const EdgeInsets.all(12),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           CircleAvatar(
                             backgroundImage: FileImage(File(companyLogo)),
-                            radius: 25,
+                            radius: 35,
                           ),
                           rowText(
                               firstText: 'Company Name',
