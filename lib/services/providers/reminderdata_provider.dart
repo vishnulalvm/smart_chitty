@@ -33,9 +33,13 @@ class ReminderListProvider extends ChangeNotifier {
 
   Future<void> deleteReminder(int index) async {
     final box = await Hive.openBox<ReminderModel>('reminders');
+    final reminderToDelete = reminders[index];
     await box.deleteAt(index);
     reminders.removeAt(index);
-    lastFourReminders.removeAt(index);
+    int lastFourRemindersIndex = lastFourReminders.indexOf(reminderToDelete);
+    if (lastFourRemindersIndex != -1) {
+    lastFourReminders.removeAt(lastFourRemindersIndex);
+  }
     notifyListeners();
   }
 }

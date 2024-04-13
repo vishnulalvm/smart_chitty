@@ -22,7 +22,6 @@ String? selectedMemberValue;
 String selectedMonthString = '';
 
 class PaymentUpdateButton extends StatefulWidget {
-  
   const PaymentUpdateButton({super.key});
 
   @override
@@ -30,6 +29,7 @@ class PaymentUpdateButton extends StatefulWidget {
 }
 
 class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
+  int lastGeneratedKey = 1;
   DateTime? _selectedDate;
   BuildContext? _context;
 
@@ -158,9 +158,8 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
                             hintText: 'Enter Amount',
                             title: 'Chit Amount :',
                             controller: paymetController,
-                            validator: (value) => value!.isEmpty
-                                ? 'Enter Amount'
-                                : null,
+                            validator: (value) =>
+                                value!.isEmpty ? 'Enter Amount' : null,
                             keyboardType: TextInputType.phone,
                           ),
                         ),
@@ -211,9 +210,9 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(
-            extendedPadding: const EdgeInsets.only(left: 40, right: 40),
+            extendedPadding: const EdgeInsets.only(left: 30, right: 30),
             label: const Text(
-              'Update',
+              'Pay Now',
               style:
                   TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
             ),
@@ -280,8 +279,14 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
 
       final box = await Hive.openBox<PaymentModel>('payments');
 
+// ! Generation unique key for transations
+
+      lastGeneratedKey = await getLastGeneratedKey();
+
+      await saveLastGeneratedKey(lastGeneratedKey + 1);
+
       final paymentModel = PaymentModel(
-        key: DateTime.now().toString(),
+        key: lastGeneratedKey.toString(),
         paymentMonth: selectedMonthString,
         imagePath: selectedMemberData.avatar,
         installmentCount: installmentCount,
@@ -291,7 +296,7 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
         paymentDate: now,
         schemeId: selectedMemberData.schemeId!,
       );
-      await box.put(DateTime.now().toString(), paymentModel);
+      await box.put(lastGeneratedKey.toString(), paymentModel);
 
       ScaffoldMessenger.of(_context!).showSnackBar(
         const SnackBar(
@@ -354,5 +359,15 @@ class _PaymentUpdateButtonState extends State<PaymentUpdateButton> {
           MonthlyCollection(month: selectedMonthString, sales: amount);
       await collectionBox.put(selectedMonthString, collectionModel);
     }
+  }
+
+  Future<int> getLastGeneratedKey() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt('lasGeneratedpaymentkey') ?? 1;
+  }
+
+  Future<void> saveLastGeneratedKey(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('lasGeneratedpaymentkey', id);
   }
 }

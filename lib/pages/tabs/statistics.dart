@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -48,7 +49,11 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
           backgroundColor: Colors.transparent,
           elevation: 5,
           title: ModifiedText(
-              text: 'Total: ₹$sales/month', size: 25, color: AppColor.fontColor,fontWeight: FontWeight.w600,),
+            text: 'Total: ₹$sales/month',
+            size: 25,
+            color: AppColor.fontColor,
+            fontWeight: FontWeight.w600,
+          ),
         ),
         body: ListView(
           padding: EdgeInsets.zero,
@@ -186,64 +191,84 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       String formattedDateTime = DateFormat('dd-MMM-yy h:mm a')
                           .format(payment.paymentDate!);
                       installmentcount = payment.installmentCount;
-                      return Padding(
-                        padding:
-                            const EdgeInsets.only(left: 6, right: 6, bottom: 4),
-                        child: Card(
-                          elevation: 0,
-                          child: Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: ListTile(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => ViewTransaction(
-                                      keys: payment.key,
-                                          index: index,
-                                          treansProvider: paymentHistory,
-                                          paymentModel: payment,
-                                        )));
-                              },
-                              leading: CircleAvatar(
-                                radius: 25,
-                                backgroundImage:
-                                    FileImage(File(payment.imagePath)),
-                                backgroundColor: Colors.blue,
-                              ),
-                              title: ModifiedText(
-                                text: formattedDateTime,
-                                size: 18,
-                                color: AppColor.fontColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              subtitle: ModifiedText(
-                                text:
-                                    'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
-                                size: 14,
-                                color: AppColor.fontColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              trailing: Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  gap(height: 2),
-                                  ModifiedText(
-                                    text:
-                                        '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
-                                    size: 18,
-                                    color: AppColor.fontColor,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  gap(height: 4),
-                                  ModifiedText(
-                                    text:
-                                        'scheme : ${payment.schemeId}', // Replace with the actual payment mode field from PaymentModel
-                                    size: 12,
-                                    color: AppColor.fontColor,
-                                  ),
-                                ],
-                              ),
+                      return IntrinsicHeight(
+                        child: Padding(
+                          padding: const EdgeInsets.only(bottom: 8,left: 12,right: 12),
+                          child: OpenContainer(
+                            openColor: Colors.white,
+                            transitionDuration: Durations.long2,
+                            transitionType: ContainerTransitionType
+                                .fadeThrough, // Adjust the transition type as needed
+                            openBuilder: (BuildContext context, VoidCallback _) {
+                              return ViewTransaction(
+                                keys: payment.key,
+                                index: index,
+                                treansProvider: paymentHistory,
+                                paymentModel: payment,
+                              );
+                            },
+                            closedElevation: 0,
+                            closedShape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(10)),
                             ),
+                            closedColor: Colors.white,
+                            closedBuilder: (BuildContext context,
+                                VoidCallback openContainer) {
+                              return Padding(
+                                padding: const EdgeInsets.only(bottom: 4),
+                                child: Card(
+                                  color: Colors.white,
+                                  elevation: 0,
+                                  child: ListTile(
+                                    onTap: () {
+                                      openContainer();
+                                    },
+                                    leading: CircleAvatar(
+                                      radius: 25,
+                                      backgroundImage:
+                                          FileImage(File(payment.imagePath)),
+                                      backgroundColor: Colors.blue,
+                                    ),
+                                    title: ModifiedText(
+                                      textOverflow: TextOverflow.ellipsis,
+                                      text: formattedDateTime,
+                                      size: 16,
+                                      color: AppColor.fontColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    subtitle: ModifiedText(
+                                      text:
+                                          'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
+                                      size: 13,
+                                      color: AppColor.fontColor,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    trailing: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: [
+                                        gap(height: 5),
+                                        ModifiedText(
+                                          text:
+                                              '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
+                                          size: 16,
+                                          color: AppColor.fontColor,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        gap(height: 2),
+                                        ModifiedText(
+                                          text:
+                                               'Member Id : ${payment.memberId}',  // Replace with the actual payment mode field from PaymentModel
+                                          size: 13,
+                                          color: AppColor.fontColor,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       );

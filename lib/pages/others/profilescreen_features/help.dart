@@ -16,7 +16,7 @@ class _HelperScreenState extends State<HelperScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: customAppBar(title: 'Help', onpresed: (value) {}),
+      appBar: customAppBar(title: 'Help', onpresed: (value) {},showMenu: false),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
         child: Column(

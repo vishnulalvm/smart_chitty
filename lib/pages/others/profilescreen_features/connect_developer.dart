@@ -19,7 +19,7 @@ class ConnectDeveloper extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar:
-          customAppBar(title: 'Connect With Developer', onpresed: (value) {}),
+          customAppBar(title: 'Connect With Developer', onpresed: (value) {},showMenu: false),
       body: Padding(
         padding: const EdgeInsets.only(top: 30, left: 12, right: 12),
         child: Column(

@@ -66,8 +66,9 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                     final data = schemedata[index];
                     return Padding(
                       padding:
-                          const EdgeInsets.only(left: 6, right: 6, bottom: 4),
+                          const EdgeInsets.only(left: 6, right: 6),
                       child: Card(
+                        color: Colors.white,
                         elevation: 0,
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),

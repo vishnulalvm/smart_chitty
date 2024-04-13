@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/pages/others/memberscreen_features/member_details.dart';
 import 'package:smart_chitty/pages/others/other_screens/view_transaction.dart';
 import 'package:smart_chitty/pages/tabs/reminders.dart';
+import 'package:smart_chitty/services/db%20functions/payment_function.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/db%20functions/transctiondata_function.dart';
@@ -25,10 +26,10 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/images.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/choice_chips.dart';
+import 'package:smart_chitty/widgets/features/scroll_text.dart';
 import 'package:smart_chitty/widgets/global/glasseffect.dart';
 import 'package:smart_chitty/widgets/global/icon_button.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
-import 'package:text_scroll/text_scroll.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 String companyLogo = '';
@@ -159,23 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                 fontWeight: FontWeight.w700),
                           ),
                           InkWell(
+                            onTap: () {
+                              showSnakebar();
+                            },
                             onDoubleTap: () => showLogoutDialog(context),
-                            child: TextScroll(
-                              fadeBorderSide: FadeBorderSide.both,
-                              newupdates.toString(),
-                              mode: TextScrollMode.endless,
-                              velocity: const Velocity(
-                                  pixelsPerSecond: Offset(70, 0)),
-                              delayBefore: const Duration(milliseconds: 100),
-                              numberOfReps: 100,
-                              pauseBetween: const Duration(seconds: 1),
-                              style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700),
-                              textAlign: TextAlign.right,
-                              selectable: true,
-                            ),
+                            child: ScrollingText(text: newupdates.toString()),
                           ),
                         ],
                       ),
@@ -253,6 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: ListView(
                     physics: const ScrollPhysics(),
                     padding: EdgeInsets.zero,
+                    // !
                     controller: scrollControllers,
                     children: [
                       Row(
@@ -277,7 +267,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: const Text(
                                 'See All',
                                 style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Color.fromRGBO(29, 27, 32, 1)),
                               )),
@@ -355,23 +345,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            'Transaction ',
+                            'Last Transactions ',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                                 color: Color.fromRGBO(29, 27, 32, 1)),
                           ),
                           TextButton(
-                              onPressed: () {
-                                context.push('/transaction');
-                              },
-                              child: const Text(
-                                'See All',
-                                style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromRGBO(29, 27, 32, 1)),
-                              )),
+                            onPressed: () {
+                              context.push('/transaction');
+                            },
+                            child: const Text(
+                              'See All',
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                color: Color.fromRGBO(29, 27, 32, 1),
+                              ),
+                            ),
+                          ),
                         ],
 // ! transations start here..
                       ),
@@ -389,69 +381,84 @@ class _HomeScreenState extends State<HomeScreen> {
                                   DateFormat('dd-MMM-yy h:mm a')
                                       .format(payment.paymentDate!);
                               installmentcount = payment.installmentCount;
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 4),
-                                child: Card(
-                                  elevation: 0,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: ListTile(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                            MaterialPageRoute(
-                                                builder: (ctx) =>
-                                                    ViewTransaction(
-                                                      
-                                                      keys: payment.key,
-                                                      index: index,
-                                                      treansProvider:
-                                                          paymentData,
-                                                      paymentModel: payment,
-                                                    )));
-                                      },
-                                      leading: CircleAvatar(
-                                        radius: 25,
-                                        backgroundImage:
-                                            FileImage(File(payment.imagePath)),
-                                        backgroundColor: Colors.blue,
-                                      ),
-                                      title: ModifiedText(
-                                        text: formattedDateTime,
-                                        size: 16,
-                                        color: AppColor.fontColor,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      subtitle: ModifiedText(
-                                        text:
-                                            'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
-                                        size: 13,
-                                        color: AppColor.fontColor,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      trailing: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.end,
-                                        children: [
-                                        
-                                          ModifiedText(
-                                            text:
-                                                '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
-                                            size: 18,
-                                            color: AppColor.fontColor,
-                                            fontWeight: FontWeight.w600,
+                              return IntrinsicHeight(
+                                child: Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: OpenContainer(
+                                    openColor: Colors.white,
+                                    transitionDuration: Durations.long2,
+                                    transitionType: ContainerTransitionType
+                                        .fadeThrough, // Adjust the transition type as needed
+                                    openBuilder:
+                                        (BuildContext context, VoidCallback _) {
+                                      return ViewTransaction(
+                                        keys: payment.key,
+                                        index: index,
+                                        treansProvider: paymentData,
+                                        paymentModel: payment,
+                                      );
+                                    },
+                                    closedElevation: 0,
+                                    closedShape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(10)),
+                                    ),
+                                    closedColor: Colors.white,
+                                    closedBuilder: (BuildContext context,
+                                        VoidCallback openContainer) {
+                                      return Card(
+                                        color: Colors.white,
+                                        elevation: 0,
+                                        child: ListTile(
+                                          onTap: () {
+                                            openContainer();
+                                          },
+                                          leading: CircleAvatar(
+                                            radius: 25,
+                                            backgroundImage: FileImage(
+                                                File(payment.imagePath)),
+                                            backgroundColor: Colors.blue,
                                           ),
-                                          gap(height: 4),
-                                          ModifiedText(
+                                          title: ModifiedText(
+                                            textOverflow: TextOverflow.ellipsis,
+                                            text: formattedDateTime,
+                                            size: 16,
+                                            color: AppColor.fontColor,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          subtitle: ModifiedText(
                                             text:
-                                                'scheme : ${payment.schemeId}', // Replace with the actual payment mode field from PaymentModel
+                                                'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
                                             size: 13,
                                             color: AppColor.fontColor,
+                                            fontWeight: FontWeight.w500,
                                           ),
-                                        ],
-                                      ),
-                                    ),
+                                          trailing: Column(
+                                           mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                               gap(height: 5),
+                                              ModifiedText(
+                                                text:
+                                                    '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
+                                                size: 16,
+                                                color: AppColor.fontColor,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                               gap(height: 2),
+                                              ModifiedText(
+                                                text:
+                                                    'Member Id : ${payment.memberId}', // Replace with the actual payment mode field from PaymentModel
+                                                size: 13,
+                                                color: AppColor.fontColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
                                   ),
                                 ),
                               );
@@ -461,7 +468,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       gap(height: 10),
                       ModifiedText(
-                        text: 'New Schemes',
+                        text: 'New Chits & Offers',
                         size: 16,
                         color: AppColor.fontColor,
                         fontWeight: FontWeight.w500,
@@ -538,7 +545,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
-                            'New Members',
+                            'New Joined Members',
                             style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -555,7 +562,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: const Text(
                                 'See All',
                                 style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Color.fromRGBO(29, 27, 32, 1)),
                               )),
@@ -572,55 +579,94 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemBuilder: (context, index) {
                             final data = membersModel.lastFourmember[index];
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 4),
-                              child: Card(
-                                elevation: 0,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: ListTile(
-                                    leading: CircleAvatar(
-                                      backgroundColor: Colors.blue,
-                                      radius: 25,
-                                      backgroundImage:
-                                          FileImage(File(data.avatar)),
-                                    ),
-                                    title: ModifiedText(
-                                      text: data.memberName,
-                                      size: 18,
-                                      color: AppColor.fontColor,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    subtitle: ModifiedText(
-                                      text: 'Member Id : ${data.memberId}',
-                                      size: 14,
-                                      color: AppColor.fontColor,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                    trailing: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        gap(height: 2),
-                                        ModifiedText(
-                                          text:
-                                              '₹${data.schemeModel.poolAmount}',
-                                          size: 18,
-                                          color: AppColor.fontColor,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                        gap(
-                                            height:
-                                                4), // Add some spacing between text widgets (optional)
-                                        ModifiedText(
-                                            text:
-                                                'Installment : 0/${data.schemeModel.installment}',
-                                            size: 12,
-                                            color: AppColor.fontColor)
-                                      ],
-                                    ),
+                              padding: const EdgeInsets.only(bottom: 8),
+                              child: IntrinsicHeight(
+                                child: OpenContainer(
+                                  openColor: Colors.white,
+                                  transitionDuration: Durations.long2,
+                                  transitionType: ContainerTransitionType
+                                      .fadeThrough, // Adjust the transition type as needed
+                                  openBuilder:
+                                      (BuildContext context, VoidCallback _) {
+                                    return MemberDetails(
+                                      pool: data.schemeModel.poolAmount,
+                                      address: data.memberAddress,
+                                      avatar: data.avatar,
+                                      contact: data.contactNumber,
+                                      idBack: data.idBack,
+                                      idFront: data.idFront,
+                                      installment: data.schemeModel.installment,
+                                      memberId: data.memberId,
+                                      memberName: data.memberName,
+                                      memberage: data.memberAge,
+                                      scheme: data.schemeId ?? '',
+                                    );
+                                  },
+                                  closedElevation: 0,
+                                  closedShape: const RoundedRectangleBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(10)),
                                   ),
+                                  closedColor: Colors.white,
+                                  closedBuilder: (BuildContext context,
+                                      VoidCallback openContainer) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(3),
+                                      child: Card(
+                                        color: Colors.white,
+                                        elevation: 0,
+                                        child: ListTile(
+                                          onTap: () {
+                                            getPaymentCredentials(
+                                                data.memberId);
+                                            openContainer();
+                                          },
+                                          leading: CircleAvatar(
+                                            backgroundImage:
+                                                FileImage(File(data.avatar)),
+                                            radius: 25,
+                                            backgroundColor: Colors.blue,
+                                          ),
+                                          title: ModifiedText(
+                                            text: data.memberName,
+                                            size: 16,
+                                            color: AppColor.fontColor,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          subtitle: ModifiedText(
+                                            text:
+                                                'Member Id : ${data.memberId}',
+                                            size: 13,
+                                            color: AppColor.fontColor,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                          trailing: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: [
+                                              gap(height: 5),
+                                              ModifiedText(
+                                                text:
+                                                    '₹${data.schemeModel.poolAmount}',
+                                                size: 16,
+                                                color: AppColor.fontColor,
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                              gap(height: 2),
+                                              ModifiedText(
+                                                text:
+                                                    'Chit Id : ${data.schemeModel.schemeId}',
+                                                size: 13,
+                                                color: AppColor.fontColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
                             );
@@ -651,7 +697,7 @@ class _HomeScreenState extends State<HomeScreen> {
         closedBuilder: (BuildContext context, VoidCallback openContainer) {
           return FloatingActionButton.extended(
             label: const Text(
-              'Update Payment',
+              'Add Payment',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w700,
@@ -739,9 +785,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> getNewUpdate() async {
     final prefs = await SharedPreferences.getInstance();
-    final updates = prefs.getString('newUpdate') ?? 'No New Update';
     setState(() {
-      newupdates = updates;
+      newupdates = prefs.getString('newUpdate') ?? 'No New Update';
     });
+  }
+
+  void showSnakebar() {
+    ScaffoldMessenger.of(_context!).showSnackBar(
+      const SnackBar(
+        content: Center(child: Text('Double Tap to Update')),
+        backgroundColor: Colors.blue,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 }

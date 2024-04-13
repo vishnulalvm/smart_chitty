@@ -22,7 +22,7 @@ Widget textField({
             maxLines: maxLine,
             keyboardType: keyboardtype,
             autovalidateMode: AutovalidateMode.onUserInteraction,
-            autofocus: true,
+            // autofocus: true,
             validator: validator,
             controller: controller,
             decoration: InputDecoration(

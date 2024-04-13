@@ -33,7 +33,8 @@ Widget customTextField({
           controller: controller,
           keyboardType: keyboardtype,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          autofocus: false,
+
+          // autofocus: false,
           validator: validator,
           decoration: InputDecoration(
             hintText: hintText,

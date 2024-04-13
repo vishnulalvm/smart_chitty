@@ -7,6 +7,7 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/dropdown_timeperiod.dart';
 import 'package:smart_chitty/widgets/features/custom_textfield.dart';
+import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -47,9 +48,11 @@ class _EditschemeScreenState extends State<EditschemeScreen> {
   BuildContext? _context;
   @override
   void initState() {
-    noOfInstallmentController = TextEditingController(text: widget.chittyIstallment);
+    noOfInstallmentController =
+        TextEditingController(text: widget.chittyIstallment);
     totalMembersController = TextEditingController(text: widget.chittyMembers);
-    subscriptionController = TextEditingController(text: widget.chittySubcription);
+    subscriptionController =
+        TextEditingController(text: widget.chittySubcription);
     commissionController = TextEditingController(text: widget.commission);
 
     super.initState();
@@ -66,172 +69,139 @@ class _EditschemeScreenState extends State<EditschemeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return DraggableScrollableSheet(
-      initialChildSize: 0.7,
-      minChildSize: 0.1,
-      maxChildSize: 0.95,
-      expand: false,
-      builder: (_, scroll) {
-        return Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(25), topRight: Radius.circular(25)),
-            color: AppColor.primaryColor,
-          ),
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.all(12),
-                child: Form(
-                  key: formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: BoldText(
-                          text: 'New Schemes',
-                          color: AppColor.fontColor,
-                          size: 24,
-                        ),
-                      ),
-                      gap(height: 20),
-                      customTextField(
-                         context: context,
-                        hintText: 'No.Of Installment in Months',
-                        title: 'No.Of Installment :',
-                        controller: noOfInstallmentController,
-                        validator: (value) =>
-                            value!.isEmpty ? 'add no.of installment' : null,
-                        keyboardType: TextInputType.phone,
-                      ),
-                      gap(height: 20),
-                      customTextField(
-                         context: context,
-                        hintText: 'Number of Members',
-                        title: 'Total Members :',
-                        controller: totalMembersController,
-                        validator: (value) =>
-                            value!.isEmpty ? 'add member count' : null,
-                        keyboardType: TextInputType.phone,
-                      ),
-                      gap(height: 20),
-                      customTextField(
-                         context: context,
-                        hintText: 'Subcription Amount',
-                        title: 'Subcription Amount :',
-                        controller: subscriptionController,
-                        validator: (value) =>
-                            value!.isEmpty // Adjust validation logic
-                                ? 'Enter the Amount'
-                                : null,
-                        keyboardType: TextInputType.phone, // Set keyboard type
-                      ),
-                      gap(height: 20),
-                      customTextField(
-                         context: context,
-                        hintText: '% Pool Cummission',
-                        title: 'Pool Cummission :',
-                        controller: commissionController,
-                        validator: (value) => value!.isEmpty
-                            ? 'Pool Cummission b/n 05-10%'
+    return Scaffold(
+      backgroundColor: AppColor.primaryColor,
+      appBar: customAppBar(
+          title: 'Edit Chitty', onpresed: (value) {}, showMenu: false),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(12),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  customTextField(
+                    context: context,
+                    hintText: 'No.Of Installment in Months',
+                    title: 'No.Of Installment :',
+                    controller: noOfInstallmentController,
+                    validator: (value) =>
+                        value!.isEmpty ? 'add no.of installment' : null,
+                    keyboardType: TextInputType.phone,
+                  ),
+                  gap(height: 20),
+                  customTextField(
+                    context: context,
+                    hintText: 'Number of Members',
+                    title: 'Total Members :',
+                    controller: totalMembersController,
+                    validator: (value) =>
+                        value!.isEmpty ? 'add member count' : null,
+                    keyboardType: TextInputType.phone,
+                  ),
+                  gap(height: 20),
+                  customTextField(
+                    context: context,
+                    hintText: 'Subcription Amount',
+                    title: 'Subcription Amount :',
+                    controller: subscriptionController,
+                    validator: (value) =>
+                        value!.isEmpty // Adjust validation logic
+                            ? 'Enter the Amount'
                             : null,
-                        keyboardType: TextInputType.phone,
+                    keyboardType: TextInputType.phone, // Set keyboard type
+                  ),
+                  gap(height: 20),
+                  customTextField(
+                    context: context,
+                    hintText: '% Pool Cummission',
+                    title: 'Pool Cummission :',
+                    controller: commissionController,
+                    validator: (value) =>
+                        value!.isEmpty ? 'Pool Cummission b/n 05-10%' : null,
+                    keyboardType: TextInputType.phone,
+                  ),
+                  gap(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ModifiedText(
+                        text: 'Installment Type :',
+                        size: 14,
+                        color: AppColor.fontColor,
+                        fontWeight: FontWeight.w500,
                       ),
-                      gap(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          ModifiedText(
-                            text: 'Installment Type :',
-                            size: 14,
-                            color: AppColor.fontColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          gap(width: 77),
-                          DropdownTimePreriod(
-                            onTimePeriodChanged: (value) {
-                              setState(() {
-                                selectedTimePeriodType = value;
-                              });
-                            },
-                          ),
-                        ],
-                      ),
-                      gap(height: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          ModifiedText(
-                            text: 'Proposed Start Date :',
-                            size: 14,
-                            color: AppColor.fontColor,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          gap(width: 57),
-                          Expanded(
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                elevation: 0,
-                              ),
-                              onPressed: () => _selectDate(context),
-                              child: ModifiedText(
-                                text: _selectedDate == null
-                                    ? 'Select Date'
-                                    : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                                size: 16,
-                                color: AppColor.fontColor,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ),
-                        ],
+                      gap(width: 77),
+                      DropdownTimePreriod(
+                        onTimePeriodChanged: (value) {
+                          setState(() {
+                            selectedTimePeriodType = value;
+                          });
+                        },
                       ),
                     ],
                   ),
-                ),
+                  gap(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      ModifiedText(
+                        text: 'Proposed Start Date :',
+                        size: 14,
+                        color: AppColor.fontColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      gap(width: 57),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            elevation: 0,
+                          ),
+                          onPressed: () => _selectDate(context),
+                          child: ModifiedText(
+                            text: _selectedDate == null
+                                ? 'Select Date'
+                                : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
+                            size: 16,
+                            color: AppColor.fontColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              Positioned(
-                  bottom: 15,
-                  left: 10,
-                  right: 10,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(
-                      Icons.add,
-                      size: 30,
-                    ),
-                    label: const Text('Add New Scheme'),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Colors.blue,
-                      elevation: 0,
-                    ),
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        saveSchemeToHive();
-
-                        Navigator.pop(context);
-                      }
-                      // Button action
-                    },
-                  )),
-              Positioned(
-                  top: 25,
-                  left: 10,
-                  child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.close,
-                        size: 30,
-                      ))),
-            ],
+            ),
           ),
-        );
-      },
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+          extendedPadding: const EdgeInsets.only(left: 30, right: 30),
+          label: const Text(
+            'Update Chitty',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+            weight: 800,
+          ),
+          backgroundColor: Colors.blue,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30), // Adjust radius as needed
+          ),
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              saveSchemeToHive();
+
+              Navigator.pop(context);
+            }
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 

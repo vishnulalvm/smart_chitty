@@ -163,7 +163,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                       ),
                       child: Center(
                         child: BoldText(
-                          text: 'Scheme Details',
+                          text: 'Chitty Details',
                           size: 20,
                           color: AppColor.fontColor,
                         ),
@@ -173,7 +173,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                   gap(height: 12),
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 200,
+                    height: 245,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10),
                       color: Colors.white,
@@ -182,8 +182,8 @@ class _MemberDetailsState extends State<MemberDetails> {
                     child: Column(
                       children: [
                         rowText(
-                            firstText: 'Scheme :',
-                            secoundText: widget.memberId),
+                            firstText: 'Chitty Id:',
+                            secoundText: widget.scheme),
                         rowText(
                             firstText: 'Pool Amount :',
                             secoundText: widget.pool),
@@ -194,6 +194,9 @@ class _MemberDetailsState extends State<MemberDetails> {
                         rowText(
                             firstText: 'Member id :',
                             secoundText: widget.memberId),
+                             rowText(
+                            firstText: 'Call Status :',
+                            secoundText: callChitty),
                       ],
                     ),
                   ),
@@ -338,7 +341,7 @@ class _MemberDetailsState extends State<MemberDetails> {
               builder: (BuildContext context, List<PaymentModel> paymentData,
                   Widget? child) {
                 return ListView.builder(
-                  padding: const EdgeInsets.only(bottom: 100),
+                  padding: const EdgeInsets.only(bottom: 12),
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: paymentData.length,
@@ -349,8 +352,9 @@ class _MemberDetailsState extends State<MemberDetails> {
                     installmentcount = payment.installmentCount;
                     return Padding(
                       padding:
-                          const EdgeInsets.only(left: 6, right: 6, bottom: 4),
+                          const EdgeInsets.only(left: 6, right: 6, bottom: 0),
                       child: Card(
+                        color: Colors.white,
                         elevation: 0,
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -362,15 +366,16 @@ class _MemberDetailsState extends State<MemberDetails> {
                               backgroundColor: Colors.blue,
                             ),
                             title: ModifiedText(
+                              textOverflow: TextOverflow.ellipsis,
                               text: formattedDateTime,
-                              size: 18,
+                              size: 16,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
                             ),
                             subtitle: ModifiedText(
                               text:
                                   'Installment: ${payment.installmentCount}', // Replace with the actual member ID field from PaymentModel
-                              size: 14,
+                              size: 13,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
                             ),
@@ -378,19 +383,19 @@ class _MemberDetailsState extends State<MemberDetails> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
-                                gap(height: 2),
+                                gap(height: 5),
                                 ModifiedText(
                                   text:
                                       '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
-                                  size: 18,
+                                  size: 16,
                                   color: AppColor.fontColor,
                                   fontWeight: FontWeight.w600,
                                 ),
-                                gap(height: 4),
+                                gap(height: 2),
                                 ModifiedText(
                                   text:
-                                      'scheme : ${payment.schemeId}', // Replace with the actual payment mode field from PaymentModel
-                                  size: 12,
+                                      'Member Id : ${payment.memberId}', // Replace with the actual payment mode field from PaymentModel
+                                  size: 13,
                                   color: AppColor.fontColor,
                                 ),
                               ],
@@ -407,11 +412,9 @@ class _MemberDetailsState extends State<MemberDetails> {
         ],
       ),
       floatingActionButton: ScrollToHide(
-        
         height: 60,
         hideDirection: Axis.vertical,
         scrollController: scrollController,
-
         child: FloatingActionButton.extended(
             label: const Text(
               '   Call Chitty   ',
@@ -426,6 +429,7 @@ class _MemberDetailsState extends State<MemberDetails> {
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
                   builder: (ctx) => CallChitty(
+                    poolAmount: widget.pool,
                         memberId: widget.scheme,
                         schemeId: widget.memberId,
                       )));
@@ -456,10 +460,7 @@ class _MemberDetailsState extends State<MemberDetails> {
                 final memberModel =
                     Provider.of<FilterMemberProvider>(_context!, listen: false);
                 memberModel.getMemberCredentials(null);
-             _context!.pushReplacement('/');
-            
-                // Navigator.of(_context!).pushAndRemoveUntil(
-                //     MaterialPageRoute(builder: (ctx) => const MembersScreen()),(route) => false,);
+                _context!.pushReplacement('/');
               },
               child: const Text('delete'),
             ),

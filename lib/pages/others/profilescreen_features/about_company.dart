@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_chitty/pages/tabs/home.dart';
 import 'package:smart_chitty/services/db%20functions/registration_function.dart';
+import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/models/addmember_model.dart';
 import 'package:smart_chitty/services/models/monthly_collection_model.dart';
 import 'package:smart_chitty/services/models/payment_details_model.dart';
@@ -14,6 +15,7 @@ import 'package:smart_chitty/services/models/registration_model.dart';
 import 'package:smart_chitty/services/models/reminder_model.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/utils/colors.dart';
+import 'package:smart_chitty/utils/constants.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
 import 'package:smart_chitty/widgets/global/row_text.dart';
@@ -374,6 +376,11 @@ class _AboutCompanyState extends State<AboutCompany> {
                 await prefs.remove('lasGeneratedMemberId');
                 final pref = await SharedPreferences.getInstance();
                 await pref.remove('lastGeneratedId');
+                 schemeListNotifer.value.clear();
+                 listofcompanydata.clear();
+                 companyDatas.clear();
+                 final sharedPre = await SharedPreferences.getInstance();
+        sharedPre.setBool(saveKeyName, false);
                 _context!.pushReplacement('/login');
               },
               child: const Text('delete'),

@@ -67,13 +67,13 @@ class _ViewTransactionState extends State<ViewTransaction> {
       body: Padding(
         padding: const EdgeInsets.only(left: 12, right: 12, top: 12),
         child: Container(
-          height: 400,
+          height: 430,
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10), color: Colors.white),
           child: Column(
             children: [
-              gap(height: 20),
+              gap(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -112,6 +112,7 @@ class _ViewTransactionState extends State<ViewTransaction> {
                 firstText: 'Member Id :',
                 secoundText: widget.paymentModel.memberId,
               ),
+              gap(height: 15),
             ],
           ),
         ),
@@ -140,7 +141,7 @@ class _ViewTransactionState extends State<ViewTransaction> {
                     listen: false);
 
                 paymentHistory.deleteTransaction(
-                    widget.paymentModel.key, widget.index);
+                    widget.paymentModel.key);
                 final amount =
                     double.tryParse(widget.paymentModel.payment) ?? 0;
                 final collectionBox =

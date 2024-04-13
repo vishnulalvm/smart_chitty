@@ -47,7 +47,6 @@ void main() async {
   if (!Hive.isAdapterRegistered(ReminderModelAdapter().typeId)) {
     Hive.registerAdapter(ReminderModelAdapter());
   }
-
   getUserCredentials();
   getSchemeCredentials();
 
@@ -79,6 +78,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         routerConfig: router,
+
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(

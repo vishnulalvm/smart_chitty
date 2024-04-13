@@ -8,7 +8,6 @@ import 'package:smart_chitty/utils/colors.dart';
 import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/features/custom_textfield.dart';
 import 'package:smart_chitty/widgets/global/appbar.dart';
-import 'package:smart_chitty/widgets/global/buttonwidget.dart';
 import 'package:smart_chitty/widgets/global/widget_gap.dart';
 
 class SetReminderScreen extends StatefulWidget {
@@ -37,6 +36,7 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
       appBar: customAppBar(
         title: 'Set Reminder',
         onpresed: (onpresed) {},
+        showMenu: false,
       ),
       body: Padding(
         padding:
@@ -50,13 +50,13 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
                 child: Column(
                   children: [
                     customTextField(
-                       context: context,
+                        context: context,
                         maxline: 3,
                         hintText: 'Reminder Note',
                         title: 'Reminder Note :',
                         keyboardType: TextInputType.multiline,
                         validator: (value) =>
-                            value!.isEmpty ? 'add no.of installment' : null,
+                            value!.isEmpty ? 'Type New Reminder' : null,
                         controller: reminderController),
                     gap(height: 20),
                     Row(
@@ -82,7 +82,7 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
                               text: _selectedDate == null
                                   ? 'Select Date'
                                   : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
-                              size: 16,
+                              size: 14,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
                             ),
@@ -95,8 +95,8 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         ModifiedText(
-                          text: 'Select Time',
-                          size: 16,
+                          text: 'Select Time :',
+                          size: 14,
                           color: AppColor.fontColor,
                           fontWeight: FontWeight.w500,
                         ),
@@ -124,7 +124,7 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
                               text: _selectedTime != null
                                   ? '${_selectedTime!.hour}:${_selectedTime!.minute}'
                                   : 'Select Time',
-                              size: 16,
+                              size: 14,
                               color: Colors.black,
                               fontWeight: FontWeight.w500,
                             ),
@@ -136,21 +136,33 @@ class _SetReminderScreenState extends State<SetReminderScreen> {
                 ),
               ),
             ),
-            buttons(
-                buttonAction: () {
-                  if (formKey.currentState!.validate()) {
-                    saveSchemeToHive();
-                    final reminderModel = Provider.of<ReminderListProvider>(
-                        context,
-                        listen: false);
-                    reminderModel.getReminders();
-                  }
-                },
-                buttonName: 'Set Reminder',
-                color: Colors.blue)
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+          extendedPadding: const EdgeInsets.only(left: 30, right: 30),
+          label: const Text(
+            'Add Reminder',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+          ),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+            weight: 800,
+          ),
+          backgroundColor: Colors.blue,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30), // Adjust radius as needed
+          ),
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              saveSchemeToHive();
+              final reminderModel =
+                  Provider.of<ReminderListProvider>(context, listen: false);
+              reminderModel.getReminders();
+            }
+          }),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 

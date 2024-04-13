@@ -1,3 +1,4 @@
+import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/Reminder_features/set_reminder.dart';
@@ -39,7 +40,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Total Reminders : ${reminderdata.sortedReminders.length}',
+                    'Upcoming Reminders : ${reminderdata.sortedReminders.length}',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
@@ -209,18 +210,27 @@ class _ReminderScreenState extends State<ReminderScreen> {
         height: 60,
         hideDirection: Axis.vertical,
         scrollController: scrollController,
-        child: FloatingActionButton(
-          backgroundColor: Colors.blue,
-          shape: const CircleBorder(),
-          onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (ctx) => const SetReminderScreen()));
+        child: OpenContainer(
+          transitionDuration: Durations.long2,  
+          closedShape:  const CircleBorder(),
+          closedBuilder: (BuildContext context, VoidCallback action) {
+            return FloatingActionButton(
+              backgroundColor: Colors.blue,
+              shape: const CircleBorder(),
+              onPressed: action,
+              child: const Icon(
+                Icons.add,
+                weight: 800,
+                color: Colors.white,
+              ),
+            );
           },
-          child: const Icon(
-            Icons.add,
-            weight: 800,
-            color: Colors.white,
-          ),
+          openBuilder: (BuildContext context, VoidCallback action) {
+            return const SetReminderScreen();
+          },
+          transitionType: ContainerTransitionType.fade,
+          openColor: Colors.white,
+          closedColor: Colors.blue,
         ),
       ),
     );

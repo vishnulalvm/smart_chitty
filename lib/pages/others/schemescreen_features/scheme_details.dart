@@ -186,6 +186,7 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                         padding:
                             const EdgeInsets.only(left: 6, right: 6, bottom: 4),
                         child: Card(
+                          color: Colors.white,
                           elevation: 0,
                           child: Padding(
                             padding: const EdgeInsets.all(5.0),
@@ -232,13 +233,13 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                                 ),
                                 title: ModifiedText(
                                   text: data.memberName,
-                                  size: 18,
+                                  size: 16,
                                   color: AppColor.fontColor,
                                   fontWeight: FontWeight.w500,
                                 ),
                                 subtitle: ModifiedText(
                                   text: 'Member Id : ${data.memberId}',
-                                  size: 14,
+                                  size: 13,
                                   color: AppColor.fontColor,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -246,19 +247,19 @@ class _SchemeDetailsState extends State<SchemeDetails> {
                                   mainAxisAlignment: MainAxisAlignment.start,
                                   crossAxisAlignment: CrossAxisAlignment.end,
                                   children: [
-                                    gap(height: 2),
+                                    gap(height: 5),
                                     ModifiedText(
                                       text: '₹${data.schemeModel.poolAmount}',
-                                      size: 18,
+                                      size: 16,
                                       color: AppColor.fontColor,
                                       fontWeight: FontWeight.w600,
                                     ),
                                     gap(
                                         height:
-                                            4), // Add some spacing between text widgets (optional)
+                                            2), // Add some spacing between text widgets (optional)
                                     ModifiedText(
                                         text: 'scheme Id : ${data.schemeId}',
-                                        size: 12,
+                                        size: 13,
                                         color: AppColor.fontColor)
                                   ],
                                 ),

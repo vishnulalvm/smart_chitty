@@ -109,6 +109,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
                               backgroundImage: FileImage(File(data.imagePath)),
                             ),
                             title: ModifiedText(
+                              textOverflow: TextOverflow.ellipsis,
                               text: formattedDateTime,
                               size: 16,
                               color: AppColor.fontColor,

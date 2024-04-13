@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:smart_chitty/pages/others/other_screens/view_id_screen.dart';
 import 'package:smart_chitty/pages/others/profilescreen_features/about_company.dart';
 import 'package:smart_chitty/pages/others/profilescreen_features/connect_developer.dart';
 import 'package:smart_chitty/pages/others/profilescreen_features/change_password.dart';
@@ -22,6 +24,7 @@ import 'package:url_launcher/url_launcher.dart';
 String companyName = '';
 String presidentPhoneNumber = '8138946412';
 String whatsappUrl = 'https://chat.whatsapp.com/GD9M49Vc4a8JiuAcHJXqww';
+String privacy = 'https://www.freeprivacypolicy.com/live/53660151-1c7f-4d0f-8659-3d9c49925043';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -31,11 +34,24 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  PackageInfo packageInfo = PackageInfo(
+    appName: 'Unknown',
+    packageName: 'Unknown',
+    version: 'Unknown',
+    buildNumber: 'Unknown',
+);
   BuildContext? _context;
   @override
   void initState() {
     super.initState();
     _context = context;
+    initPackageInfo();
+  }
+   Future<void> initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      packageInfo = info;
+    });
   }
 
   @override
@@ -75,9 +91,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            CircleAvatar(
-                              backgroundImage: FileImage(File(companyLogo)),
-                              radius: 40,
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (ctx) => ViewIdScreen(
+                                          path: companyLogo,
+                                        )));
+                              },
+                              child: CircleAvatar(
+                                backgroundImage: FileImage(File(companyLogo)),
+                                radius: 45,
+                              ),
                             ),
                             gap(height: 10),
                             ModifiedText(
@@ -164,7 +188,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     context.push('/members');
                                   },
                                   title: 'Members',
-                                  leading: Symbols.group),
+                                  leading: FontAwesomeIcons.userGroup),
                               customListTile(
                                   onTap: () {
                                     Navigator.of(context).push(
@@ -207,7 +231,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 children: [
                                   customListTile(
-                                      onTap: () {},
+                                      onTap: ()=>launchWhatsApp(privacy),
                                       title: 'Privacy and Policy',
                                       leading: Icons.privacy_tip),
                                 ],
@@ -245,9 +269,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ],
                                 ),
                               ),
-                              gap(height: 50),
+                              gap(height: 30),
                               ModifiedText(
-                                  text: 'version 1.0',
+                                  text: '${packageInfo.appName} : ${packageInfo.version}',
                                   size: 12,
                                   color: AppColor.fontColor),
                               gap(height: 20)
@@ -297,7 +321,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _performLogout(BuildContext context) {
-    // Perform logout logic
 
     context.pushReplacement('/login');
   }

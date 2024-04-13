@@ -281,9 +281,6 @@ class _EditPaymentUpdateButtonState extends State<EditPaymentUpdateButton> {
         ),
       );
     } else {
-      // final installmentCount =
-      //     await getInstallmentCount(selectedMemberData.memberId) + 1;
-      // await saveInstallmentCount(selectedMemberData.memberId, installmentCount);
 
       final box = await Hive.openBox<PaymentModel>('payments');
 
@@ -332,6 +329,7 @@ class _EditPaymentUpdateButtonState extends State<EditPaymentUpdateButton> {
       });
     }
   }
+  
 
   Future<void> collectionToHive() async {
     final amount = double.tryParse(paymetController.text) ?? 0;

@@ -6,7 +6,10 @@ class CircularIconhome extends StatelessWidget {
   final void Function() buttonpress;
 
   const CircularIconhome(
-      {super.key, required this.icontype, required this.buttonpress, required this.iconname});
+      {super.key,
+      required this.icontype,
+      required this.buttonpress,
+      required this.iconname});
 
   @override
   Widget build(BuildContext context) {
@@ -24,11 +27,16 @@ class CircularIconhome extends StatelessWidget {
             size: 28,
             weight: 800,
             color: Colors.white,
-            
           ),
         ),
-        const SizedBox(height: 12,),
-        Text(iconname,style: const TextStyle(color: Colors.white,fontWeight: FontWeight.w700),)
+        const SizedBox(
+          height: 12,
+        ),
+        Text(
+          iconname,
+          style:
+              const TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        )
       ],
     );
   }

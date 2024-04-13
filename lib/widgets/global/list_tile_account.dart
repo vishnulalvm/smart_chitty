@@ -16,10 +16,10 @@ Widget customListTile(
     ),
     leading: CircleAvatar(
       backgroundColor: Colors.blue,
-      radius: 22,
+      radius: 24,
       child: Icon(
         leading,
-        size: 24,
+        size: 22,
         color: Colors.white,
       ),
     ),

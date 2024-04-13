@@ -115,7 +115,7 @@ class _MembersScreenState extends State<MembersScreen> {
                   final installment = installmentCounts[data.memberId] ?? 0;
                   return Padding(
                     padding:
-                        const EdgeInsets.only(left: 12, right: 12, bottom: 12),
+                        const EdgeInsets.only(left: 12, right: 12, bottom: 8),
                     child: IntrinsicHeight(
                       child: OpenContainer(
                         openColor: Colors.white,
@@ -167,7 +167,7 @@ class _MembersScreenState extends State<MembersScreen> {
                                 ),
                                 subtitle: ModifiedText(
                                   text: 'Member Id : ${data.memberId}',
-                                  size: 12,
+                                  size: 13,
                                   color: AppColor.fontColor,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -178,7 +178,7 @@ class _MembersScreenState extends State<MembersScreen> {
                                     gap(height: 5),
                                     ModifiedText(
                                       text: '₹${data.schemeModel.poolAmount}',
-                                      size: 14,
+                                      size: 16,
                                       color: AppColor.fontColor,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -186,7 +186,7 @@ class _MembersScreenState extends State<MembersScreen> {
                                     ModifiedText(
                                       text:
                                           'Installment : $installment/${data.schemeModel.installment}',
-                                      size: 12,
+                                      size: 13,
                                       color: AppColor.fontColor,
                                     ),
                                   ],
@@ -208,19 +208,27 @@ class _MembersScreenState extends State<MembersScreen> {
         height: 60,
         hideDirection: Axis.vertical,
         scrollController: scrollController,
-
-        child: FloatingActionButton(
-          backgroundColor: Colors.blue,
-          shape: const CircleBorder(),
-          onPressed: () {
-            Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const AddMemberScreen()));
+        child: OpenContainer(
+          transitionDuration: Durations.long2,  
+          closedShape:  const CircleBorder(),
+          closedBuilder: (BuildContext context, VoidCallback action) {
+            return FloatingActionButton(
+              backgroundColor: Colors.blue,
+              shape: const CircleBorder(),
+              onPressed: action,
+              child: const Icon(
+                Icons.add,
+                weight: 800,
+                color: Colors.white,
+              ),
+            );
           },
-          child: const Icon(
-            Icons.add,
-            weight: 800,
-            color: Colors.white,
-          ),
+          openBuilder: (BuildContext context, VoidCallback action) {
+            return const AddMemberScreen();
+          },
+          transitionType: ContainerTransitionType.fade,
+          openColor: Colors.white,
+          closedColor: Colors.blue,
         ),
       ),
       // resizeToAvoidBottomInset: false

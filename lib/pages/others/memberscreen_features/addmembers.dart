@@ -157,8 +157,8 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             keyboardtype: TextInputType.number,
                             icons: Icons.contacts,
                             controller: contactNumController,
-                            validator: (name) => name!.length < 3
-                                ? 'Name should be 3 character'
+                            validator: (name) => name!.length < 10
+                                ? 'Number should be 10 Nos'
                                 : null),
                         gap(height: 12),
                         textField(
@@ -167,7 +167,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             icons: Icons.event,
                             controller: memberAgeController,
                             validator: (name) => name!.isEmpty
-                                ? 'Name should be 3 character'
+                                ? 'Enter age'
                                 : null),
                         gap(height: 12),
                         textField(
@@ -176,7 +176,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                             icons: Icons.notes,
                             controller: memberAddressController,
                             validator: (name) => name!.length < 3
-                                ? 'Name should be 3 character'
+                                ? 'Address should be 3 character'
                                 : null),
                         gap(height: 20),
                         BoldText(

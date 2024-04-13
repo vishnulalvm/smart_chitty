@@ -5,6 +5,7 @@ import 'package:smart_chitty/services/db%20functions/registration_function.dart'
 import 'package:smart_chitty/auth/register.dart';
 import 'package:smart_chitty/utils/constants.dart';
 import 'package:smart_chitty/utils/images.dart';
+import 'package:smart_chitty/utils/text.dart';
 import 'package:smart_chitty/widgets/global/buttonwidget.dart';
 import 'package:smart_chitty/widgets/global/textfieldwidget.dart';
 
@@ -71,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     controller: userNameController,
                     key: formKey,
                     validator: (name) =>
-                        name!.length < 3 ? 'Name should be 3 character' : null),
+                        name!.isEmpty ? 'Enter valid UserName' : null),
                 widgetSpace(height: 20),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -86,9 +87,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           obscureText: true,
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           autofocus: true,
-                          validator: (name) => name!.length < 3
-                              ? 'Name should be 3 character'
-                              : null,
+                          validator: (name) =>
+                              name!.isEmpty ? 'Enter valid Password' : null,
                           controller: passwordController,
                           decoration: InputDecoration(
                             hintText: 'Enter Password',
@@ -174,11 +174,38 @@ class _LoginScreenState extends State<LoginScreen> {
         return;
       }
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Invalid username or password'),
-        duration: Duration(seconds: 2),
-      ),
+    showDialog(
+      barrierDismissible: true,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          alignment: Alignment.center,
+          actionsAlignment: MainAxisAlignment.center,
+          actionsPadding: EdgeInsets.zero,
+          buttonPadding: EdgeInsets.zero,
+          insetPadding: EdgeInsets.zero,
+          elevation: 5,
+          title: const Text('Incorrect Password'),
+          content: const Text(
+              'The password you entered in incorrect.\n please try again'),
+          actions: [
+            const Divider(),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const ModifiedText(
+                  text: 'Try again',
+                  size: 16,
+                  color: Colors.blue,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
