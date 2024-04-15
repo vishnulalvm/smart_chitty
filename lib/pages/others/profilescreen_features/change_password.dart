@@ -70,7 +70,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
                     children: [
                       const SizedBox(height: 20),
                       textField(
-                          hintText: 'Enter User id',
+                          hintText: 'Enter New User id',
                           icons: Icons.account_box,
                           controller: userIdSignupController,
                           validator: (userId) => userId!.length < 3
@@ -78,7 +78,7 @@ class _ChangeUserPasswordState extends State<ChangeUserPassword> {
                               : null),
                       const SizedBox(height: 20),
                       textField(
-                          hintText: 'Enter password',
+                          hintText: 'Enter New password',
                           icons: Icons.lock,
                           controller: passwordSignupController,
                           validator: (password) => password!.length < 3

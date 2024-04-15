@@ -269,7 +269,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 style: TextStyle(
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: Color.fromRGBO(29, 27, 32, 1)),
+                                    color: Colors.blue),
                               )),
                         ],
                       ),
@@ -304,7 +304,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         const Icon(
-                                          Icons.alarm,
+                                          Symbols.note_stack_add_rounded,
                                           color: Colors.white,
                                         ),
                                         SizedBox(
@@ -360,8 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
-                                color: Color.fromRGBO(29, 27, 32, 1),
-                              ),
+                                color: Colors.blue),
                             ),
                           ),
                         ],
@@ -562,9 +561,10 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: const Text(
                                 'See All',
                                 style: TextStyle(
+                                  
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
-                                    color: Color.fromRGBO(29, 27, 32, 1)),
+                                    color: Colors.blue),
                               )),
                         ],
                       ),

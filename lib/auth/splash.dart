@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
               'assets/images/smartkuri.jpeg',
               width: 250,
             ),
-            BoldText(text: 'SMART CHITTY', size: 50, color: AppColor.fontColor)
+            BoldText(text: 'SMART CHITS', size: 45, color: AppColor.fontColor)
           ],
         ),
       ),

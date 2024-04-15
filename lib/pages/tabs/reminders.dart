@@ -1,5 +1,6 @@
 import 'package:animations/animations.dart';
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:provider/provider.dart';
 import 'package:smart_chitty/pages/others/Reminder_features/set_reminder.dart';
 import 'package:smart_chitty/services/providers/reminderdata_provider.dart';
@@ -112,7 +113,7 @@ class _ReminderScreenState extends State<ReminderScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Icon(
-                                      Icons.alarm,
+                                     Symbols.note_stack_add_rounded,
                                       color: Colors.white,
                                     ),
                                     SizedBox(

@@ -24,7 +24,8 @@ import 'package:url_launcher/url_launcher.dart';
 String companyName = '';
 String presidentPhoneNumber = '8138946412';
 String whatsappUrl = 'https://chat.whatsapp.com/GD9M49Vc4a8JiuAcHJXqww';
-String privacy = 'https://www.freeprivacypolicy.com/live/53660151-1c7f-4d0f-8659-3d9c49925043';
+String privacy =
+    'https://www.freeprivacypolicy.com/live/53660151-1c7f-4d0f-8659-3d9c49925043';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -39,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     packageName: 'Unknown',
     version: 'Unknown',
     buildNumber: 'Unknown',
-);
+  );
   BuildContext? _context;
   @override
   void initState() {
@@ -47,7 +48,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _context = context;
     initPackageInfo();
   }
-   Future<void> initPackageInfo() async {
+
+  Future<void> initPackageInfo() async {
     final info = await PackageInfo.fromPlatform();
     setState(() {
       packageInfo = info;
@@ -105,6 +107,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             gap(height: 10),
                             ModifiedText(
+                                textOverflow: TextOverflow.ellipsis,
                                 text: companyName,
                                 size: 30,
                                 color: Colors.white)
@@ -181,7 +184,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             builder: (ctx) =>
                                                 const ReminderScreen()));
                                   },
-                                  title: 'Notifications',
+                                  title: 'Reminders',
                                   leading: Icons.notifications_active),
                               customListTile(
                                   onTap: () {
@@ -231,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                                 children: [
                                   customListTile(
-                                      onTap: ()=>launchWhatsApp(privacy),
+                                      onTap: () => launchWhatsApp(privacy),
                                       title: 'Privacy and Policy',
                                       leading: Icons.privacy_tip),
                                 ],
@@ -271,7 +274,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               gap(height: 30),
                               ModifiedText(
-                                  text: '${packageInfo.appName} : ${packageInfo.version}',
+                                  text:
+                                      '${packageInfo.appName} : ${packageInfo.version}',
                                   size: 12,
                                   color: AppColor.fontColor),
                               gap(height: 20)
@@ -321,7 +325,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   void _performLogout(BuildContext context) {
-
     context.pushReplacement('/login');
   }
 
