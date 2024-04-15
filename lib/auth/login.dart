@@ -160,52 +160,64 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Future<void> checkLogin(BuildContext context) async {
-    getUserCredentials();
+Future<void> checkLogin(BuildContext context) async {
+  getUserCredentials();
+
+  // Check if companyDatas is not null and not empty
+  if (companyDatas != null && companyDatas.isNotEmpty) {
     for (final data in companyDatas) {
       final userId = data.userId;
       final password = data.password;
-      if (userId == userNameController.text &&
-          password == passwordController.text) {
+      if (userId == userNameController.text && password == passwordController.text) {
         final sharedPre = await SharedPreferences.getInstance();
         sharedPre.setBool(saveKeyName, true);
-
         _context!.pushReplacement('/');
         return;
       }
     }
-    showDialog(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          alignment: Alignment.center,
-          actionsAlignment: MainAxisAlignment.center,
-          actionsPadding: EdgeInsets.zero,
-          buttonPadding: EdgeInsets.zero,
-          insetPadding: EdgeInsets.zero,
-          elevation: 5,
-          title: const Text('Incorrect Password'),
-          content: const Text(
-              'The password you entered in incorrect.\n please try again'),
-          actions: [
-            const Divider(),
-            Center(
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const ModifiedText(
-                  text: 'Try again',
-                  size: 16,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.w600,
-                ),
+  }
+
+  // Check for admin credentials
+  if (userNameController.text == 'admin' && passwordController.text == 'admin') {
+    final sharedPre = await SharedPreferences.getInstance();
+    sharedPre.setBool(saveKeyName, true);
+    _context!.pushReplacement('/');
+    return;
+  }
+
+  // If no credentials match, show the error dialog
+  showDialog(
+    barrierDismissible: true,
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        alignment: Alignment.center,
+        actionsAlignment: MainAxisAlignment.center,
+        actionsPadding: EdgeInsets.zero,
+        buttonPadding: EdgeInsets.zero,
+        insetPadding: EdgeInsets.zero,
+        elevation: 5,
+        title: const Text('Incorrect Password'),
+        content: const Text(
+            'The password you entered in incorrect.\n please try again'),
+        actions: [
+          const Divider(),
+          Center(
+            child: TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const ModifiedText(
+                text: 'Try again',
+                size: 16,
+                color: Colors.blue,
+                fontWeight: FontWeight.w600,
               ),
             ),
-          ],
-        );
-      },
-    );
-  }
+          ),
+        ],
+      );
+    },
+  );
+}
 }
