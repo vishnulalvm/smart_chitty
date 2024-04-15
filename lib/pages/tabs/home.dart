@@ -358,9 +358,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: const Text(
                               'See All',
                               style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: Colors.blue),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.blue),
                             ),
                           ),
                         ],
@@ -433,12 +433,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontWeight: FontWeight.w500,
                                           ),
                                           trailing: Column(
-                                           mainAxisAlignment:
+                                            mainAxisAlignment:
                                                 MainAxisAlignment.start,
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.end,
                                             children: [
-                                               gap(height: 5),
+                                              gap(height: 5),
                                               ModifiedText(
                                                 text:
                                                     '₹ ${payment.payment}', // Replace with the actual amount field from PaymentModel
@@ -446,7 +446,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 color: AppColor.fontColor,
                                                 fontWeight: FontWeight.w600,
                                               ),
-                                               gap(height: 2),
+                                              gap(height: 2),
                                               ModifiedText(
                                                 text:
                                                     'Member Id : ${payment.memberId}', // Replace with the actual payment mode field from PaymentModel
@@ -528,6 +528,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               maxLines: 2,
                                               style: const TextStyle(
                                                 color: Colors.white,
+                                                
                                               ),
                                             ),
                                           ],
@@ -561,7 +562,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: const Text(
                                 'See All',
                                 style: TextStyle(
-                                  
                                     fontSize: 14,
                                     fontWeight: FontWeight.w500,
                                     color: Colors.blue),

@@ -12,7 +12,7 @@ class DropdownTimePreriod extends StatefulWidget {
 }
 
 class _DropdownTimePreriodState extends State<DropdownTimePreriod> {
-  String? selectedValue = 'Monthly';
+  String? selectedValue = 'Months';
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -30,9 +30,9 @@ class _DropdownTimePreriodState extends State<DropdownTimePreriod> {
           enableFeedback: true,
           value: selectedValue,
           items: [
-            'Daily',
-            'Weekly',
-            'Monthly',
+            'Days',
+            'Weeks',
+            'Months',
           ]
               .map((item) => DropdownMenuItem<String>(
                     value: item,

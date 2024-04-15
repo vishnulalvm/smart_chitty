@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_chitty/services/db%20functions/schemedata_function.dart';
 import 'package:smart_chitty/services/models/scheme_model.dart';
 import 'package:smart_chitty/pages/others/schemescreen_features/scheme_details.dart';
@@ -19,7 +20,7 @@ class SchemeButtonHome extends StatefulWidget {
 }
 
 class _SchemeButtonHomeState extends State<SchemeButtonHome> {
-    ScrollController scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,8 +66,7 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                     }
                     final data = schemedata[index];
                     return Padding(
-                      padding:
-                          const EdgeInsets.only(left: 6, right: 6),
+                      padding: const EdgeInsets.only(left: 6, right: 6),
                       child: Card(
                         color: Colors.white,
                         elevation: 0,
@@ -108,21 +108,25 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
                               radius: 25,
                               backgroundColor: Colors.blue,
                               child: ModifiedText(
-                                  text: data.installment,
+                                  text: data.totalMembers,
                                   size: 26,
                                   color: Colors.white),
                             ),
                             title: ModifiedText(
-                              text: '${data.subscription}×${data.totalMembers}',
+                              text:
+                                  '${data.subscription} × ${data.installment} ${data.installmentType}',
                               size: 18,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
+                              textOverflow: TextOverflow.ellipsis,
                             ),
                             subtitle: ModifiedText(
-                              text: 'Subscribers : ${data.totalMembers}',
-                              size: 14,
+                              text:
+                                  'Propose Date : ${data.proposeDate != null ? DateFormat('dd-MM-yyyy').format(data.proposeDate!) : ''}',
+                              size: 12,
                               color: AppColor.fontColor,
                               fontWeight: FontWeight.w500,
+                              textOverflow: TextOverflow.ellipsis,
                             ),
                             trailing: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -156,7 +160,7 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
         ],
       ),
       floatingActionButton: ScrollToHide(
-         height: 60,
+        height: 60,
         hideDirection: Axis.vertical,
         scrollController: scrollController,
         child: FloatingActionButton(
@@ -166,7 +170,8 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
             showModalBottomSheet(
                 context: context,
                 isScrollControlled: true,
-                builder: (BuildContext context) => const AddSchemeBottomSheet());
+                builder: (BuildContext context) =>
+                    const AddSchemeBottomSheet());
           },
           child: const Icon(
             Icons.add,
@@ -177,22 +182,23 @@ class _SchemeButtonHomeState extends State<SchemeButtonHome> {
       ),
     );
   }
+
   Widget fabIcon() {
-  return FloatingActionButton(
-    backgroundColor: Colors.blue,
-    shape: const CircleBorder(),
-    onPressed: () {
-      showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) => const AddSchemeBottomSheet(),
-      );
-    },
-    child: const Icon(
-      Icons.add,
-      weight: 800,
-      color: Colors.white,
-    ),
-  );
-}
+    return FloatingActionButton(
+      backgroundColor: Colors.blue,
+      shape: const CircleBorder(),
+      onPressed: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) => const AddSchemeBottomSheet(),
+        );
+      },
+      child: const Icon(
+        Icons.add,
+        weight: 800,
+        color: Colors.white,
+      ),
+    );
+  }
 }
