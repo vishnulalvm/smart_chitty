@@ -14,7 +14,7 @@ class ReminderListProvider extends ChangeNotifier {
     final box = await Hive.openBox<ReminderModel>('reminders');
     final reminderdata = box.values.toList();
     reminders = reminderdata;
-    if (reminderdata.isNotEmpty) {
+    if (reminderdata.isNotEmpty) { 
       reminders.sort((a, b) {
         final aDate = a.now;
         final bDate = b.now;

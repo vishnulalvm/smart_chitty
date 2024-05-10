@@ -734,6 +734,7 @@ class _HomeScreenState extends State<HomeScreen> {
           title: const Text('New Update'),
           content: SizedBox(
             width: 100,
+            
             child: TextFormField(
               maxLines: 2,
               controller: newupdateController,

@@ -164,7 +164,7 @@ Future<void> checkLogin(BuildContext context) async {
   getUserCredentials();
 
   // Check if companyDatas is not null and not empty
-  if (companyDatas != null && companyDatas.isNotEmpty) {
+  if (companyDatas !=null && companyDatas.isNotEmpty) {
     for (final data in companyDatas) {
       final userId = data.userId;
       final password = data.password;
